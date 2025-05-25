@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
+const bcrypt = require("bcrypt");
 require("dotenv").config();
 
 const app = express();
@@ -19,15 +20,47 @@ app.get("/", (req, res) => {
 });
 
 
-app.post("/api/login", (req, res) => {
+/*
+app.post("/api/users", async (req, res) => {
   const { email, password } = req.body;
-  // Ici on fait une vérif simple ou appel vers l’API si elle gère le login
-  if (email === "admin@iot.com" && password === "1234") {
-    res.json({ token: "faketoken" });
-  } else {
-    res.status(401).json({ message: "Identifiants incorrects" });
+  try {
+    // Récupère tous les utilisateurs depuis l’API distante
+    const response = await axios.get(`${BASE_API_URL}/users`);
+    const users = response.data;
+
+    // Cherche l’utilisateur avec l’email fourni
+    const user = users.find(u => u.email === email);
+    if (!user) {
+      return res.status(401).json({ message: "Identifiants incorrects" });
+    }
+
+    // Compare le mot de passe fourni avec le hash stocké
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(401).json({ message: "Identifiants incorrects" });
+    }
+
+    // Authentification réussie
+    res.json({ token: "faketoken", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur lors de la connexion" });
   }
 });
+*/
+
+
+app.get("/api/users", async (req, res) => {
+  try {
+    const response = await axios.get(`${BASE_API_URL}/users`);
+    res.json(response.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur lors de la récupération des utilisateurs" });
+  }
+});
+
+
 
 app.get("/api/devices", async (req, res) => {
   try {

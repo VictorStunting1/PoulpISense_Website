@@ -1,0 +1,36 @@
+<!-- users.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Liste des utilisateurs</title>
+</head>
+<body>
+  <h1>Utilisateurs</h1>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Mot de passe (hashé)</th>
+      </tr>
+    </thead>
+    <tbody id="users-table"></tbody>
+  </table>
+  <!-- ...existing code... -->
+    <script>
+    fetch('http://localhost:3001/api/users')
+        .then(res => res.json())
+        .then(users => {
+        // Utilise la propriété $values si elle existe
+        const list = users.$values || users;
+        const table = document.getElementById('users-table');
+        list.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${user.email}</td><td>${user.password}</td>`;
+            table.appendChild(row);
+        });
+        });
+    </script>
+<!-- ...existing code... -->
+</body>
+</html>
