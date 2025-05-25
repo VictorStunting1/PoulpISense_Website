@@ -77,3 +77,42 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+:root {
+  --main-blue: #1565c0;
+  --main-blue-light: #1976d2;
+  --white: #fff;
+}
+
+body {
+  background: var(--white) !important;
+  color: var(--main-blue) !important;
+}
+
+h1, h2, h3, h4, h5, h6, p, label, th, td, ul, li {
+  color: var(--main-blue);
+}
+
+.card, .module, .form-module {
+  background: var(--main-blue);
+  color: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px #1976d233;
+  padding: 20px;
+}
+
+button {
+  background: var(--white) !important;
+  color: var(--main-blue) !important;
+  border: 2px solid var(--main-blue);
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+button:hover {
+  background: var(--main-blue) !important;
+  color: var(--white) !important;
+}
