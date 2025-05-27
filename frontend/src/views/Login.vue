@@ -9,7 +9,7 @@
       
       <div class="login-card">
         <div class="login-header">
-          <div class="logo">
+          <div class="logo" @click="goToHome">
             <img src="@/assets/logo2.png" alt="PoulpISense Logo" class="logo-image" />
           </div>
           <h1>PoulpISense</h1>
@@ -230,6 +230,10 @@ const loadSavedData = () => {
       email.value = savedEmail
     }
   }
+}
+
+const goToHome = () => {
+  router.push('/')
 }
 
 // Charger les données au montage du composant
