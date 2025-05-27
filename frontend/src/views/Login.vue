@@ -397,7 +397,7 @@ loadSavedData()
 }
 .form-input {
   width: 100%; padding: 16px 16px 16px 48px;
-  border: 2px solid var(--border-color);
+  border: 2px solid #1565c07e;
   border-radius: 14px;
   font-size: 1.08rem;
   background: var(--input-bg);
@@ -477,7 +477,7 @@ loadSavedData()
 .login-button {
   width: 100%; padding: 16px;
   background: var(--btn-bg); color: var(--btn-text);
-  border: none; border-radius: 13px;
+  border: 1px solid #1565c0;
   font-size: 1.13rem; font-weight: 600;
   cursor: pointer; transition: background 0.2s, box-shadow 0.2s;
   display: flex; align-items: center; justify-content: center; gap: 11px;
