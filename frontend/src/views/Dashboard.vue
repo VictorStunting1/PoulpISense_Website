@@ -4,17 +4,21 @@
       <h1 class="dashboard-title">
         <i class="fas fa-tachometer-alt"></i> Tableau de bord
       </h1>
-      <div class="device-selector-container">
-        <label for="device-selector" class="device-label">Appareil :</label>
-        <div class="custom-select">
-          <select id="device-selector" v-model="selectedDeviceId" @change="onDeviceChange" class="select-styled">
-            <option v-for="device in userDevices" :key="device.id" :value="device.id">
-              {{ device.nom }}
-            </option>
-          </select>
-          <i class="fas fa-chevron-down select-arrow"></i>
+      <div class="device-icon-selector" v-if="userDevices.length > 0">
+          <button
+            v-for="device in userDevices"
+            :key="device.id"
+            class="device-icon-btn"
+            :class="{ selected: selectedDeviceId === device.id }"
+            @click="selectDevice(device)"
+            :aria-label="device.nom"
+          >
+            <span class="device-icon-circle">
+              <i class="fas fa-robot"></i>
+            </span>
+            <span class="device-icon-name">{{ device.nom }}</span>
+          </button>
         </div>
-      </div>
     </header>
 
     <div v-if="!userDevices.length" class="no-devices">
@@ -184,6 +188,13 @@ async function fetchUserDevices() {
     console.error('Erreur lors de la récupération des appareils utilisateur :', error)
   }
 }
+
+function selectDevice(device) {
+  selectedDeviceId.value = device.id
+  selectedDevice.value = device
+  fetchDeviceMeasurements(device.id)
+}
+
 
 // Fonction pour récupérer les mesures d'un appareil spécifique
 async function fetchDeviceMeasurements(deviceId) {
@@ -651,6 +662,89 @@ header {
 .empty-state p {
   color: #666;
 }
+
+.device-icon-selector {
+  display: flex;
+  gap: 22px;
+  margin: 30px 0 25px 0;
+}
+
+.device-icon-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.15s;
+  padding: 0;
+}
+
+.device-icon-btn:focus .device-icon-circle,
+.device-icon-btn:hover .device-icon-circle {
+  box-shadow: 0 4px 18px rgba(33,150,243,0.18), 0 0 0 3px #1976d2;
+}
+
+.device-icon-btn:focus .device-icon-name,
+.device-icon-btn:hover .device-icon-name {
+  color: white;
+}
+
+.device-icon-btn.selected .device-icon-circle {
+  background: linear-gradient(135deg, #1976d2, #0d47a1);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(33,150,243,0.30), 0 0 0 4px #1976d2;
+  transform: scale(1.1);
+}
+
+.device-icon-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e3f2fd 40%, #bbdefb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.1rem;
+  color: #1976d2;
+  margin-bottom: 7px;
+  box-shadow: 0 2px 10px rgba(21,101,192,0.10);
+  transition: box-shadow 0.18s, background 0.18s, color 0.18s, transform 0.18s;
+}
+
+.device-icon-btn.selected .device-icon-name {
+  color: #1976d2;
+  font-weight: 700;
+  text-shadow: 0 1px 6px rgba(21,101,192,0.08);
+}
+
+.device-icon-name {
+  font-size: 1rem;
+  color: #444;
+  margin-top: 2px;
+  text-align: center;
+  word-break: break-all;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 700px) {
+  .device-icon-selector {
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .device-icon-circle {
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
+  }
+  .device-icon-name {
+    font-size: 0.9rem;
+  }
+}
+
 
 @keyframes spin {
   to { transform: rotate(360deg); }
