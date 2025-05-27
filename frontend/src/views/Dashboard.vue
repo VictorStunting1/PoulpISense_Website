@@ -4,7 +4,9 @@
       <h1 class="dashboard-title">
         <i class="fas fa-tachometer-alt"></i> Tableau de bord
       </h1>
-      <div class="device-icon-selector" v-if="userDevices.length > 0">
+    </header>
+
+    <div class="device-icon-selector" v-if="userDevices.length > 0">
           <button
             v-for="device in userDevices"
             :key="device.id"
@@ -19,7 +21,6 @@
             <span class="device-icon-name">{{ device.nom }}</span>
           </button>
         </div>
-    </header>
 
     <div v-if="!userDevices.length" class="no-devices">
       <div class="empty-state">
