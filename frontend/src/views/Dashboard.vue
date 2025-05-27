@@ -166,7 +166,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import DeviceChart from '../components/DeviceChart.vue'
@@ -199,10 +199,20 @@ async function fetchUserDevices() {
 }
 
 function selectDevice(device) {
+  console.log('🔄 Changement d\'appareil:', device.nom, 'ID:', device.id)
+  console.log('📊 Anciennes mesures:', measurements.value.length)
+  
+  measurements.value = []
   selectedDeviceId.value = device.id
   selectedDevice.value = device
-  fetchDeviceMeasurements(device.id)
+  
+  console.log('🔄 Mesures après reset:', measurements.value.length)
+  
+  nextTick(() => {
+    fetchDeviceMeasurements(device.id)
+  })
 }
+
 
 
 // Fonction pour récupérer les mesures d'un appareil spécifique
@@ -210,15 +220,21 @@ async function fetchDeviceMeasurements(deviceId) {
   if (!deviceId) return
   
   loading.value = true
+  // Vider explicitement les mesures avant de récupérer les nouvelles
   measurements.value = []
   
   try {
+    console.log(`Récupération des mesures pour l'appareil ${deviceId}`)
     const BASE_API_URL = "http://localhost:3001/api"
     const res = await axios.get(`${BASE_API_URL}/measurements/device/${deviceId}`)
-    measurements.value = res.data.$values || res.data
-    console.log(`Mesures récupérées pour l'appareil ${deviceId}:`, measurements.value)
+    const newMeasurements = res.data.$values || res.data
+    
+    // S'assurer que les nouvelles données sont bien assignées
+    measurements.value = [...newMeasurements]
+    console.log(`${newMeasurements.length} mesures récupérées pour l'appareil ${deviceId}:`, measurements.value)
   } catch (error) {
     console.error(`Erreur lors de la récupération des mesures pour l'appareil ${deviceId}:`, error)
+    measurements.value = [] // Réinitialiser en cas d'erreur
   } finally {
     loading.value = false
   }
