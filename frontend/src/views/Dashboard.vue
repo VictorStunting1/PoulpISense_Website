@@ -30,11 +30,20 @@
       </div>
     </div>
 
-    <div v-else-if="!selectedDevice" class="loading-container">
-      <div class="empty-state">
-        <i class="fas fa-mouse-pointer empty-icon"></i>
-        <h3>Veuillez sélectionner un appareil</h3>
-        <p>Choisissez un appareil ci-dessus pour afficher ses données.</p>
+    <div v-else-if="!selectedDevice" class="selection-prompt">
+      <div class="selection-content">
+        <div class="selection-icon-wrapper">
+          <i class="fas fa-hand-pointer selection-icon"></i>
+          <div class="selection-pulse"></div>
+        </div>
+        <h3 class="selection-title">Sélectionnez un appareil</h3>
+        <p class="selection-description">
+          Choisissez l'un de vos appareils ci-dessus pour visualiser les données de mesure en temps réel
+        </p>
+        <div class="selection-hint">
+          <i class="fas fa-arrow-up"></i>
+          <span>Cliquez sur une icône d'appareil</span>
+        </div>
       </div>
     </div>
 
@@ -772,6 +781,167 @@ header {
 
   .metrics-cards {
     grid-template-columns: 1fr;
+  }
+}
+
+.selection-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #f8fafd 0%, #e3f2fd 100%);
+  border-radius: 16px;
+  border: 2px dashed #bbdefb;
+  margin: 20px 0;
+  min-height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+
+.selection-prompt::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(25, 118, 210, 0.05) 0%, transparent 70%);
+  animation: float 6s ease-in-out infinite;
+}
+
+.selection-content {
+  text-align: center;
+  z-index: 1;
+  position: relative;
+}
+
+.selection-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.selection-icon {
+  font-size: 4rem;
+  color: #1976d2;
+  animation: bounce 2s infinite;
+  filter: drop-shadow(0 4px 8px rgba(25, 118, 210, 0.2));
+}
+
+.selection-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border: 2px solid #1976d2;
+  border-radius: 50%;
+  opacity: 0;
+  animation: pulse 2s infinite;
+}
+
+.selection-title {
+  font-size: 1.8rem;
+  color: #1565c0;
+  margin: 0 0 16px 0;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.selection-description {
+  font-size: 1.1rem;
+  color: #5f6368;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+  max-width: 400px;
+}
+
+.selection-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(25, 118, 210, 0.1);
+  border-radius: 25px;
+  border: 1px solid rgba(25, 118, 210, 0.2);
+  font-size: 0.95rem;
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.selection-hint i {
+  animation: bounce-subtle 1.5s infinite;
+}
+
+/* Animations */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: rotate(0deg) translate(0, 0);
+  }
+  33% {
+    transform: rotate(120deg) translate(10px, -10px);
+  }
+  66% {
+    transform: rotate(240deg) translate(-10px, 10px);
+  }
+}
+
+
+@media (max-width: 768px) {
+  .selection-prompt {
+    padding: 40px 16px;
+    min-height: 250px;
+  }
+  
+  .selection-icon {
+    font-size: 3rem;
+  }
+  
+  .selection-title {
+    font-size: 1.5rem;
+  }
+  
+  .selection-description {
+    font-size: 1rem;
   }
 }
 </style>
