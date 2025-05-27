@@ -11,14 +11,11 @@ app.use(express.json());
 const PORT = 3001;
 
 // Remplacer par l’URL de ton Swagger si besoin
-const BASE_API_URL = "http://ssssirhcwan.ddns.net:40000";
+// const BASE_API_URL = "http://ssssirhcwan.ddns.net:40000";
 
-const XAPIKEY = process.env.XAPIKEY;
-const axiosConfig = {
-  headers: {
-    'XApiKey': XAPIKEY
-  }
-};
+const BASE_API_URL = "http://10.58.255.68:5168";
+
+axios.defaults.headers.common['XApiKey'] = 'pgH7QzFHJx4w46fI~5Uzi4RvtTwLEXp';
 
 
 
