@@ -211,58 +211,105 @@ html, body {
 
 /* Navigation */
 .navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 10;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 5%;
+  padding: 16px 5%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(25, 118, 210, 0.08);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Effet lors du scroll */
+.navbar.scrolled {
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-light);
-  width: 100%;
+  backdrop-filter: blur(25px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  padding: 12px 5%;
 }
 
 .nav-brand {
   display: flex;
   align-items: center;
   gap: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
+.nav-brand:hover {
+  transform: scale(1.02);
+}
+
+
 .nav-logo {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(25, 118, 210, 0.2));
+  transition: all 0.3s ease;
+}
+
+.nav-brand:hover .nav-logo {
+  transform: rotate(5deg);
+  filter: drop-shadow(0 4px 12px rgba(25, 118, 210, 0.3));
 }
 
 .nav-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1976d2 !important;
-  
-  background: none !important;
-  -webkit-background-clip: initial !important;
-  -webkit-text-fill-color: initial !important;
-  background-clip: initial !important;
-  
-  background: linear-gradient(135deg, #1976d2, #00bcd4);
+  font-size: 1.6rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #1976d2 0%, #00bcd4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  
-  color: #1976d2;
+  color: #1976d2; /* Fallback */
+  letter-spacing: -0.02em;
+  transition: all 0.3s ease;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
   color: var(--primary-color);
   text-decoration: none;
   font-weight: 600;
-  padding: 12px 24px;
-  border-radius: 20px;
+  font-size: 0.95rem;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid transparent;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
+  overflow: hidden;
   backdrop-filter: blur(10px);
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.nav-link:hover::before {
+  left: 100%;
 }
 
 .nav-link:hover {
@@ -275,6 +322,73 @@ html, body {
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   transform: translateY(-3px);
 }
+
+.nav-mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.nav-mobile-toggle:hover {
+  background: rgba(25, 118, 210, 0.1);
+}
+
+.nav-mobile-toggle span {
+  width: 24px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.nav-mobile-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.nav-mobile-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-mobile-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.nav-mobile-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: all 0.3s ease;
+}
+
+
+.nav-mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-mobile-menu .nav-link {
+  display: flex;
+  justify-content: center;
+  margin: 16px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  background: rgba(25, 118, 210, 0.05);
+}
+
 
 /* Contenu principal */
 .main-content {
