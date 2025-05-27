@@ -194,7 +194,7 @@ import { useRouter } from 'vue-router'
 import axios from 'axios'
 import DeviceChart from '../components/DeviceChart.vue'
 import jsPDF from 'jspdf'
-import 'jspdf-autotable'
+import autoTable from 'jspdf-autotable'
 import Papa from 'papaparse'
 
 const router = useRouter()
@@ -428,11 +428,11 @@ function exportToPDF() {
   
   doc.setFontSize(10)
   doc.setTextColor(0, 0, 0)
-    doc.text(`Nombre de mesures: ${filteredMeasurements.value.length}`, 20, 90)
+  doc.text(`Nombre de mesures: ${filteredMeasurements.value.length}`, 20, 90)
   doc.text(`Température moyenne: ${stats.avgTemp}°C`, 20, 97)
   doc.text(`pH moyen: ${stats.avgPh}`, 100, 97)
   doc.text(`Turbidité moyenne: ${stats.avgTurbidity}`, 170, 97)
-  
+    
   // Préparation des données du tableau
   const sortedData = [...filteredMeasurements.value].sort((a, b) => 
     new Date(b.timestamp) - new Date(a.timestamp)
@@ -446,8 +446,8 @@ function exportToPDF() {
     measure.turbidity.toString()
   ])
   
-  // Création du tableau
-  doc.autoTable({
+  // Création du tableau avec autoTable importé séparément
+  autoTable(doc, {
     head: [['Date', 'Heure', 'Température', 'pH', 'Turbidité']],
     body: tableData,
     startY: 110,
@@ -466,7 +466,8 @@ function exportToPDF() {
     margin: { top: 110, left: 20, right: 20 },
     theme: 'grid'
   })
-  // Pied de page
+
+    // Pied de page
   const pageCount = doc.internal.getNumberOfPages()
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i)
