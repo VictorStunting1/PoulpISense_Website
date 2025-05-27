@@ -548,17 +548,23 @@ const scrollToFeatures = () => {
   line-height: 1.6;
 }
 
-/* Footer */
+
 .footer {
-  background: var(--text-primary);
-  color: white;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+  color: #ffffff;
   padding: 60px 5% 30px;
+  position: relative;
+  z-index: 2;
 }
 
 .footer-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 30px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 30px;
 }
 
@@ -570,10 +576,17 @@ const scrollToFeatures = () => {
   font-weight: 600;
 }
 
+.footer-brand span {
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
 .footer-logo {
   width: 32px;
   height: 32px;
   object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
 
 .footer-links {
@@ -582,20 +595,44 @@ const scrollToFeatures = () => {
 }
 
 .footer-links a {
-  color: var(--text-light);
+  color: #b0bec5;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  position: relative;
+}
+
+.footer-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #00bcd4;
+  transition: width 0.3s ease;
 }
 
 .footer-links a:hover {
-  color: var(--accent-color);
+  color: #ffffff;
+}
+
+.footer-links a:hover::after {
+  width: 100%;
 }
 
 .footer-bottom {
   text-align: center;
   padding-top: 30px;
-  border-top: 1px solid #37474f;
-  color: var(--text-light);
+  border-top: 1px solid #404040;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-bottom p {
+  color: #90a4ae;
+  margin: 0;
+  font-size: 0.9rem;
 }
 
 /* Arrière-plan animé amélioré */
