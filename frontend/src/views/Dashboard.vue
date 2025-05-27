@@ -571,6 +571,7 @@ header {
   background-color: white;
   border-radius: 10px;
   padding: 20px;
+  margin-bottom: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
