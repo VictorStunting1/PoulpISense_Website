@@ -217,7 +217,7 @@ function selectDevice(device) {
 
 // Fonction pour récupérer les mesures d'un appareil spécifique
 async function fetchDeviceMeasurements(deviceId) {
-  if (!deviceId) return
+  if (deviceId === null || deviceId === undefined) return;
   
   loading.value = true
   // Vider explicitement les mesures avant de récupérer les nouvelles
