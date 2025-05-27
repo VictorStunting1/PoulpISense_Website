@@ -1,10 +1,10 @@
 <template>
-  <div class="login-container">
-    <div class="login-background">
+  <div class="login-background">
       <div class="wave wave1"></div>
       <div class="wave wave2"></div>
       <div class="wave wave3"></div>
     </div>
+  <div class="login-container">
     
     <div class="login-card">
       <div class="login-header">
@@ -290,22 +290,19 @@ loadSavedData()
 }
 
 .login-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--background);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  position: relative;
+  background: transparent;
+}
+
+
+.login-background {
+  position: fixed;  /* FIXED, pas absolute ! */
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none;  /* Pour que ça ne bloque jamais les clics */
+  z-index: 0;
   overflow: hidden;
 }
 
-.login-background {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  overflow: hidden;
-  z-index: 0;
-}
 
 .wave {
   position: absolute;
