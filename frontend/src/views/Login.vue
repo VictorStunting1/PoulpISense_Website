@@ -313,11 +313,11 @@ loadSavedData()
 }
 .wave1 {
   width: 300px; height: 300px; top: -150px; left: -150px;
-  background: rgba(0, 188, 212, 0.13);
+  background: #675fff45;
 }
 .wave2 {
   width: 400px; height: 400px; top: 50%; right: -200px;
-  background: rgba(25, 118, 210, 0.11);
+  background: rgba(4, 110, 134, 0.313);
   animation-delay: 2s;
 }
 .wave3 {
@@ -360,7 +360,7 @@ loadSavedData()
   background: var(--accent-color);
   border-radius: 50%;
   margin-bottom: 22px;
-  box-shadow: 0 8px 20px rgba(103, 95, 255, 0.27);
+  box-shadow: 0 8px 20px #675fff45;
   position: relative;
   overflow: hidden; /* Pour éviter que l'image dépasse du cercle */
 }
