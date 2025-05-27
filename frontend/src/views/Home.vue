@@ -141,31 +141,26 @@
 
           <!-- Grille de fonctionnalités -->
           <div class="features-grid">
-            <!-- Carte 1 - Dashboard -->
-            <div class="feature-card" data-feature="dashboard">
+            <!-- Carte 1 - App Mobile -->
+            <div class="feature-card" data-feature="mobile">
               <div class="feature-card-inner">
                 <div class="feature-header">
-                  <div class="feature-icon dashboard">
-                    <i class="fas fa-tachometer-alt"></i>
+                  <div class="feature-icon mobile">
+                    <i class="fas fa-mobile-alt"></i>
                     <div class="icon-bg"></div>
                   </div>
-                  <div class="feature-badge">Interface</div>
+                  <div class="feature-badge">Mobile</div>
                 </div>
                 <div class="feature-content">
-                  <h3>Dashboard intuitif</h3>
-                  <p>Visualisez toutes vos données de capteurs dans une interface claire et moderne avec des graphiques interactifs en temps réel.</p>
+                  <h3>Application mobile</h3>
+                  <p>Surveillez vos capteurs où que vous soyez avec notre application mobile native iOS et Android.</p>
                   <ul class="feature-benefits">
-                    <li><i class="fas fa-check"></i> Graphiques temps réel</li>
-                    <li><i class="fas fa-check"></i> Interface responsive</li>
-                    <li><i class="fas fa-check"></i> Widgets personnalisables</li>
+                    <li><i class="fas fa-check"></i> Notifications push</li>
+                    <li><i class="fas fa-check"></i> Gestion des appareils</li>
+                    <li><i class="fas fa-check"></i> Interface tactile et inuitive</li>
                   </ul>
                 </div>
-                <div class="feature-footer">
-                  <button class="feature-btn" @click="showFeatureDemo('dashboard')">
-                    <span>Voir la démo</span>
-                    <i class="fas fa-arrow-right"></i>
-                  </button>
-                </div>
+           
                 <div class="feature-decoration">
                   <div class="decoration-circle"></div>
                   <div class="decoration-line"></div>
@@ -181,23 +176,18 @@
                     <i class="fas fa-bell"></i>
                     <div class="icon-bg"></div>
                   </div>
-                  <div class="feature-badge premium">Intelligent</div>
+                  <div class="feature-badge premium">Alertes</div>
                 </div>
                 <div class="feature-content">
-                  <h3>Alertes intelligentes</h3>
-                  <p>Recevez des notifications instantanées en cas de valeurs anormales avec un système d'IA qui apprend de vos données.</p>
+                  <h3>Alertes</h3>
+                  <p>Recevez des notifications instantanées en cas de valeurs anormales.</p>
                   <ul class="feature-benefits">
-                    <li><i class="fas fa-check"></i> IA prédictive</li>
-                    <li><i class="fas fa-check"></i> Seuils adaptatifs</li>
-                    <li><i class="fas fa-check"></i> Multi-canaux</li>
+                    <li><i class="fas fa-check"></i> Personnalisation par appareil</li>
+                    <li><i class="fas fa-check"></i> Personnalisation des seuils</li>
+                    <li><i class="fas fa-check"></i> Personnalisation par lieu</li>
                   </ul>
                 </div>
-                <div class="feature-footer">
-                  <button class="feature-btn" @click="showFeatureDemo('alerts')">
-                    <span>Voir la démo</span>
-                    <i class="fas fa-arrow-right"></i>
-                  </button>
-                </div>
+           
                 <div class="feature-decoration">
                   <div class="decoration-circle"></div>
                   <div class="decoration-line"></div>
@@ -217,159 +207,17 @@
                 </div>
                 <div class="feature-content">
                   <h3>Historique complet</h3>
-                  <p>Accédez à l'historique complet de vos mesures avec des graphiques détaillés et des outils d'analyse avancés.</p>
+                  <p>Accédez à l'historique complet de vos mesures avec des graphiques détaillés.</p>
                   <ul class="feature-benefits">
                     <li><i class="fas fa-check"></i> Stockage illimité</li>
                     <li><i class="fas fa-check"></i> Export de données</li>
-                    <li><i class="fas fa-check"></i> Rapports automatiques</li>
+                    <li><i class="fas fa-check"></i> Historique personnalisable</li>
                   </ul>
                 </div>
-                <div class="feature-footer">
-                  <button class="feature-btn" @click="showFeatureDemo('history')">
-                    <span>Voir la démo</span>
-                    <i class="fas fa-arrow-right"></i>
-                  </button>
-                </div>
+           
                 <div class="feature-decoration">
                   <div class="decoration-circle"></div>
                   <div class="decoration-line"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Cartes supplémentaires -->
-            <div class="feature-card" data-feature="security">
-              <div class="feature-card-inner">
-                <div class="feature-header">
-                  <div class="feature-icon security">
-                    <i class="fas fa-shield-alt"></i>
-                    <div class="icon-bg"></div>
-                  </div>
-                  <div class="feature-badge">Sécurité</div>
-                </div>
-                <div class="feature-content">
-                  <h3>Sécurité renforcée</h3>
-                  <p>Protection de vos données avec un chiffrement de bout en bout et une authentification multi-facteurs.</p>
-                  <ul class="feature-benefits">
-                    <li><i class="fas fa-check"></i> Chiffrement AES-256</li>
-                    <li><i class="fas fa-check"></i> Authentification 2FA</li>
-                    <li><i class="fas fa-check"></i> Audit de sécurité</li>
-                  </ul>
-                </div>
-                <div class="feature-footer">
-                  <button class="feature-btn" @click="showFeatureDemo('security')">
-                    <span>En savoir plus</span>
-                    <i class="fas fa-arrow-right"></i>
-                  </button>
-                </div>
-                <div class="feature-decoration">
-                  <div class="decoration-circle"></div>
-                  <div class="decoration-line"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="feature-card" data-feature="api">
-              <div class="feature-card-inner">
-                <div class="feature-header">
-                  <div class="feature-icon api">
-                    <i class="fas fa-code"></i>
-                    <div class="icon-bg"></div>
-                  </div>
-                  <div class="feature-badge">Développeur</div>
-                </div>
-                <div class="feature-content">
-                  <h3>API puissante</h3>
-                  <p>Intégrez facilement vos applications avec notre API RESTful complète et notre SDK multi-plateformes.</p>
-                  <ul class="feature-benefits">
-                    <li><i class="fas fa-check"></i> Documentation complète</li>
-                    <li><i class="fas fa-check"></i> SDK multi-plateformes</li>
-                    <li><i class="fas fa-check"></i> Webhooks temps réel</li>
-                  </ul>
-                </div>
-                <div class="feature-footer">
-                  <button class="feature-btn" @click="showFeatureDemo('api')">
-                    <span>Documentation</span>
-                    <i class="fas fa-external-link-alt"></i>
-                  </button>
-                </div>
-                <div class="feature-decoration">
-                  <div class="decoration-circle"></div>
-                  <div class="decoration-line"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="feature-card" data-feature="mobile">
-              <div class="feature-card-inner">
-                <div class="feature-header">
-                  <div class="feature-icon mobile">
-                    <i class="fas fa-mobile-alt"></i>
-                    <div class="icon-bg"></div>
-                  </div>
-                  <div class="feature-badge">Mobile</div>
-                </div>
-                <div class="feature-content">
-                  <h3>Application mobile</h3>
-                  <p>Surveillez vos capteurs où que vous soyez avec notre application mobile native iOS et Android.</p>
-                  <ul class="feature-benefits">
-                    <li><i class="fas fa-check"></i> Notifications push</li>
-                    <li><i class="fas fa-check"></i> Mode hors ligne</li>
-                    <li><i class="fas fa-check"></i> Interface tactile</li>
-                  </ul>
-                </div>
-                <div class="feature-footer">
-                  <button class="feature-btn" @click="showFeatureDemo('mobile')">
-                    <span>Télécharger</span>
-                    <i class="fas fa-download"></i>
-                  </button>
-                </div>
-                <div class="feature-decoration">
-                  <div class="decoration-circle"></div>
-                  <div class="decoration-line"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Section de comparaison rapide -->
-          <div class="features-comparison">
-            <h3>Comparaison rapide</h3>
-            <div class="comparison-grid">
-              <div class="comparison-item">
-                <div class="comparison-icon">
-                  <i class="fas fa-clock"></i>
-                </div>
-                <div class="comparison-content">
-                  <h4>Temps réel</h4>
-                  <p>Données actualisées toutes les secondes</p>
-                </div>
-              </div>
-              <div class="comparison-item">
-                <div class="comparison-icon">
-                  <i class="fas fa-cloud"></i>
-                </div>
-                <div class="comparison-content">
-                  <h4>Cloud sécurisé</h4>
-                  <p>Infrastructure haute disponibilité</p>
-                </div>
-              </div>
-              <div class="comparison-item">
-                <div class="comparison-icon">
-                  <i class="fas fa-users"></i>
-                </div>
-                <div class="comparison-content">
-                  <h4>Multi-utilisateurs</h4>
-                  <p>Gestion des permissions granulaire</p>
-                </div>
-              </div>
-              <div class="comparison-item">
-                <div class="comparison-icon">
-                  <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="comparison-content">
-                  <h4>Analytics avancés</h4>
-                  <p>IA et machine learning intégrés</p>
                 </div>
               </div>
             </div>
