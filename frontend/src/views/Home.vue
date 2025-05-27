@@ -270,11 +270,25 @@ const scrollToFeatures = () => {
 }
 
 .highlight {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1976d2;
+  font-weight: 800;
+  position: relative;
+  text-shadow: 0 1px 3px rgba(25, 118, 210, 0.2);
+  
+  /* Effet de fond subtil */
+  background: linear-gradient(135deg, rgba(25, 118, 210, 0.1), rgba(0, 188, 212, 0.1));
+  padding: 2px 6px;
+  border-radius: 4px;
+  
+  /* Animation hover */
+  transition: all 0.3s ease;
 }
+
+.highlight:hover {
+  background: linear-gradient(135deg, rgba(25, 118, 210, 0.15), rgba(0, 188, 212, 0.15));
+  transform: translateY(-1px);
+}
+
 
 .hero-subtitle {
   font-size: 1.25rem;
