@@ -10,7 +10,7 @@
       <div class="login-card">
         <div class="login-header">
           <div class="logo">
-            <i class="fas fa-water"></i>
+            <img src="@/assets/logo2.png" alt="PoulpISense Logo" class="logo-image" />
           </div>
           <h1>PoulpISense</h1>
           <p>Connectez-vous à votre espace IoT</p>
@@ -352,14 +352,26 @@ loadSavedData()
   margin-bottom: 40px;
 }
 .logo {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 84px; height: 84px;
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center;
+  width: 84px; 
+  height: 84px;
   background: var(--accent-color);
   border-radius: 50%;
   margin-bottom: 22px;
-  box-shadow: 0 8px 20px rgba(0, 188, 212, 0.27);
+  box-shadow: 0 8px 20px rgba(103, 95, 255, 0.27);
   position: relative;
+  overflow: hidden; /* Pour éviter que l'image dépasse du cercle */
 }
+
+.logo-image {
+  width: 100px; /* Ajustez selon votre logo */
+  height: 100px; /* Ajustez selon votre logo */
+  object-fit: contain; /* Garde les proportions */
+  /* Ou utilisez filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); pour une ombre */
+}
+
 .logo i { font-size: 2.6rem; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.15);}
 .login-header h1 {
   margin: 0 0 10px 0;
