@@ -13,13 +13,32 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="navbar">
-      <div class="nav-brand">
+    <nav ref="navbar" class="navbar" :class="{ scrolled: isScrolled }">
+      <div class="nav-brand" @click="$router.push('/')">
         <img src="@/assets/logo2.png" alt="PoulpISense" class="nav-logo">
         <span class="nav-title">PoulpISense</span>
       </div>
+      
       <div class="nav-actions">
-        <router-link to="/login" class="nav-link"><i class="fas fa-sign-in-alt"></i> Connexion</router-link>
+        <router-link to="/login" class="nav-link highlight">
+          <i class="fas fa-sign-in-alt"></i>
+          <span>Connexion</span>
+        </router-link>
+      </div>
+      
+      <!-- Menu mobile toggle -->
+      <div class="nav-mobile-toggle" :class="{ active: mobileMenuOpen }" @click="toggleMobileMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      
+      <!-- Menu mobile dropdown -->
+      <div class="nav-mobile-menu" :class="{ active: mobileMenuOpen }">
+        <router-link to="/login" class="nav-link" @click="mobileMenuOpen = false">
+          <i class="fas fa-sign-in-alt"></i>
+          <span>Connexion</span>
+        </router-link>
       </div>
     </nav>
 
@@ -152,7 +171,27 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+
+const navbar = ref(null)
+const mobileMenuOpen = ref(false)
+const isScrolled = ref(false)
+
+const toggleMobileMenu = () => {
+  mobileMenuOpen.value = !mobileMenuOpen.value
+}
+
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 50
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 
 const featuresSection = ref(null)
 
