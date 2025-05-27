@@ -191,15 +191,32 @@ const scrollToFeatures = () => {
 
 .home-container {
   min-height: 100vh;
+  width: 100%;
   background: var(--background);
   position: relative;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+#app {
+  min-height: 100vh;
+  width: 100%;
 }
 
 
 /* Navigation */
 .navbar {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 10;
   display: flex;
   justify-content: space-between;
@@ -208,6 +225,7 @@ const scrollToFeatures = () => {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-light);
+  width: 100%;
 }
 
 .nav-brand {
@@ -249,6 +267,9 @@ const scrollToFeatures = () => {
 .main-content {
   position: relative;
   z-index: 1;
+  flex: 1; /* Occupe l'espace restant */
+  display: flex;
+  flex-direction: column;
 }
 
 .hero-section {
@@ -259,6 +280,8 @@ const scrollToFeatures = () => {
   padding: 80px 5%;
   max-width: 1400px;
   margin: 0 auto;
+  min-height: calc(100vh - 120px); /* Hauteur moins la navbar */
+  width: 100%;
 }
 
 .hero-title {
@@ -488,11 +511,14 @@ const scrollToFeatures = () => {
 .features-section {
   padding: 100px 5%;
   background: white;
+  width: 100%;
+  min-height: 60vh; /* Assurer une hauteur minimale */
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .section-title {
@@ -555,6 +581,8 @@ const scrollToFeatures = () => {
   padding: 60px 5% 30px;
   position: relative;
   z-index: 2;
+  width: 100%;
+  margin-top: auto; /* Pousse le footer vers le bas */
 }
 
 .footer-content {
@@ -566,6 +594,7 @@ const scrollToFeatures = () => {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 30px;
+  width: 100%;
 }
 
 .footer-brand {
@@ -640,8 +669,8 @@ const scrollToFeatures = () => {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw; /* Utiliser vw pour la largeur complète */
+  height: 100vh; /* Utiliser vh pour la hauteur complète */
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
@@ -992,12 +1021,15 @@ const scrollToFeatures = () => {
   to { transform: scaleY(1); }
 }
 
-/* Responsive */
+
+/* Responsive - Version plein écran */
 @media (max-width: 1024px) {
   .hero-section {
     grid-template-columns: 1fr;
     gap: 40px;
     text-align: center;
+    min-height: calc(100vh - 100px);
+    padding: 60px 5%;
   }
 
   .hero-title {
@@ -1016,7 +1048,8 @@ const scrollToFeatures = () => {
   }
 
   .hero-section {
-    padding: 60px 4%;
+    padding: 40px 4%;
+    min-height: calc(100vh - 80px);
   }
 
   .hero-title {
@@ -1046,7 +1079,8 @@ const scrollToFeatures = () => {
   }
 
   .features-section {
-    padding: 80px 4%;
+    padding: 60px 4%;
+    min-height: 50vh;
   }
 
   .section-title {
@@ -1063,9 +1097,18 @@ const scrollToFeatures = () => {
     gap: 20px;
     text-align: center;
   }
+
+  .footer {
+    padding: 40px 4% 20px;
+  }
 }
 
 @media (max-width: 480px) {
+  .hero-section {
+    padding: 30px 4%;
+    min-height: calc(100vh - 70px);
+  }
+
   .hero-title {
     font-size: 1.8rem;
   }
@@ -1076,6 +1119,10 @@ const scrollToFeatures = () => {
 
   .nav-title {
     font-size: 1.2rem;
+  }
+
+  .navbar {
+    padding: 12px 4%;
   }
 }
 
