@@ -239,10 +239,19 @@ html, body {
 .nav-title {
   font-size: 1.5rem;
   font-weight: 700;
-  background: var(--gradient-primary);
+  color: #1976d2 !important;
+  
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: initial !important;
+  
+  background: linear-gradient(135deg, #1976d2, #00bcd4);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  
+  color: #1976d2;
 }
 
 .nav-link {
