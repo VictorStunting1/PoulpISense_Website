@@ -2,6 +2,8 @@
   <div class="home-container">
     <!-- Arrière-plan animé -->
     <div class="background-animation">
+      <div class="layer-1"></div>
+      <div class="layer-2"></div>
       <div class="wave wave1"></div>
       <div class="wave wave2"></div>
       <div class="wave wave3"></div>
@@ -194,68 +196,6 @@ const scrollToFeatures = () => {
   overflow-x: hidden;
 }
 
-/* Arrière-plan animé */
-.background-animation {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.wave {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.1;
-  animation: float 15s ease-in-out infinite;
-}
-
-.wave1 {
-  width: 400px;
-  height: 400px;
-  background: var(--gradient-primary);
-  top: -200px;
-  left: -200px;
-}
-
-.wave2 {
-  width: 600px;
-  height: 600px;
-  background: var(--gradient-secondary);
-  top: 20%;
-  right: -300px;
-  animation-delay: 5s;
-}
-
-.wave3 {
-  width: 300px;
-  height: 300px;
-  background: var(--accent-color);
-  bottom: -150px;
-  left: 30%;
-  animation-delay: 10s;
-}
-
-.floating-dots {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-.floating-dots .dot {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: var(--accent-color);
-  border-radius: 50%;
-  animation: float-dot 20s linear infinite;
-}
-
-.floating-dots .dot:nth-child(odd) {
-  animation-delay: -10s;
-}
 
 /* Navigation */
 .navbar {
@@ -642,6 +582,342 @@ const scrollToFeatures = () => {
   padding-top: 30px;
   border-top: 1px solid #37474f;
   color: var(--text-light);
+}
+
+/* Arrière-plan animé amélioré */
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Gradient principal animé */
+.background-animation::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg, 
+    rgba(25, 118, 210, 0.08) 0%, 
+    rgba(0, 188, 212, 0.03) 20%, 
+    rgba(77, 208, 225, 0.08) 40%,
+    rgba(25, 118, 210, 0.03) 60%,
+    rgba(0, 188, 212, 0.08) 80%,
+    rgba(77, 208, 225, 0.03) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 25s ease infinite;
+  opacity: 0.8;
+}
+
+/* Cercles flottants animés */
+.background-animation::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(25, 118, 210, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 40%, rgba(0, 188, 212, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(77, 208, 225, 0.18) 0%, transparent 50%),
+    radial-gradient(circle at 90% 10%, rgba(25, 118, 210, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 10% 90%, rgba(0, 188, 212, 0.14) 0%, transparent 50%);
+  animation: floatingCircles 30s ease-in-out infinite;
+}
+
+/* Formes géométriques flottantes */
+.wave {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  animation: floatShape 20s ease-in-out infinite;
+  filter: blur(2px);
+}
+
+.wave1 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(25, 118, 210, 0.2) 0%, rgba(25, 118, 210, 0.05) 70%, transparent 100%);
+  top: 10%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.wave2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 188, 212, 0.15) 0%, rgba(0, 188, 212, 0.03) 70%, transparent 100%);
+  top: 60%;
+  right: -15%;
+  animation-delay: 7s;
+}
+
+.wave3 {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(77, 208, 225, 0.25) 0%, rgba(77, 208, 225, 0.08) 70%, transparent 100%);
+  bottom: 20%;
+  left: 70%;
+  animation-delay: 14s;
+}
+
+/* Particules flottantes améliorées */
+.floating-dots {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.floating-dots .dot {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  animation: floatParticle 25s linear infinite;
+  filter: blur(0.5px);
+}
+
+/* Différentes tailles et couleurs pour les particules */
+.floating-dots .dot:nth-child(4n+1) {
+  width: 3px;
+  height: 3px;
+  background: radial-gradient(circle, rgba(25, 118, 210, 0.8) 0%, rgba(25, 118, 210, 0.2) 100%);
+  left: 10%;
+  animation-delay: -5s;
+}
+
+.floating-dots .dot:nth-child(4n+2) {
+  width: 5px;
+  height: 5px;
+  background: radial-gradient(circle, rgba(0, 188, 212, 0.6) 0%, rgba(0, 188, 212, 0.1) 100%);
+  left: 30%;
+  animation-delay: -10s;
+}
+
+.floating-dots .dot:nth-child(4n+3) {
+  width: 2px;
+  height: 2px;
+  background: radial-gradient(circle, rgba(77, 208, 225, 0.9) 0%, rgba(77, 208, 225, 0.3) 100%);
+  left: 60%;
+  animation-delay: -15s;
+}
+
+.floating-dots .dot:nth-child(4n) {
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, rgba(25, 118, 210, 0.7) 0%, rgba(25, 118, 210, 0.15) 100%);
+  left: 80%;
+  animation-delay: -20s;
+}
+
+/* Animations améliorées */
+@keyframes gradientShift {
+  0% { 
+    background-position: 0% 50%; 
+    transform: rotate(0deg) scale(1);
+  }
+  25% { 
+    background-position: 100% 25%; 
+    transform: rotate(90deg) scale(1.1);
+  }
+  50% { 
+    background-position: 100% 100%; 
+    transform: rotate(180deg) scale(1);
+  }
+  75% { 
+    background-position: 0% 75%; 
+    transform: rotate(270deg) scale(1.1);
+  }
+  100% { 
+    background-position: 0% 50%; 
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes floatingCircles {
+  0%, 100% { 
+    transform: translateX(0) translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  25% { 
+    transform: translateX(20px) translateY(-15px) scale(1.1);
+    opacity: 0.6;
+  }
+  50% { 
+    transform: translateX(-10px) translateY(-25px) scale(0.9);
+    opacity: 1;
+  }
+  75% { 
+    transform: translateX(-25px) translateY(10px) scale(1.05);
+    opacity: 0.7;
+  }
+}
+
+@keyframes floatShape {
+  0% { 
+    transform: translateY(0px) translateX(0px) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(-20px) translateX(10px) rotate(36deg) scale(1);
+  }
+  50% { 
+    transform: translateY(-60px) translateX(-20px) rotate(180deg) scale(1.2);
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(-40px) translateX(30px) rotate(324deg) scale(1);
+  }
+  100% { 
+    transform: translateY(0px) translateX(0px) rotate(360deg) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes floatParticle {
+  0% { 
+    transform: translateY(100vh) translateX(0px) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+    transform: translateY(95vh) translateX(0px) rotate(0deg) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(50vh) translateX(20px) rotate(180deg) scale(1.1);
+  }
+  95% {
+    opacity: 1;
+    transform: translateY(5vh) translateX(-10px) rotate(350deg) scale(1);
+  }
+  100% { 
+    transform: translateY(-5vh) translateX(0px) rotate(360deg) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Effet de parallaxe subtil pour les éléments */
+@keyframes parallaxFloat {
+  0%, 100% { 
+    transform: translateY(0px) translateX(0px);
+  }
+  50% { 
+    transform: translateY(-10px) translateX(5px);
+  }
+}
+
+/* Vagues géométriques supplémentaires */
+.wave::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  border: 1px solid rgba(25, 118, 210, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple 8s ease-out infinite;
+}
+
+.wave::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  border: 1px solid rgba(0, 188, 212, 0.08);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple 8s ease-out infinite;
+  animation-delay: 2s;
+}
+
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Effet de profondeur avec plusieurs couches */
+.background-animation .layer-1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at top left, rgba(25, 118, 210, 0.05) 0%, transparent 50%),
+              radial-gradient(ellipse at bottom right, rgba(0, 188, 212, 0.08) 0%, transparent 50%);
+  animation: layerMove1 40s ease-in-out infinite;
+}
+
+.background-animation .layer-2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, rgba(77, 208, 225, 0.06) 0%, transparent 70%);
+  animation: layerMove2 35s ease-in-out infinite reverse;
+}
+
+@keyframes layerMove1 {
+  0%, 100% { transform: translateX(0) translateY(0) scale(1); }
+  50% { transform: translateX(30px) translateY(-20px) scale(1.05); }
+}
+
+@keyframes layerMove2 {
+  0%, 100% { transform: translateX(0) translateY(0) scale(1); }
+  50% { transform: translateX(-20px) translateY(30px) scale(0.95); }
+}
+
+/* Responsive pour les animations */
+@media (max-width: 768px) {
+  .wave1, .wave2, .wave3 {
+    animation-duration: 15s; /* Plus rapide sur mobile */
+  }
+  
+  .floating-dots .dot {
+    animation-duration: 20s;
+  }
+  
+  .background-animation::before {
+    animation-duration: 20s;
+  }
+}
+
+/* Optimisation pour les préférences d'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  .background-animation::before,
+  .background-animation::after,
+  .wave,
+  .floating-dots .dot,
+  .wave::before,
+  .wave::after {
+    animation: none;
+  }
+  
+  .background-animation {
+    background: linear-gradient(135deg, rgba(25, 118, 210, 0.05) 0%, rgba(0, 188, 212, 0.08) 100%);
+  }
 }
 
 /* Animations */
