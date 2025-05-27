@@ -117,31 +117,261 @@
         </div>
       </div>
 
-      <!-- Section fonctionnalités -->
+            <!-- Section fonctionnalités améliorée -->
       <section ref="featuresSection" class="features-section">
+        <div class="features-background">
+          <div class="features-wave"></div>
+          <div class="features-particles">
+            <div class="feature-particle" v-for="i in 15" :key="i"></div>
+          </div>
+        </div>
+        
         <div class="container">
-          <h2 class="section-title">Pourquoi choisir PoulpISense ?</h2>
+          <!-- En-tête de section amélioré -->
+          <div class="features-header">
+            <span class="features-badge">Fonctionnalités</span>
+            <h2 class="section-title">
+              Pourquoi choisir 
+              <span class="highlight-text">PoulpISense</span> ?
+            </h2>
+            <p class="section-subtitle">
+              Découvrez comment notre plateforme révolutionne la surveillance IoT avec des outils puissants et une interface intuitive.
+            </p>
+          </div>
+
+          <!-- Grille de fonctionnalités -->
           <div class="features-grid">
-            <div class="feature-card">
-              <div class="feature-icon">
-                <i class="fas fa-tachometer-alt"></i>
+            <!-- Carte 1 - Dashboard -->
+            <div class="feature-card" data-feature="dashboard">
+              <div class="feature-card-inner">
+                <div class="feature-header">
+                  <div class="feature-icon dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <div class="icon-bg"></div>
+                  </div>
+                  <div class="feature-badge">Interface</div>
+                </div>
+                <div class="feature-content">
+                  <h3>Dashboard intuitif</h3>
+                  <p>Visualisez toutes vos données de capteurs dans une interface claire et moderne avec des graphiques interactifs en temps réel.</p>
+                  <ul class="feature-benefits">
+                    <li><i class="fas fa-check"></i> Graphiques temps réel</li>
+                    <li><i class="fas fa-check"></i> Interface responsive</li>
+                    <li><i class="fas fa-check"></i> Widgets personnalisables</li>
+                  </ul>
+                </div>
+                <div class="feature-footer">
+                  <button class="feature-btn" @click="showFeatureDemo('dashboard')">
+                    <span>Voir la démo</span>
+                    <i class="fas fa-arrow-right"></i>
+                  </button>
+                </div>
+                <div class="feature-decoration">
+                  <div class="decoration-circle"></div>
+                  <div class="decoration-line"></div>
+                </div>
               </div>
-              <h3>Dashboard intuitif</h3>
-              <p>Visualisez toutes vos données de capteurs dans une interface claire et moderne.</p>
             </div>
-            <div class="feature-card">
-              <div class="feature-icon">
-                <i class="fas fa-bell"></i>
+
+            <!-- Carte 2 - Alertes -->
+            <div class="feature-card featured" data-feature="alerts">
+              <div class="feature-card-inner">
+                <div class="feature-header">
+                  <div class="feature-icon alerts">
+                    <i class="fas fa-bell"></i>
+                    <div class="icon-bg"></div>
+                  </div>
+                  <div class="feature-badge premium">Intelligent</div>
+                </div>
+                <div class="feature-content">
+                  <h3>Alertes intelligentes</h3>
+                  <p>Recevez des notifications instantanées en cas de valeurs anormales avec un système d'IA qui apprend de vos données.</p>
+                  <ul class="feature-benefits">
+                    <li><i class="fas fa-check"></i> IA prédictive</li>
+                    <li><i class="fas fa-check"></i> Seuils adaptatifs</li>
+                    <li><i class="fas fa-check"></i> Multi-canaux</li>
+                  </ul>
+                </div>
+                <div class="feature-footer">
+                  <button class="feature-btn" @click="showFeatureDemo('alerts')">
+                    <span>Voir la démo</span>
+                    <i class="fas fa-arrow-right"></i>
+                  </button>
+                </div>
+                <div class="feature-decoration">
+                  <div class="decoration-circle"></div>
+                  <div class="decoration-line"></div>
+                </div>
               </div>
-              <h3>Alertes intelligentes</h3>
-              <p>Recevez des notifications instantanées en cas de valeurs anormales.</p>
             </div>
-            <div class="feature-card">
-              <div class="feature-icon">
-                <i class="fas fa-history"></i>
+
+            <!-- Carte 3 - Historique -->
+            <div class="feature-card" data-feature="history">
+              <div class="feature-card-inner">
+                <div class="feature-header">
+                  <div class="feature-icon history">
+                    <i class="fas fa-history"></i>
+                    <div class="icon-bg"></div>
+                  </div>
+                  <div class="feature-badge">Analytics</div>
+                </div>
+                <div class="feature-content">
+                  <h3>Historique complet</h3>
+                  <p>Accédez à l'historique complet de vos mesures avec des graphiques détaillés et des outils d'analyse avancés.</p>
+                  <ul class="feature-benefits">
+                    <li><i class="fas fa-check"></i> Stockage illimité</li>
+                    <li><i class="fas fa-check"></i> Export de données</li>
+                    <li><i class="fas fa-check"></i> Rapports automatiques</li>
+                  </ul>
+                </div>
+                <div class="feature-footer">
+                  <button class="feature-btn" @click="showFeatureDemo('history')">
+                    <span>Voir la démo</span>
+                    <i class="fas fa-arrow-right"></i>
+                  </button>
+                </div>
+                <div class="feature-decoration">
+                  <div class="decoration-circle"></div>
+                  <div class="decoration-line"></div>
+                </div>
               </div>
-              <h3>Historique complet</h3>
-              <p>Accédez à l'historique complet de vos mesures avec des graphiques détaillés.</p>
+            </div>
+
+            <!-- Cartes supplémentaires -->
+            <div class="feature-card" data-feature="security">
+              <div class="feature-card-inner">
+                <div class="feature-header">
+                  <div class="feature-icon security">
+                    <i class="fas fa-shield-alt"></i>
+                    <div class="icon-bg"></div>
+                  </div>
+                  <div class="feature-badge">Sécurité</div>
+                </div>
+                <div class="feature-content">
+                  <h3>Sécurité renforcée</h3>
+                  <p>Protection de vos données avec un chiffrement de bout en bout et une authentification multi-facteurs.</p>
+                  <ul class="feature-benefits">
+                    <li><i class="fas fa-check"></i> Chiffrement AES-256</li>
+                    <li><i class="fas fa-check"></i> Authentification 2FA</li>
+                    <li><i class="fas fa-check"></i> Audit de sécurité</li>
+                  </ul>
+                </div>
+                <div class="feature-footer">
+                  <button class="feature-btn" @click="showFeatureDemo('security')">
+                    <span>En savoir plus</span>
+                    <i class="fas fa-arrow-right"></i>
+                  </button>
+                </div>
+                <div class="feature-decoration">
+                  <div class="decoration-circle"></div>
+                  <div class="decoration-line"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-card" data-feature="api">
+              <div class="feature-card-inner">
+                <div class="feature-header">
+                  <div class="feature-icon api">
+                    <i class="fas fa-code"></i>
+                    <div class="icon-bg"></div>
+                  </div>
+                  <div class="feature-badge">Développeur</div>
+                </div>
+                <div class="feature-content">
+                  <h3>API puissante</h3>
+                  <p>Intégrez facilement vos applications avec notre API RESTful complète et notre SDK multi-plateformes.</p>
+                  <ul class="feature-benefits">
+                    <li><i class="fas fa-check"></i> Documentation complète</li>
+                    <li><i class="fas fa-check"></i> SDK multi-plateformes</li>
+                    <li><i class="fas fa-check"></i> Webhooks temps réel</li>
+                  </ul>
+                </div>
+                <div class="feature-footer">
+                  <button class="feature-btn" @click="showFeatureDemo('api')">
+                    <span>Documentation</span>
+                    <i class="fas fa-external-link-alt"></i>
+                  </button>
+                </div>
+                <div class="feature-decoration">
+                  <div class="decoration-circle"></div>
+                  <div class="decoration-line"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-card" data-feature="mobile">
+              <div class="feature-card-inner">
+                <div class="feature-header">
+                  <div class="feature-icon mobile">
+                    <i class="fas fa-mobile-alt"></i>
+                    <div class="icon-bg"></div>
+                  </div>
+                  <div class="feature-badge">Mobile</div>
+                </div>
+                <div class="feature-content">
+                  <h3>Application mobile</h3>
+                  <p>Surveillez vos capteurs où que vous soyez avec notre application mobile native iOS et Android.</p>
+                  <ul class="feature-benefits">
+                    <li><i class="fas fa-check"></i> Notifications push</li>
+                    <li><i class="fas fa-check"></i> Mode hors ligne</li>
+                    <li><i class="fas fa-check"></i> Interface tactile</li>
+                  </ul>
+                </div>
+                <div class="feature-footer">
+                  <button class="feature-btn" @click="showFeatureDemo('mobile')">
+                    <span>Télécharger</span>
+                    <i class="fas fa-download"></i>
+                  </button>
+                </div>
+                <div class="feature-decoration">
+                  <div class="decoration-circle"></div>
+                  <div class="decoration-line"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section de comparaison rapide -->
+          <div class="features-comparison">
+            <h3>Comparaison rapide</h3>
+            <div class="comparison-grid">
+              <div class="comparison-item">
+                <div class="comparison-icon">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <div class="comparison-content">
+                  <h4>Temps réel</h4>
+                  <p>Données actualisées toutes les secondes</p>
+                </div>
+              </div>
+              <div class="comparison-item">
+                <div class="comparison-icon">
+                  <i class="fas fa-cloud"></i>
+                </div>
+                <div class="comparison-content">
+                  <h4>Cloud sécurisé</h4>
+                  <p>Infrastructure haute disponibilité</p>
+                </div>
+              </div>
+              <div class="comparison-item">
+                <div class="comparison-icon">
+                  <i class="fas fa-users"></i>
+                </div>
+                <div class="comparison-content">
+                  <h4>Multi-utilisateurs</h4>
+                  <p>Gestion des permissions granulaire</p>
+                </div>
+              </div>
+              <div class="comparison-item">
+                <div class="comparison-icon">
+                  <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="comparison-content">
+                  <h4>Analytics avancés</h4>
+                  <p>IA et machine learning intégrés</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -293,7 +523,6 @@ const isScrolled = ref(false)
 const featuresSection = ref(null)
 const newsletterEmail = ref('')
 
-
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value
 }
@@ -301,15 +530,6 @@ const toggleMobileMenu = () => {
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 50
 }
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
-
 
 const scrollToFeatures = () => {
   featuresSection.value?.scrollIntoView({ behavior: 'smooth' })
@@ -321,11 +541,61 @@ const scrollToTop = () => {
 
 const subscribeNewsletter = () => {
   if (newsletterEmail.value) {
-    // Ajouter la logique d'inscription à la newsletter ici
     alert(`Merci pour votre inscription avec l'email: ${newsletterEmail.value}`)
     newsletterEmail.value = ''
   }
 }
+
+// Nouvelle fonction pour les démos de fonctionnalités
+const showFeatureDemo = (feature) => {
+  switch (feature) {
+    case 'dashboard':
+      alert('Démo du Dashboard - Redirection vers la page de démonstration')
+      break
+    case 'alerts':
+      alert('Démo des Alertes - Simulation d\'une alerte en temps réel')
+      break
+    case 'history':
+      alert('Démo de l\'Historique - Affichage des données historiques')
+      break
+    case 'security':
+      alert('Informations Sécurité - Détails sur nos mesures de sécurité')
+      break
+    case 'api':
+      alert('Documentation API - Redirection vers la documentation')
+      break
+    case 'mobile':
+      alert('Téléchargement Mobile - Liens vers App Store et Google Play')
+      break
+    default:
+      console.log('Feature demo:', feature)
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+  
+  // Animation au scroll pour les cartes (optionnel)
+  const observeFeatures = () => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view')
+        }
+      })
+    }, { threshold: 0.1 })
+    
+    if (featuresSection.value) {
+      observer.observe(featuresSection.value)
+    }
+  }
+  
+  observeFeatures()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <style scoped>
@@ -803,11 +1073,107 @@ html, body {
 
 /* Section fonctionnalités */
 .features-section {
-  padding: 100px 5%;
-  background: white;
+  position: relative;
+  padding: 120px 5% 100px;
+  background: linear-gradient(135deg, #f8faff 0%, #ffffff 50%, #f0f8ff 100%);
   width: 100%;
-  min-height: 60vh; /* Assurer une hauteur minimale */
+  overflow: hidden;
 }
+
+.features-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.features-wave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(90deg, 
+    rgba(25, 118, 210, 0.05) 0%, 
+    rgba(0, 188, 212, 0.08) 50%, 
+    rgba(25, 118, 210, 0.05) 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+  animation: featuresWave 12s ease-in-out infinite;
+}
+
+.features-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.feature-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, rgba(0, 188, 212, 0.6), rgba(0, 188, 212, 0.1));
+  border-radius: 50%;
+  animation: floatFeatureParticle 20s linear infinite;
+}
+
+.feature-particle:nth-child(odd) {
+  background: radial-gradient(circle, rgba(25, 118, 210, 0.6), rgba(25, 118, 210, 0.1));
+  animation-delay: -10s;
+}
+
+/* Container et layout */
+.features-section .container {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* En-tête de section */
+.features-header {
+  text-align: center;
+  margin-bottom: 80px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 80px;
+}
+
+.features-badge {
+  display: inline-block;
+  background: var(--gradient-primary);
+  color: white;
+  padding: 8px 24px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+}
+
+.section-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 24px;
+}
+
+.section-subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+
 
 .container {
   max-width: 1200px;
@@ -815,45 +1181,459 @@ html, body {
   width: 100%;
 }
 
-.section-title {
-  text-align: center;
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 60px;
-}
-
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 32px;
+  margin-bottom: 80px;
 }
 
 .feature-card {
-  text-align: center;
-  padding: 40px 30px;
-  border-radius: 16px;
-  background: var(--surface);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  height: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+  border: 1px solid rgba(25, 118, 210, 0.1);
+  border-radius: 24px;
+  backdrop-filter: blur(20px);
+  transition: all 0.4s ease;
+}
+
+.feature-card:hover::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+  border-color: rgba(25, 118, 210, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.feature-card.featured::before {
+  background: linear-gradient(135deg, rgba(25, 118, 210, 0.05), rgba(0, 188, 212, 0.05));
+  border: 2px solid rgba(25, 118, 210, 0.2);
+}
+
+.feature-card.featured:hover::before {
+  border-color: rgba(25, 118, 210, 0.3);
+  box-shadow: 0 25px 70px rgba(25, 118, 210, 0.2);
 }
 
 .feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px) scale(1.02);
 }
 
+
+/* Contenu des cartes */
+.feature-card-inner {
+  position: relative;
+  z-index: 2;
+  padding: 40px 32px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+/* Icônes */
 .feature-icon {
+  position: relative;
   width: 80px;
   height: 80px;
-  margin: 0 auto 24px;
-  border-radius: 50%;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.feature-icon.dashboard {
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+}
+
+.feature-icon.alerts {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+}
+
+.feature-icon.history {
+  background: linear-gradient(135deg, #4caf50, #388e3c);
+}
+
+.feature-icon.security {
+  background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+}
+
+.feature-icon.api {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+}
+
+.feature-icon.mobile {
+  background: linear-gradient(135deg, #00bcd4, #0097a7);
+}
+
+.icon-bg {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+  transform: scale(0);
+  transition: transform 0.6s ease;
+}
+
+.feature-card:hover .icon-bg {
+  transform: scale(1);
+}
+
+.feature-icon i {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover .feature-icon i {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.feature-badge {
+  background: rgba(25, 118, 210, 0.1);
+  color: var(--primary-color);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.feature-badge.premium {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: white;
+}
+
+.feature-content {
+  flex: 1;
+  margin-bottom: 24px;
+}
+
+.feature-content h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.feature-content p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Liste des avantages */
+.feature-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.feature-benefits li i {
+  color: #4caf50;
+  font-size: 0.8rem;
+  width: 16px;
+}
+
+/* Footer des cartes */
+.feature-footer {
+  margin-top: auto;
+}
+
+.feature-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+
+.feature-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
   background: var(--gradient-primary);
+  transition: width 0.3s ease;
+}
+
+.feature-btn:hover::after {
+  width: 100%;
+}
+
+.feature-btn:hover {
+  color: var(--primary-dark);
+  transform: translateX(4px);
+}
+
+.feature-btn i {
+  transition: transform 0.3s ease;
+}
+
+.feature-btn:hover i {
+  transform: translateX(4px);
+}
+
+/* Décorations */
+.feature-decoration {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  pointer-events: none;
+  opacity: 0.1;
+}
+
+.decoration-circle {
+  width: 60px;
+  height: 60px;
+  border: 2px solid var(--primary-color);
+  border-radius: 50%;
+  position: relative;
+}
+
+.decoration-line {
+  position: absolute;
+  top: 50%;
+  left: 120%;
+  width: 40px;
+  height: 2px;
+  background: var(--accent-color);
+  transform: translateY(-50%);
+}
+
+/* Section de comparaison */
+.features-comparison {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 48px;
+  border: 1px solid rgba(25, 118, 210, 0.1);
+  text-align: center;
+}
+
+.features-comparison h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 40px;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 32px;
+}
+
+.comparison-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
+}
+
+.comparison-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--gradient-primary);
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 2rem;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.comparison-content h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.comparison-content p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Animations */
+@keyframes featuresWave {
+  0%, 100% { 
+    clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+  }
+  50% { 
+    clip-path: polygon(0 0, 100% 0, 100% 60%, 0 80%);
+  }
+}
+
+@keyframes floatFeatureParticle {
+  0% { 
+    transform: translateY(100vh) translateX(0) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(90vh) translateX(0) rotate(0deg) scale(1);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(10vh) translateX(30px) rotate(360deg) scale(1);
+  }
+  100% { 
+    transform: translateY(0) translateX(0) rotate(360deg) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Animation d'apparition en scroll */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.feature-card {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.feature-card:nth-child(1) { animation-delay: 0.1s; }
+.feature-card:nth-child(2) { animation-delay: 0.2s; }
+.feature-card:nth-child(3) { animation-delay: 0.3s; }
+.feature-card:nth-child(4) { animation-delay: 0.4s; }
+.feature-card:nth-child(5) { animation-delay: 0.5s; }
+.feature-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  
+  .section-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .features-section {
+    padding: 80px 4% 60px;
+  }
+  
+  .features-header {
+    margin-bottom: 60px;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 60px;
+  }
+
+  .feature-card-inner {
+    padding: 32px 24px;
+  }
+  
+  .feature-icon {
+    width: 64px;
+    height: 64px;
+    font-size: 1.6rem;
+  }
+  
+  .features-comparison {
+    padding: 32px 24px;
+  }
+  
+  .comparison-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .comparison-item {
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .features-section {
+    padding: 60px 4% 40px;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+  }
+  
+  .feature-card-inner {
+    padding: 24px 20px;
+  }
+  
+  .features-comparison {
+    padding: 24px 16px;
+  }
 }
 
 .feature-card h3 {
