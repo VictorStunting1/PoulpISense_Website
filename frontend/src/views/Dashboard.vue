@@ -30,8 +30,11 @@
     </div>
 
     <div v-else-if="!selectedDevice" class="loading-container">
-      <div class="spinner"></div>
-      <p>Chargement des données...</p>
+      <div class="empty-state">
+        <i class="fas fa-mouse-pointer empty-icon"></i>
+        <h3>Veuillez sélectionner un appareil</h3>
+        <p>Choisissez un appareil ci-dessus pour afficher ses données.</p>
+      </div>
     </div>
 
     <div v-else class="dashboard-content">
@@ -179,11 +182,7 @@ async function fetchUserDevices() {
     userDevices.value = res.data
     console.log('Appareils récupérés:', userDevices.value)
     
-    if (userDevices.value.length > 0) {
-      selectedDeviceId.value = userDevices.value[0].id
-      selectedDevice.value = userDevices.value[0]
-      await fetchDeviceMeasurements(selectedDeviceId.value)
-    }
+
   } catch (error) {
     console.error('Erreur lors de la récupération des appareils utilisateur :', error)
   }
