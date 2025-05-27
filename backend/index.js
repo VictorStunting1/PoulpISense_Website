@@ -129,28 +129,34 @@ app.get("/api/measurements", async (req, res) => {
 });
 
 
-// Récupérer les appareils d’un utilisateur par email
+// Récupérer les appareils d'un utilisateur par email
 app.get("/api/devices/user/:email", async (req, res) => {
   try {
-    const response = await axios.get(`${BASE_API_URL}/devices`);
-    // Filtrer les appareils par email utilisateur (adapte selon ta structure)
-
-    const devices = response.data.$values || response.data;
-    console.log("devices:", devices); // <-- Ajoute ce log
-
+    // D'abord, récupérer l'ID de l'utilisateur à partir de son email
+    const usersResponse = await axios.get(`${BASE_API_URL}/users`);
+    const users = usersResponse.data.$values || usersResponse.data;
     
-    const userDevices = (response.data.$values || response.data).filter(
-      //device => device.utilisateur?.email === req.params.email
-      //device.deviceUsers?.some(u => u.email === req.params.email)
-      device =>
-      Array.isArray(device.deviceUsers) &&
-      device.deviceUsers.some(u => u.email === req.params.email)
-    );
-    console.log("userDevices:", userDevices); // Ajout pour debug
-
+    const userEmail = req.params.email;
+    console.log("Email recherché:", userEmail);
+    
+    const user = users.find(u => u.email === userEmail);
+    
+    if (!user) {
+      console.log("Utilisateur non trouvé avec l'email:", userEmail);
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+    
+    console.log("Utilisateur trouvé, ID:", user.id);
+    
+    // Utiliser l'endpoint /devices/user/{userId} pour récupérer les appareils de l'utilisateur
+    const userDevicesResponse = await axios.get(`${BASE_API_URL}/devices/user/${user.id}`);
+    const userDevices = userDevicesResponse.data.$values || userDevicesResponse.data;
+    
+    console.log("Appareils trouvés pour l'utilisateur:", userDevices.length);
+    
     res.json(userDevices);
   } catch (error) {
-    console.error(error);
+    console.error("Erreur détaillée:", error);
     res.status(500).json({ message: "Erreur lors de la récupération des appareils utilisateur" });
   }
 });
