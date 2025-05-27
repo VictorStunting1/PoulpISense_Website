@@ -124,6 +124,26 @@
             <button @click="setTimeRange('month')" :class="{ active: timeRange === 'month' }">Mois</button>
           </div>
         </div>
+        <div class="export-controls">
+              <button 
+                @click="exportToPDF" 
+                class="export-btn pdf-btn"
+                :disabled="!filteredMeasurements.length"
+                title="Exporter en PDF"
+              >
+                <i class="fas fa-file-pdf"></i>
+                PDF
+              </button>
+              <button 
+                @click="exportToCSV" 
+                class="export-btn csv-btn"
+                :disabled="!filteredMeasurements.length"
+                title="Exporter en CSV"
+              >
+                <i class="fas fa-file-csv"></i>
+                CSV
+              </button>
+            </div>
         
         <div v-if="loading" class="loading-chart">
           <div class="spinner"></div>
@@ -173,6 +193,9 @@ import { ref, onMounted, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import DeviceChart from '../components/DeviceChart.vue'
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
+import Papa from 'papaparse'
 
 const router = useRouter()
 const userDevices = ref([]) 
@@ -366,6 +389,171 @@ function getChartData(measurements) {
         tension: 0.4,
       }
     ]
+  }
+}
+
+// Fonction d'exportation PDF
+function exportToPDF() {
+  if (!filteredMeasurements.value.length) {
+    alert('Aucune donnée à exporter')
+    return
+  }
+
+  const doc = new jsPDF()
+  const pageWidth = doc.internal.pageSize.width
+  
+  // En-tête du document
+  doc.setFontSize(20)
+  doc.setTextColor(25, 118, 210)
+  doc.text('PoulpISense - Rapport des Mesures', pageWidth / 2, 20, { align: 'center' })
+  
+  // Informations de l'appareil
+  doc.setFontSize(12)
+  doc.setTextColor(0, 0, 0)
+  doc.text(`Appareil: ${selectedDevice.value.nom}`, 20, 35)
+  doc.text(`Description: ${selectedDevice.value.description}`, 20, 42)
+  doc.text(`Localisation: ${selectedDevice.value.localisation?.description || 'Non définie'}`, 20, 49)
+  doc.text(`Période: ${getTimeRangeLabel()}`, 20, 56)
+  doc.text(`Date d'export: ${new Date().toLocaleDateString('fr-FR')}`, 20, 63)
+  
+  // Ligne de séparation
+  doc.setDrawColor(200, 200, 200)
+  doc.line(20, 68, pageWidth - 20, 68)
+  
+  // Statistiques résumées
+  const stats = calculateStats()
+  doc.setFontSize(14)
+  doc.setTextColor(25, 118, 210)
+  doc.text('Statistiques Résumées', 20, 80)
+  
+  doc.setFontSize(10)
+  doc.setTextColor(0, 0, 0)
+    doc.text(`Nombre de mesures: ${filteredMeasurements.value.length}`, 20, 90)
+  doc.text(`Température moyenne: ${stats.avgTemp}°C`, 20, 97)
+  doc.text(`pH moyen: ${stats.avgPh}`, 100, 97)
+  doc.text(`Turbidité moyenne: ${stats.avgTurbidity}`, 170, 97)
+  
+  // Préparation des données du tableau
+  const sortedData = [...filteredMeasurements.value].sort((a, b) => 
+    new Date(b.timestamp) - new Date(a.timestamp)
+  )
+  
+  const tableData = sortedData.map(measure => [
+    formatDateOnly(measure.timestamp),
+    formatTimeOnly(measure.timestamp),
+    `${measure.temperature}°C`,
+    measure.ph.toString(),
+    measure.turbidity.toString()
+  ])
+  
+  // Création du tableau
+  doc.autoTable({
+    head: [['Date', 'Heure', 'Température', 'pH', 'Turbidité']],
+    body: tableData,
+    startY: 110,
+    styles: {
+      fontSize: 9,
+      cellPadding: 3,
+    },
+    headStyles: {
+      fillColor: [25, 118, 210],
+      textColor: 255,
+      fontStyle: 'bold'
+    },
+    alternateRowStyles: {
+      fillColor: [245, 245, 245]
+    },
+    margin: { top: 110, left: 20, right: 20 },
+    theme: 'grid'
+  })
+  // Pied de page
+  const pageCount = doc.internal.getNumberOfPages()
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i)
+    doc.setFontSize(8)
+    doc.setTextColor(128, 128, 128)
+    doc.text(
+      `Page ${i} sur ${pageCount} - Généré par PoulpISense`, 
+      pageWidth / 2, 
+      doc.internal.pageSize.height - 10, 
+      { align: 'center' }
+    )
+  }
+  
+  // Sauvegarde
+  const fileName = `mesures_${selectedDevice.value.nom}_${timeRange.value}_${new Date().toISOString().split('T')[0]}.pdf`
+  doc.save(fileName)
+}
+
+
+// Fonction d'exportation CSV
+function exportToCSV() {
+  if (!filteredMeasurements.value.length) {
+    alert('Aucune donnée à exporter')
+    return
+  }
+
+  const sortedData = [...filteredMeasurements.value].sort((a, b) => 
+    new Date(b.timestamp) - new Date(a.timestamp)
+  )
+  
+  const csvData = sortedData.map(measure => ({
+    'Date': formatDateOnly(measure.timestamp),
+    'Heure': formatTimeOnly(measure.timestamp),
+    'Timestamp': measure.timestamp,
+    'Appareil': selectedDevice.value.nom,
+    'Température (°C)': measure.temperature,
+    'pH': measure.ph,
+    'Turbidité': measure.turbidity,
+    'Localisation': selectedDevice.value.localisation?.description || 'Non définie'
+  }))
+  
+  // Conversion en CSV avec Papa Parse
+  const csv = Papa.unparse(csvData, {
+    delimiter: ';', // Utilise le point-virgule pour Excel français
+    header: true,
+    quotes: true
+  })
+    // Création et téléchargement du fichier
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' }) // BOM pour Excel
+  const link = document.createElement('a')
+  const url = URL.createObjectURL(blob)
+  
+  link.setAttribute('href', url)
+  const fileName = `mesures_${selectedDevice.value.nom}_${timeRange.value}_${new Date().toISOString().split('T')[0]}.csv`
+  link.setAttribute('download', fileName)
+  link.style.visibility = 'hidden'
+  
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
+// Fonction utilitaire pour obtenir le label de la période
+function getTimeRangeLabel() {
+  switch (timeRange.value) {
+    case 'day': return 'Dernières 24 heures'
+    case 'week': return 'Dernière semaine'
+    case 'month': return 'Dernier mois'
+    default: return 'Période inconnue'
+  }
+}
+
+// Fonction pour calculer les statistiques
+function calculateStats() {
+  if (!filteredMeasurements.value.length) {
+    return { avgTemp: 0, avgPh: 0, avgTurbidity: 0 }
+  }
+  
+  const totalTemp = filteredMeasurements.value.reduce((sum, m) => sum + parseFloat(m.temperature), 0)
+  const totalPh = filteredMeasurements.value.reduce((sum, m) => sum + parseFloat(m.ph), 0)
+  const totalTurbidity = filteredMeasurements.value.reduce((sum, m) => sum + parseFloat(m.turbidity), 0)
+  const count = filteredMeasurements.value.length
+  
+  return {
+    avgTemp: (totalTemp / count).toFixed(1),
+    avgPh: (totalPh / count).toFixed(2),
+    avgTurbidity: (totalTurbidity / count).toFixed(1)
   }
 }
 
@@ -972,4 +1160,141 @@ header {
     font-size: 1rem;
   }
 }
+
+.chart-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.export-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.export-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.export-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.pdf-btn {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: white;
+  border: 2px solid transparent;
+}
+
+.pdf-btn:not(:disabled):hover {
+  background: linear-gradient(135deg, #c82333, #a71e2a);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.csv-btn {
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+  color: white;
+  border: 2px solid transparent;
+}
+
+.csv-btn:not(:disabled):hover {
+  background: linear-gradient(135deg, #1e7e34, #155724);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.export-btn i {
+  font-size: 1rem;
+}
+
+/* Responsivité pour les boutons d'export */
+@media (max-width: 768px) {
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .chart-header-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .export-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .export-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 16px;
+  }
+  
+  .chart-controls {
+    order: 2;
+  }
+  
+  .export-controls {
+    order: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-header-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .chart-controls {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .chart-controls button {
+    flex: 1;
+    margin: 0 2px;
+  }
+}
+
+/* Animation de chargement pour l'export */
+.export-btn.loading {
+  position: relative;
+  color: transparent;
+}
+
+.export-btn.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-left-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+
 </style>
