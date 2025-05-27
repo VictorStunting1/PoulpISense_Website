@@ -1146,7 +1146,7 @@ html, body {
 .features-badge {
   display: inline-block;
   background: var(--gradient-primary);
-  color: white;
+  color: rgb(103, 156, 255);
   padding: 8px 24px;
   border-radius: 50px;
   font-size: 0.9rem;
@@ -1154,7 +1154,7 @@ html, body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+  box-shadow: 0 4px 15px #1976d24d;
 }
 
 .section-title {
