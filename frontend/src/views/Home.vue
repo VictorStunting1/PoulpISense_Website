@@ -249,14 +249,22 @@ html, body {
   color: var(--primary-color);
   text-decoration: none;
   font-weight: 600;
-  padding: 8px 16px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  padding: 12px 24px;
+  border-radius: 20px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  backdrop-filter: blur(10px);
 }
 
 .nav-link:hover {
-  background: var(--primary-color);
-  color: white;
+  background: rgba(255, 255, 255, 0.25);
+  color: var(--primary-color);
+  border: 1px solid rgba(25, 118, 210, 0.3);
+  backdrop-filter: blur(20px);
+  box-shadow: 
+    0 8px 32px rgba(25, 118, 210, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
 }
 
 /* Contenu principal */
