@@ -1,106 +1,108 @@
 <template>
-  <div class="login-background">
-      <div class="wave wave1"></div>
-      <div class="wave wave2"></div>
-      <div class="wave wave3"></div>
-    </div>
-  <div class="login-container">
-    
-    <div class="login-card">
-      <div class="login-header">
-        <div class="logo">
-          <i class="fas fa-water"></i>
-        </div>
-        <h1>PoulpISense</h1>
-        <p>Connectez-vous à votre espace IoT</p>
+  <div class="login-page">
+    <div class="login-background">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
       </div>
-
-      <form @submit.prevent="login" class="login-form">
-        <!-- Champ Email -->
-        <div class="form-group">
-          <div class="input-container">
-            <i class="fas fa-envelope input-icon"></i>
-            <input
-              v-model="email"
-              type="email"
-              required
-              placeholder="Votre adresse email"
-              class="form-input"
-              :class="{ 'input-error': emailError }"
-              @blur="validateEmail"
-              @input="clearEmailError"
-            >
+    <div class="login-container">
+      
+      <div class="login-card">
+        <div class="login-header">
+          <div class="logo">
+            <i class="fas fa-water"></i>
           </div>
-          <div v-if="emailError" class="error-message">
-            <i class="fas fa-exclamation-circle"></i>
-            {{ emailError }}
-          </div>
+          <h1>PoulpISense</h1>
+          <p>Connectez-vous à votre espace IoT</p>
         </div>
 
-        <!-- Champ Mot de passe -->
-        <div class="form-group">
-          <div class="input-container">
-            <i class="fas fa-lock input-icon"></i>
-            <input
-              v-model="password"
-              :type="showPassword ? 'text' : 'password'"
-              required
-              placeholder="Votre mot de passe"
-              class="form-input"
-              :class="{ 'input-error': passwordError }"
-              @blur="validatePassword"
-              @input="clearPasswordError"
-            >
-            <button
-              type="button"
-              class="password-toggle"
-              @click="togglePassword"
-            >
-              <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
-            </button>
+        <form @submit.prevent="login" class="login-form">
+          <!-- Champ Email -->
+          <div class="form-group">
+            <div class="input-container">
+              <i class="fas fa-envelope input-icon"></i>
+              <input
+                v-model="email"
+                type="email"
+                required
+                placeholder="Votre adresse email"
+                class="form-input"
+                :class="{ 'input-error': emailError }"
+                @blur="validateEmail"
+                @input="clearEmailError"
+              >
+            </div>
+            <div v-if="emailError" class="error-message">
+              <i class="fas fa-exclamation-circle"></i>
+              {{ emailError }}
+            </div>
           </div>
-          <div v-if="passwordError" class="error-message">
-            <i class="fas fa-exclamation-circle"></i>
-            {{ passwordError }}
+
+          <!-- Champ Mot de passe -->
+          <div class="form-group">
+            <div class="input-container">
+              <i class="fas fa-lock input-icon"></i>
+              <input
+                v-model="password"
+                :type="showPassword ? 'text' : 'password'"
+                required
+                placeholder="Votre mot de passe"
+                class="form-input"
+                :class="{ 'input-error': passwordError }"
+                @blur="validatePassword"
+                @input="clearPasswordError"
+              >
+              <button
+                type="button"
+                class="password-toggle"
+                @click="togglePassword"
+              >
+                <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+              </button>
+            </div>
+            <div v-if="passwordError" class="error-message">
+              <i class="fas fa-exclamation-circle"></i>
+              {{ passwordError }}
+            </div>
           </div>
+
+          <!-- Options supplémentaires -->
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" v-model="rememberMe">
+              <span class="checkmark"></span>
+              Se souvenir de moi
+            </label>
+            <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+          </div>
+
+          <!-- Bouton de connexion -->
+          <button 
+            type="submit" 
+            class="login-button"
+            :disabled="loading || !isFormValid"
+            :class="{ 'loading': loading }"
+          >
+            <span v-if="loading" class="button-spinner"></span>
+            <i v-else class="fas fa-sign-in-alt"></i>
+            {{ loading ? 'Connexion en cours...' : 'Se connecter' }}
+          </button>
+
+          <!-- Message de statut -->
+          <transition name="message">
+            <div v-if="message" class="status-message" :class="messageType">
+              <i :class="messageIcon"></i>
+              {{ message }}
+            </div>
+          </transition>
+        </form>
+
+        <!-- Pied de page -->
+        <div class="login-footer">
+          <p>Pas encore de compte ? 
+            <router-link to="/register" class="register-link">S'inscrire</router-link>
+          </p>
         </div>
-
-        <!-- Options supplémentaires -->
-        <div class="form-options">
-          <label class="remember-me">
-            <input type="checkbox" v-model="rememberMe">
-            <span class="checkmark"></span>
-            Se souvenir de moi
-          </label>
-          <a href="#" class="forgot-password">Mot de passe oublié ?</a>
-        </div>
-
-        <!-- Bouton de connexion -->
-        <button 
-          type="submit" 
-          class="login-button"
-          :disabled="loading || !isFormValid"
-          :class="{ 'loading': loading }"
-        >
-          <span v-if="loading" class="button-spinner"></span>
-          <i v-else class="fas fa-sign-in-alt"></i>
-          {{ loading ? 'Connexion en cours...' : 'Se connecter' }}
-        </button>
-
-        <!-- Message de statut -->
-        <transition name="message">
-          <div v-if="message" class="status-message" :class="messageType">
-            <i :class="messageIcon"></i>
-            {{ message }}
-          </div>
-        </transition>
-      </form>
-
-      <!-- Pied de page -->
-      <div class="login-footer">
-        <p>Pas encore de compte ? 
-          <router-link to="/register" class="register-link">S'inscrire</router-link>
-        </p>
       </div>
     </div>
   </div>
