@@ -128,6 +128,19 @@ app.get("/api/measurements", async (req, res) => {
   }
 });
 
+// Récupérer les mesures d'un appareil spécifique
+app.get("/api/measurements/device/:deviceId", async (req, res) => {
+  try {
+    const deviceId = req.params.deviceId;
+    const response = await axios.get(`${BASE_API_URL}/measurements/device/${deviceId}`);
+    const measurements = response.data.$values || response.data;
+    res.json(measurements);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des mesures:", error);
+    res.status(500).json({ message: "Erreur lors de la récupération des mesures" });
+  }
+});
+
 
 // Récupérer les appareils d'un utilisateur par email
 app.get("/api/devices/user/:email", async (req, res) => {
