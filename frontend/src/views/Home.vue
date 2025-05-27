@@ -148,22 +148,136 @@
       </section>
     </main>
 
-    <!-- Footer -->
+        <!-- Footer amélioré -->
     <footer class="footer">
+      <div class="footer-background">
+        <div class="footer-wave"></div>
+        <div class="footer-particles">
+          <div class="particle" v-for="i in 20" :key="i"></div>
+        </div>
+      </div>
+      
       <div class="container">
-        <div class="footer-content">
-          <div class="footer-brand">
-            <img src="@/assets/logo2.png" alt="PoulpISense" class="footer-logo">
-            <span>PoulpISense</span>
+        <div class="footer-main">
+          <!-- Section Brand -->
+          <div class="footer-section brand-section">
+            <div class="footer-brand">
+              <img src="@/assets/logo2.png" alt="PoulpISense" class="footer-logo">
+              <span class="footer-brand-text">PoulpISense</span>
+            </div>
+            <p class="footer-description">
+              Votre plateforme IoT de confiance pour surveiller et analyser vos capteurs en temps réel.
+            </p>
+            <div class="social-links">
+              <a href="#" class="social-link" aria-label="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+              <a href="#" class="social-link" aria-label="Twitter">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="social-link" aria-label="GitHub">
+                <i class="fab fa-github"></i>
+              </a>
+              <a href="#" class="social-link" aria-label="Email">
+                <i class="fas fa-envelope"></i>
+              </a>
+            </div>
           </div>
-          <div class="footer-links">
-            <a href="#">À propos</a>
-            <a href="#">Contact</a>
-            <a href="#">Support</a>
+
+          <!-- Section Navigation -->
+          <div class="footer-section">
+            <h4 class="footer-title">Navigation</h4>
+            <ul class="footer-links">
+              <li><router-link to="/" class="footer-link">Accueil</router-link></li>
+              <li><router-link to="/dashboard" class="footer-link">Dashboard</router-link></li>
+              <li><a href="#features" class="footer-link">Fonctionnalités</a></li>
+              <li><a href="#pricing" class="footer-link">Tarifs</a></li>
+            </ul>
+          </div>
+
+          <!-- Section Support -->
+          <div class="footer-section">
+            <h4 class="footer-title">Support</h4>
+            <ul class="footer-links">
+              <li><a href="#" class="footer-link">Centre d'aide</a></li>
+              <li><a href="#" class="footer-link">Documentation</a></li>
+              <li><a href="#" class="footer-link">API</a></li>
+              <li><a href="#" class="footer-link">Contact</a></li>
+            </ul>
+          </div>
+
+          <!-- Section Contact -->
+          <div class="footer-section">
+            <h4 class="footer-title">Nous contacter</h4>
+            <div class="contact-info">
+              <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>contact@poulpisense.com</span>
+              </div>
+              <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span>+33 1 23 45 67 89</span>
+              </div>
+              <div class="contact-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Nevers, France</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Newsletter -->
+          <div class="footer-section newsletter-section">
+            <h4 class="footer-title">Newsletter</h4>
+            <p class="newsletter-description">
+              Restez informé des dernières nouveautés et mises à jour.
+            </p>
+            <form class="newsletter-form" @submit.prevent="subscribeNewsletter">
+              <div class="input-group">
+                <input 
+                  type="email" 
+                  placeholder="Votre email" 
+                  class="newsletter-input"
+                  v-model="newsletterEmail"
+                  required
+                >
+                <button type="submit" class="newsletter-btn">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
+
+        <!-- Séparateur -->
+        <div class="footer-divider"></div>
+
+        <!-- Section Bottom -->
         <div class="footer-bottom">
-          <p>&copy; 2025 PoulpISense. Tous droits réservés.</p>
+          <div class="footer-bottom-content">
+            <div class="footer-bottom-left">
+              <p>&copy; 2025 PoulpISense. Tous droits réservés.</p>
+              <div class="footer-badges">
+                <span class="badge">
+                  <i class="fas fa-shield-alt"></i>
+                  Sécurisé
+                </span>
+                <span class="badge">
+                  <i class="fas fa-bolt"></i>
+                  Temps réel
+                </span>
+              </div>
+            </div>
+            <div class="footer-bottom-right">
+              <div class="footer-legal">
+                <a href="#" class="legal-link">Conditions d'utilisation</a>
+                <a href="#" class="legal-link">Politique de confidentialité</a>
+                <a href="#" class="legal-link">Cookies</a>
+              </div>
+              <button class="back-to-top" @click="scrollToTop" aria-label="Retour en haut">
+                <i class="fas fa-chevron-up"></i>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
@@ -176,6 +290,9 @@ import { ref, onMounted, onUnmounted } from 'vue'
 const navbar = ref(null)
 const mobileMenuOpen = ref(false)
 const isScrolled = ref(false)
+const featuresSection = ref(null)
+const newsletterEmail = ref('')
+
 
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value
@@ -193,10 +310,21 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 
-const featuresSection = ref(null)
 
 const scrollToFeatures = () => {
   featuresSection.value?.scrollIntoView({ behavior: 'smooth' })
+}
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+const subscribeNewsletter = () => {
+  if (newsletterEmail.value) {
+    // Ajouter la logique d'inscription à la newsletter ici
+    alert(`Merci pour votre inscription avec l'email: ${newsletterEmail.value}`)
+    newsletterEmail.value = ''
+  }
 }
 </script>
 
@@ -742,14 +870,84 @@ html, body {
 
 
 .footer {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+  position: relative;
+  background: linear-gradient(145deg, #0a1829 0%, #1a2332 50%, #0f1419 100%);
   color: #ffffff;
-  padding: 60px 5% 30px;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+.footer-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.footer-wave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(90deg, 
+    rgba(25, 118, 210, 0.1) 0%, 
+    rgba(0, 188, 212, 0.15) 50%, 
+    rgba(25, 118, 210, 0.1) 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 50%, 0 100%);
+  animation: waveMove 8s ease-in-out infinite;
+}
+
+.footer-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.footer-particles .particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, rgba(0, 188, 212, 0.8), rgba(0, 188, 212, 0.2));
+  border-radius: 50%;
+  animation: floatFooter 15s linear infinite;
+}
+.footer-particles .particle:nth-child(odd) {
+  animation-delay: -7s;
+  background: radial-gradient(circle, rgba(25, 118, 210, 0.8), rgba(25, 118, 210, 0.2));
+}
+
+.footer .container {
   position: relative;
   z-index: 2;
-  width: 100%;
-  margin-top: auto; /* Pousse le footer vers le bas */
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 5% 0;
 }
+
+.footer-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+  gap: 60px;
+  margin-bottom: 60px;
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Section Brand */
+.brand-section {
+  gap: 24px;
+}
+
+
+
 
 .footer-content {
   display: flex;
@@ -778,16 +976,426 @@ html, body {
 }
 
 .footer-logo {
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
   object-fit: contain;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 4px 12px rgba(0, 188, 212, 0.3));
+  transition: all 0.3s ease;
+}
+
+.footer-logo:hover {
+  transform: scale(1.1) rotate(5deg);
+  filter: drop-shadow(0 6px 16px rgba(0, 188, 212, 0.5));
+}
+
+.footer-brand-text {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 0%, #00bcd4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: #ffffff; /* Fallback */
+}
+
+.footer-description {
+  color: #b0bec5;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 16px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 188, 212, 0.2);
+  border-radius: 50%;
+  color: #b0bec5;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  backdrop-filter: blur(10px);
+}
+
+.social-link:hover {
+  background: var(--gradient-primary);
+  border-color: rgba(0, 188, 212, 0.5);
+  color: white;
+  transform: translateY(-4px) scale(1.1);
+  box-shadow: 0 8px 25px rgba(0, 188, 212, 0.3);
+}
+
+.social-link i {
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.social-link:hover i {
+  transform: scale(1.2);
+}
+
+.footer-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+
+.footer-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
 }
 
 .footer-links {
+  list-style: none;
   display: flex;
-  gap: 30px;
+  flex-direction: column;
+  gap: 12px;
 }
+
+.footer-link {
+  color: #b0bec5;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  padding-left: 16px;
+}
+
+.footer-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 1px;
+  background: #00bcd4;
+  transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #ffffff;
+  padding-left: 20px;
+  transform: translateX(4px);
+}
+
+.footer-link:hover::before {
+  width: 12px;
+  height: 2px;
+}
+
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #b0bec5;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+  color: #ffffff;
+  transform: translateX(4px);
+}
+
+.contact-item i {
+  width: 18px;
+  color: #00bcd4;
+  font-size: 1rem;
+}
+
+.newsletter-section {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 32px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 188, 212, 0.1);
+  backdrop-filter: blur(20px);
+}
+
+.newsletter-description {
+  color: #b0bec5;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.newsletter-form {
+  margin-top: 20px;
+}
+
+.input-group {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 188, 212, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.input-group:focus-within {
+  border-color: #00bcd4;
+  box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.1);
+}
+
+.newsletter-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 14px 16px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.newsletter-input::placeholder {
+  color: #78909c;
+}
+
+.newsletter-btn {
+  background: var(--gradient-primary);
+  border: none;
+  padding: 14px 18px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newsletter-btn:hover {
+  background: linear-gradient(135deg, #0d47a1, #006064);
+  transform: scale(1.05);
+}
+
+.newsletter-btn i {
+  font-size: 1rem;
+}
+
+/* Séparateur */
+.footer-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 188, 212, 0.3), transparent);
+  margin: 40px 0;
+}
+
+/* Section Bottom */
+.footer-bottom {
+  padding-bottom: 40px;
+}
+
+.footer-bottom-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+
+.footer-bottom-left {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-bottom-left p {
+  color: #78909c;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.footer-badges {
+  display: flex;
+  gap: 12px;
+}
+
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 188, 212, 0.1);
+  color: #00bcd4;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid rgba(0, 188, 212, 0.2);
+}
+
+.footer-bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.footer-legal {
+  display: flex;
+  gap: 24px;
+}
+
+.legal-link {
+  color: #78909c;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.legal-link:hover {
+  color: #00bcd4;
+}
+
+.back-to-top {
+  width: 48px;
+  height: 48px;
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+}
+
+.back-to-top:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 188, 212, 0.4);
+}
+
+.back-to-top i {
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.back-to-top:hover i {
+  transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes waveMove {
+  0%, 100% { 
+    clip-path: polygon(0 0, 100% 0, 100% 50%, 0 100%);
+  }
+  50% { 
+    clip-path: polygon(0 0, 100% 0, 100% 80%, 0 60%);
+  }
+}
+
+@keyframes floatFooter {
+  0% { 
+    transform: translateY(100vh) translateX(0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(90vh) translateX(0) scale(1);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(10vh) translateX(20px) scale(1);
+  }
+  100% { 
+    transform: translateY(0) translateX(0) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .footer-main {
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 40px;
+  }
+  
+  .footer-section:nth-child(3) {
+    display: none; /* Masquer la section support sur tablette */
+  }
+}
+
+@media (max-width: 768px) {
+  .footer .container {
+    padding: 60px 4% 0;
+  }
+  
+  .footer-main {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+  
+  .footer-section:nth-child(2),
+  .footer-section:nth-child(3) {
+    display: none; /* Masquer nav et support sur mobile */
+  }
+  
+  .footer-bottom-content {
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+  }
+  
+  .footer-legal {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .social-links {
+    justify-content: center;
+  }
+  
+  .footer-badges {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .newsletter-section {
+    padding: 24px 20px;
+  }
+  
+  .input-group {
+    flex-direction: column;
+  }
+  
+  .newsletter-btn {
+    border-radius: 0 0 12px 12px;
+  }
+  
+  .footer-brand {
+    justify-content: center;
+  }
+  
+  .contact-info {
+    align-items: center;
+  }
+}
+
+
+
 
 .footer-links a {
   color: #b0bec5;
