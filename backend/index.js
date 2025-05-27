@@ -13,6 +13,13 @@ const PORT = 3001;
 // Remplacer par l’URL de ton Swagger si besoin
 const BASE_API_URL = "http://ssssirhcwan.ddns.net:40000";
 
+const XAPIKEY = process.env.XAPIKEY;
+const axiosConfig = {
+  headers: {
+    'XApiKey': XAPIKEY
+  }
+};
+
 
 
 app.get("/", (req, res) => {
@@ -50,16 +57,58 @@ app.post("/api/users", async (req, res) => {
 */
 
 
+
 app.get("/api/users", async (req, res) => {
   try {
-    const response = await axios.get(`${BASE_API_URL}/users`);
+    const response = await axios.get(`${BASE_API_URL}/users`, axiosConfig);
     res.json(response.data);
   } catch (error) {
-    console.error(error);
+    // Log complet de l'erreur pour debug
+    console.error('Erreur complète Axios:', error);
+    if (error.response) {
+      console.error('API error:', error.response.status, error.response.data);
+    } else {
+      console.error('Axios error:', error.message);
+    }
     res.status(500).json({ message: "Erreur lors de la récupération des utilisateurs" });
   }
 });
 
+
+app.post("/api/users_password", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const response = await axios.get(`${BASE_API_URL}/users`);
+    //const users = response.data;
+    const users = response.data.$values || response.data;
+
+    console.log('users:', JSON.stringify(users, null, 2));
+
+    const user = users.find(u => u.email === email);
+    if (!user) {
+      return res.status(401).json({ message: "Identifiants incorrects" });
+    }
+
+    let hash = user.password;
+    hash = hash.replace(/^\$2y\$/, '$2a$');
+
+    // Ajoute ces logs :
+    console.log('Mot de passe reçu:', password);
+    console.log('Hash utilisé:', hash);
+
+    const match = await bcrypt.compare(password, hash);
+    console.log('Résultat bcrypt:', match);
+
+    if (!match) {
+      return res.status(401).json({ message: "Identifiants incorrects" });
+    }
+
+    res.json({ token: "faketoken", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur lors de la connexion" });
+  }
+});
 
 
 app.get("/api/devices", async (req, res) => {
@@ -71,6 +120,44 @@ app.get("/api/devices", async (req, res) => {
     res.status(500).json({ message: "Erreur API" });
   }
 });
+
+app.get("/api/measurements", async (req, res) => {
+  try {
+    const response = await axios.get(`${BASE_API_URL}/measurements`);
+    res.json(response.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur API" });
+  }
+});
+
+
+// Récupérer les appareils d’un utilisateur par email
+app.get("/api/devices/user/:email", async (req, res) => {
+  try {
+    const response = await axios.get(`${BASE_API_URL}/devices`);
+    // Filtrer les appareils par email utilisateur (adapte selon ta structure)
+
+    const devices = response.data.$values || response.data;
+    console.log("devices:", devices); // <-- Ajoute ce log
+
+    
+    const userDevices = (response.data.$values || response.data).filter(
+      //device => device.utilisateur?.email === req.params.email
+      //device.deviceUsers?.some(u => u.email === req.params.email)
+      device =>
+      Array.isArray(device.deviceUsers) &&
+      device.deviceUsers.some(u => u.email === req.params.email)
+    );
+    console.log("userDevices:", userDevices); // Ajout pour debug
+
+    res.json(userDevices);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur lors de la récupération des appareils utilisateur" });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);

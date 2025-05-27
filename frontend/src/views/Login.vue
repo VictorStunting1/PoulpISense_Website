@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 import { defineEmits } from 'vue'
 const emit = defineEmits(['login-success'])
@@ -10,6 +12,28 @@ const password = ref('')
 const message = ref('')
 const loading = ref(false)
 
+
+
+const login = async () => {
+  loading.value = true
+  message.value = ''
+  try {
+    const res = await axios.post('http://localhost:3001/api/users_password', {
+      email: email.value,
+      password: password.value
+    })
+    message.value = 'Connexion réussie !'
+    emit('login-success')
+    localStorage.setItem('userEmail', email.value)
+    router.push('/dashboard')
+  } catch (err) {
+    message.value = err.response?.data?.message || 'Erreur de connexion'
+  }
+  loading.value = false
+}
+
+
+/*
 const login = async () => {
   loading.value = true
   message.value = ''
@@ -20,6 +44,13 @@ const login = async () => {
     })
     message.value = 'Connexion réussie !'
     emit('login-success')
+
+    localStorage.setItem('userEmail', email.value)
+    emit('login-success')
+
+
+    
+    router.push('/dashboard')
     // Ici tu peux stocker le token ou rediriger l’utilisateur
     // ex: localStorage.setItem('token', res.data.token)
   } catch (err) {
@@ -27,6 +58,8 @@ const login = async () => {
   }
   loading.value = false
 }
+*/
+
 </script>
 
 <template>
