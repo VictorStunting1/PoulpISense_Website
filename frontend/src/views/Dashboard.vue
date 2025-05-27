@@ -4,6 +4,9 @@
       <h1 class="dashboard-title">
         <i class="fas fa-tachometer-alt"></i> Tableau de bord
       </h1>
+      <button @click="logout" class="logout-button" title="Se déconnecter">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
     </header>
 
     <div class="device-icon-selector" v-if="userDevices.length > 0">
@@ -369,6 +372,14 @@ function getChartData(measurements) {
 onMounted(() => {
   fetchUserDevices()
 })
+
+// Fonction de déconnexion
+function logout() {
+  localStorage.removeItem('userEmail')
+  localStorage.removeItem('rememberMe')
+  
+  router.push('/')
+}
 </script>
 
 <style scoped>
