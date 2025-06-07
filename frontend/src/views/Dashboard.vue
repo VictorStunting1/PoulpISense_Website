@@ -214,7 +214,7 @@ async function fetchUserDevices() {
   }
 
   try {
-    const res = await axios.get(`http://localhost:3001/api/devices/user/${encodeURIComponent(userEmail)}`)
+    const res = await axios.get(`http://ssssirhcwan.ddns.net:42000/api/devices/user/${encodeURIComponent(userEmail)}`)
     userDevices.value = res.data
     console.log('Appareils récupérés:', userDevices.value)
     
@@ -251,7 +251,7 @@ async function fetchDeviceMeasurements(deviceId) {
   
   try {
     console.log(`Récupération des mesures pour l'appareil ${deviceId}`)
-    const BASE_API_URL = "http://localhost:3001/api"
+    const BASE_API_URL = "http://ssssirhcwan.ddns.net:42000/api"
     const res = await axios.get(`${BASE_API_URL}/measurements/device/${deviceId}`)
     const newMeasurements = res.data.$values || res.data
     

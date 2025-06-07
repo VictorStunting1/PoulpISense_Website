@@ -67,7 +67,7 @@
 
   /*
   //Mesurements :
-  const res = await axios.get('http://localhost:3001/api/measurements')
+  const res = await axios.get('http://ssssirhcwan.ddns.net:42000/api/measurements')
   const measurements = res.data?.$values || []
   const devicesMap = new Map()
 
@@ -121,7 +121,7 @@
     try {
       // Appels parallèles
       const [resDevices, resMeasures] = await Promise.all([
-        axios.get('http://localhost:3001/api/devices'),
+        axios.get('http://ssssirhcwan.ddns.net:42000/api/devices'),
         axios.get('http://ssssirhcwan.ddns.net:40000/measurements')
       ])
       
@@ -220,18 +220,18 @@
     
 
     /*
-    const res = await axios.get('http://localhost:3001/api/devices')
+    const res = await axios.get('http://ssssirhcwan.ddns.net:42000/api/devices')
     devices.value = res.data.$values || res.data
     */
 
 
     /*
     // Récupération des devices simples
-    const resDevices = await axios.get('http://localhost:3001/api/devices')
+    const resDevices = await axios.get('http://ssssirhcwan.ddns.net:42000/api/devices')
     devices.value = resDevices.data.$values || resDevices.data
 
     // Récupération des mesures
-    //const resMeasures = await axios.get('http://localhost:3001/api/measurements')
+    //const resMeasures = await axios.get('http://ssssirhcwan.ddns.net:42000/api/measurements')
     const resMeasures = await axios.get('http://ssssirhcwan.ddns.net:40000/measurements')
     const measurements = resMeasures.data?.$values || []
     const devicesMap = new Map()

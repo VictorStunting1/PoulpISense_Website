@@ -186,7 +186,7 @@ const login = async () => {
   message.value = ''
   
   try {
-    const res = await axios.post('http://localhost:3001/api/users_password', {
+    const res = await axios.post('http://ssssirhcwan.ddns.net:42000/api/users_password', {
       email: email.value,
       password: password.value
     })

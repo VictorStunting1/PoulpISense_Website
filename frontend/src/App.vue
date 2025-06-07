@@ -21,14 +21,14 @@ const handleLoginSuccess = () => {
 async function loadDevices() {
   const email = localStorage.getItem('userEmail')
   if (!email) return
-  const res = await axios.get(`http://localhost:3001/api/devices/user/${encodeURIComponent(email)}`)
+  const res = await axios.get(`http://ssssirhcwan.ddns.net:42000/api/devices/user/${encodeURIComponent(email)}`)
   devices.value = res.data.$values || res.data
 }
 */
 
 
 async function loadDevices() {
-  const res = await axios.get('http://localhost:3001/api/devices')
+  const res = await axios.get('http://ssssirhcwan.ddns.net:42000/api/devices')
   devices.value = res.data.$values || res.data
 }
 
