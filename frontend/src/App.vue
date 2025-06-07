@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import { API_CONFIG, API_ENDPOINTS } from './config/api.js'
 
 import { useRouter } from 'vue-router'
 const router = useRouter()
@@ -21,14 +22,14 @@ const handleLoginSuccess = () => {
 async function loadDevices() {
   const email = localStorage.getItem('userEmail')
   if (!email) return
-  const res = await axios.get(`http://ssssirhcwan.ddns.net:42000/api/devices/user/${encodeURIComponent(email)}`)
+  const res = await axios.get(`${API_CONFIG.BASE_URL}/api/devices/user/${encodeURIComponent(email)}`)
   devices.value = res.data.$values || res.data
 }
 */
 
 
 async function loadDevices() {
-  const res = await axios.get('http://ssssirhcwan.ddns.net:42000/api/devices')
+  const res = await axios.get(API_ENDPOINTS.DEVICES)
   devices.value = res.data.$values || res.data
 }
 

@@ -60,6 +60,7 @@
   import axios from 'axios'
   import DeviceCard from '../components/DeviceCard.vue'
   import DeviceChart from '../components/DeviceChart.vue'
+  import { API_CONFIG, API_ENDPOINTS } from '../config/api.js'
 
   const router = useRouter()
   const devices = ref([])
@@ -67,7 +68,7 @@
 
   /*
   //Mesurements :
-  const res = await axios.get('http://ssssirhcwan.ddns.net:42000/api/measurements')
+  const res = await axios.get(`${API_CONFIG.BASE_URL}/api/measurements`)
   const measurements = res.data?.$values || []
   const devicesMap = new Map()
 
@@ -121,8 +122,8 @@
     try {
       // Appels parallèles
       const [resDevices, resMeasures] = await Promise.all([
-        axios.get('http://ssssirhcwan.ddns.net:42000/api/devices'),
-        axios.get('http://ssssirhcwan.ddns.net:40000/measurements')
+        axios.get(API_ENDPOINTS.DEVICES),
+        axios.get(API_ENDPOINTS.MEASUREMENTS)
       ])
       
       const devicesList = resDevices.data?.$values || resDevices.data || []
@@ -220,19 +221,19 @@
     
 
     /*
-    const res = await axios.get('http://ssssirhcwan.ddns.net:42000/api/devices')
+    const res = await axios.get(API_ENDPOINTS.DEVICES)
     devices.value = res.data.$values || res.data
     */
 
 
     /*
     // Récupération des devices simples
-    const resDevices = await axios.get('http://ssssirhcwan.ddns.net:42000/api/devices')
+    const resDevices = await axios.get(API_ENDPOINTS.DEVICES)
     devices.value = resDevices.data.$values || resDevices.data
 
     // Récupération des mesures
-    //const resMeasures = await axios.get('http://ssssirhcwan.ddns.net:42000/api/measurements')
-    const resMeasures = await axios.get('http://ssssirhcwan.ddns.net:40000/measurements')
+    //const resMeasures = await axios.get(`${API_CONFIG.BASE_URL}/api/measurements`)
+    const resMeasures = await axios.get(API_ENDPOINTS.MEASUREMENTS)
     const measurements = resMeasures.data?.$values || []
     const devicesMap = new Map()
 

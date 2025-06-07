@@ -196,6 +196,7 @@ import DeviceChart from '../components/DeviceChart.vue'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import Papa from 'papaparse'
+import { API_CONFIG, API_ENDPOINTS } from '../config/api.js'
 
 const router = useRouter()
 const userDevices = ref([]) 
@@ -214,7 +215,7 @@ async function fetchUserDevices() {
   }
 
   try {
-    const res = await axios.get(`http://ssssirhcwan.ddns.net:42000/api/devices/user/${encodeURIComponent(userEmail)}`)
+    const res = await axios.get(`${API_CONFIG.BASE_URL}/api/devices/user/${encodeURIComponent(userEmail)}`)
     userDevices.value = res.data
     console.log('Appareils récupérés:', userDevices.value)
     
@@ -251,8 +252,7 @@ async function fetchDeviceMeasurements(deviceId) {
   
   try {
     console.log(`Récupération des mesures pour l'appareil ${deviceId}`)
-    const BASE_API_URL = "http://ssssirhcwan.ddns.net:42000/api"
-    const res = await axios.get(`${BASE_API_URL}/measurements/device/${deviceId}`)
+    const res = await axios.get(`${API_CONFIG.BASE_URL}/api/measurements/device/${deviceId}`)
     const newMeasurements = res.data.$values || res.data
     
     // S'assurer que les nouvelles données sont bien assignées

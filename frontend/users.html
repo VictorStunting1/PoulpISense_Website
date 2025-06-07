@@ -17,8 +17,14 @@
     <tbody id="users-table"></tbody>
   </table>
   <!-- ...existing code... -->
-    <script>
-    fetch('http://ssssirhcwan.ddns.net:42000/api/users')
+  <script>
+    // Configuration des URLs d'API
+    const MODE_PRODUCTION = true;
+    const BASE_URL = MODE_PRODUCTION 
+      ? 'http://ssssirhcwan.ddns.net:42000' 
+      : 'http://localhost:42000';
+    
+    fetch(`${BASE_URL}/api/users`)
         .then(res => res.json())
         .then(users => {
         // Utilise la propriété $values si elle existe

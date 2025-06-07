@@ -112,6 +112,7 @@
 import { ref, computed } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { API_CONFIG, API_ENDPOINTS } from '../config/api.js'
 
 const router = useRouter()
 const emit = defineEmits(['login-success'])
@@ -186,7 +187,7 @@ const login = async () => {
   message.value = ''
   
   try {
-    const res = await axios.post('http://ssssirhcwan.ddns.net:42000/api/users_password', {
+    const res = await axios.post(API_ENDPOINTS.USERS_PASSWORD, {
       email: email.value,
       password: password.value
     })
