@@ -1,5 +1,10 @@
 <template>
   <div class="home-container" :class="{ 'dark-mode': isDarkMode }">
+    <!-- Barre de progression du scroll -->
+    <div class="scroll-progress-container">
+        <div class="scroll-progress-bar" :style="{ width: scrollProgress + '%' }"></div>
+    </div>
+
     <!-- Header -->
     <AppHeader @theme-changed="onThemeChanged" />
 
@@ -310,6 +315,8 @@ const router = useRouter()
 // État du thème
 const isDarkMode = ref(false)
 
+const scrollProgress = ref(0)
+
 // Données réactives
 const totalDevices = ref(0)
 const activeAlerts = ref(0)
@@ -373,6 +380,13 @@ const createParticles = () => {
   }
 }
 
+const updateScrollProgress = () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight
+  const progress = (scrollTop / docHeight) * 100
+  scrollProgress.value = Math.min(100, Math.max(0, progress))
+}
+
 // Effet de parallaxe au scroll
 const handleScroll = () => {
   const scrollY = window.scrollY
@@ -382,6 +396,9 @@ const handleScroll = () => {
     const speed = (index + 1) * 0.1
     shape.style.transform = `translateY(${scrollY * speed}px) rotate(${scrollY * 0.05}deg)`
   })
+  
+  // Ajouter l'appel à updateScrollProgress
+  updateScrollProgress()
 }
 
 // Intersection Observer pour les animations
@@ -1682,4 +1699,64 @@ onUnmounted(() => {
 .dark-mode .stats-section {
   background: linear-gradient(135deg, #2B0B98 0%, #190649 100%);
 }
+
+.scroll-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.scroll-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #512BD4, #764dfb, #ab95f4);
+  background-size: 200% 100%;
+  animation: gradient-flow 3s ease-in-out infinite;
+  transition: width 0.1s ease-out;
+  border-radius: 0 2px 2px 0;
+  box-shadow: 0 0 20px rgba(81, 43, 212, 0.8);
+}
+
+.home-container:not(.dark-mode) .scroll-progress-container {
+  background: rgba(43, 11, 152, 0.15);
+  border-bottom: 1px solid rgba(81, 43, 212, 0.2);
+}
+
+.home-container:not(.dark-mode) .scroll-progress-bar {
+  box-shadow: 0 0 25px rgba(81, 43, 212, 0.9),
+              0 2px 8px rgba(81, 43, 212, 0.4);
+}
+
+
+@keyframes gradient-flow {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Mode sombre */
+.dark-mode .scroll-progress-container {
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(172, 153, 234, 0.2);
+}
+
+.dark-mode .scroll-progress-bar {
+  box-shadow: 0 0 20px rgba(172, 153, 234, 0.6);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .scroll-progress-container {
+    height: 3px;
+  }
+}
+
 </style>
