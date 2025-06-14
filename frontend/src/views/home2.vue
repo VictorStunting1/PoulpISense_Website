@@ -10,23 +10,11 @@
 
     <!-- Hero Section avec animations -->
     <section class="hero-section">
-      <!-- Particules animées en arrière-plan -->
-      <div class="hero-particles" ref="heroParticles"></div>
-      
-      <!-- Formes géométriques décoratives -->
-      <div class="hero-shapes">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-        <div class="shape shape-3"></div>
-        <div class="shape shape-4"></div>
-      </div>
+
 
       <div class="hero-content">
         <!-- Animation d'entrée pour le logo -->
         <div class="logo-container" v-motion-slide-visible-once-bottom>
-          <div class="logo-icon">
-            <i class="fas fa-water"></i>
-          </div>
           <h1 class="main-title">PoulpISence</h1>
         </div>
         
@@ -46,7 +34,7 @@
             <div class="btn-glow"></div>
           </router-link>
           <router-link to="/devices" class="btn btn-secondary">
-            <i class="fas fa-microchip"></i>
+            <i class="fas fa-robot"></i>
             <span>Gérer les Appareils</span>
             <div class="btn-glow"></div>
           </router-link>
@@ -672,12 +660,15 @@ onUnmounted(() => {
   font-size: clamp(3rem, 8vw, 5rem);
   font-weight: 800;
   margin: 0;
-  background: linear-gradient(45deg, #DFD8F7, #ffffff, #ac99ea);
+  background: linear-gradient(135deg, 
+    #4a90e2 0%, 
+    #8e6cef 30%, 
+    #b856c4 70%, 
+    #ec4899 100%);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-shift 3s ease-in-out infinite;
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
