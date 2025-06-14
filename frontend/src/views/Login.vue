@@ -1,5 +1,11 @@
 <template>
   <div class="login-page">
+    <!-- Bouton retour homepage -->
+    <button class="back-to-home" @click="goToHome" title="Retour à l'accueil">
+      <i class="fas fa-arrow-left"></i>
+      <span>Accueil</span>
+    </button>
+
     <div class="login-background">
       <div class="gradient-overlay"></div>
     </div>
@@ -740,49 +746,77 @@ const goToHome = () => {
   transform: translateX(3px);
 }
 
-/* Responsive amélioré */
-@media (max-width: 480px) {
-  .login-page {
-    padding: 15px;
-  }
-  
-  .login-card {
-    padding: 36px 28px;
-    border-radius: 20px;
-  }
-  
-  .logo {
-    width: 56px;
-    height: 56px;
-  }
+/* Bouton retour homepage */
+.back-to-home {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  text-decoration: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
 
-  .logo-image {
-    width: 88px;
-    height: 88px;
+.back-to-home:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.back-to-home:active {
+  transform: translateY(0);
+}
+
+.back-to-home i {
+  font-size: 16px;
+  transition: transform 0.3s ease;
+}
+
+.back-to-home:hover i {
+  transform: translateX(-2px);
+}
+
+/* Version mobile plus compacte */
+@media (max-width: 768px) {
+  .back-to-home {
+    top: 20px;
+    left: 20px;
+    padding: 10px 16px;
+    font-size: 13px;
   }
   
-  .logo i {
-    font-size: 28px;
+  .back-to-home span {
+    display: none; /* Masquer le texte sur mobile */
   }
   
-  .login-header h1 {
-    font-size: 28px;
+  .back-to-home {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    justify-content: center;
   }
-  
-  .form-input {
-    padding: 16px 16px 16px 52px;
-    font-size: 15px;
-  }
-  
-  .floating-label {
-    left: 44px;
+}
+
+/* Version encore plus compacte pour très petits écrans */
+@media (max-width: 480px) {
+  .back-to-home {
     top: 16px;
-    font-size: 15px;
-  }
-  
-  .login-button {
-    height: 52px;
-    font-size: 15px;
+    left: 16px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
   }
 }
 </style>
