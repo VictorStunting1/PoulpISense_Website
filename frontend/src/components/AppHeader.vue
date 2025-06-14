@@ -4,8 +4,10 @@
       <div class="nav-container">
         <!-- Logo et titre -->
         <div class="nav-brand">
-          <div class="brand-icon"><i class="fas fa-octopus-deploy"></i></div>
-          <router-link to="/" class="brand-text">PoulpISence</router-link>
+            <div class="brand-logo">
+                <img :src="logoUrl" alt="PoulpISence Logo" class="logo-image">
+            </div>
+            <router-link to="/" class="brand-text">PoulpISence</router-link>
         </div>
 
         <!-- Menu de navigation -->
@@ -38,27 +40,27 @@
 
         <!-- Actions de droite -->
         <div class="nav-actions">
-          <!-- Bouton de thème -->
-          <button class="theme-toggle" @click="toggleTheme" :title="isDarkMode ? 'Mode clair' : 'Mode sombre'">
-            <div class="theme-icon">
-              <i v-if="isDarkMode" class="fas fa-sun"></i>
-              <i v-else class="fas fa-moon"></i>
+            <!-- Bouton de thème -->
+            <button class="theme-toggle" @click="toggleTheme" :title="isDarkMode ? 'Mode clair' : 'Mode sombre'">
+                <div class="theme-icon">
+                <i v-if="isDarkMode" class="fas fa-sun"></i>
+                <i v-else class="fas fa-moon"></i>
+                </div>
+            </button>
+
+            <!-- Bouton de connexion -->
+            <router-link to="/login" class="login-btn">
+                <i class="fas fa-user login-icon"></i>
+                <span>Connexion</span>
+            </router-link>
+
+            <!-- Menu mobile hamburger -->
+            <button class="mobile-menu-toggle" :class="{ 'active': isMobileMenuOpen }" @click="toggleMobileMenu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
             </div>
-          </button>
-
-          <!-- Bouton de connexion -->
-          <router-link to="/login" class="login-btn">
-            <i class="fas fa-user login-icon"></i>
-            <span>Connexion</span>
-          </router-link>
-
-          <!-- Menu mobile hamburger -->
-          <button class="mobile-menu-toggle" @click="toggleMobileMenu">
-            <span class="hamburger-line" :class="{ 'active': isMobileMenuOpen }"></span>
-            <span class="hamburger-line" :class="{ 'active': isMobileMenuOpen }"></span>
-            <span class="hamburger-line" :class="{ 'active': isMobileMenuOpen }"></span>
-          </button>
-        </div>
       </div>
     </nav>
   </header>
@@ -66,6 +68,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import logoUrl from '@/assets/logo3.png'
 
 // Props/Emits
 const emit = defineEmits(['theme-changed'])
@@ -105,14 +108,23 @@ onMounted(() => {
   right: 0;
   z-index: 1000;
   backdrop-filter: blur(20px);
-  background: rgba(255, 255, 255, 0.95);
-  border-bottom: 1px solid rgba(81, 43, 212, 0.1);
+  background: linear-gradient(135deg, 
+    rgba(74, 144, 226, 0.95) 0%, 
+    rgba(142, 108, 239, 0.95) 30%, 
+    rgba(184, 86, 196, 0.95) 70%, 
+    rgba(236, 72, 153, 0.95) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(142, 108, 239, 0.1);
 }
 
 .app-header.dark-mode {
-  background: rgba(31, 31, 31, 0.95);
-  border-bottom-color: rgba(172, 153, 234, 0.2);
+  background: linear-gradient(135deg, 
+    rgba(31, 31, 31, 0.95) 0%, 
+    rgba(59, 39, 123, 0.95) 30%, 
+    rgba(89, 47, 142, 0.95) 70%, 
+    rgba(119, 55, 161, 0.95) 100%);
+  border-bottom-color: rgba(172, 153, 234, 0.3);
 }
 
 .navbar {
@@ -138,38 +150,47 @@ onMounted(() => {
   gap: 12px;
 }
 
-.brand-icon {
-  font-size: 2rem;
-  color: #512BD4;
-  animation: pulse 2s infinite;
+.brand-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(142, 108, 239, 0.3);
 }
 
-.dark-mode .brand-icon {
-  color: #ac99ea;
+.brand-logo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(142, 108, 239, 0.4);
 }
 
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 .brand-text {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #512BD4;
+  color: white;
   text-decoration: none;
-  background: linear-gradient(45deg, #512BD4, #ac99ea);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
 }
 
+.brand-text:hover {
+  transform: translateY(-1px);
+  text-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
 .dark-mode .brand-text {
-  background: linear-gradient(45deg, #ac99ea, #DFD8F7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #DFD8F7;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 /* Menu de navigation */
@@ -186,7 +207,7 @@ onMounted(() => {
   padding: 10px 16px;
   border-radius: 12px;
   text-decoration: none;
-  color: #6E6E6E;
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 500;
   transition: all 0.3s ease;
   position: relative;
@@ -200,7 +221,7 @@ onMounted(() => {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(81, 43, 212, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
   transition: left 0.5s ease;
 }
 
@@ -209,33 +230,32 @@ onMounted(() => {
 }
 
 .nav-link:hover {
-  color: #512BD4;
-  background: rgba(81, 43, 212, 0.05);
+  color: white;
+  background: rgba(255, 255, 255, 0.15);
   transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .nav-link.router-link-active {
-  color: #512BD4;
-  background: linear-gradient(135deg, rgba(81, 43, 212, 0.1), rgba(172, 153, 234, 0.1));
-  box-shadow: 0 2px 10px rgba(81, 43, 212, 0.2);
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .dark-mode .nav-link {
-  color: #DFD8F7;
+  color: rgba(223, 216, 247, 0.9);
 }
 
 .dark-mode .nav-link:hover {
-  color: #ac99ea;
-  background: rgba(172, 153, 234, 0.1);
+  color: #DFD8F7;
+  background: rgba(223, 216, 247, 0.1);
 }
 
 .dark-mode .nav-link.router-link-active {
-  color: #ac99ea;
-  background: linear-gradient(135deg, rgba(172, 153, 234, 0.2), rgba(223, 216, 247, 0.1));
-}
-
-.nav-icon {
-  font-size: 1.2rem;
+  color: #DFD8F7;
+  background: rgba(223, 216, 247, 0.15);
+  border: 1px solid rgba(223, 216, 247, 0.2);
 }
 
 /* Actions de droite */
@@ -250,8 +270,8 @@ onMounted(() => {
   position: relative;
   width: 50px;
   height: 28px;
-  background: linear-gradient(135deg, #512BD4, #ac99ea);
-  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -260,7 +280,8 @@ onMounted(() => {
 
 .theme-toggle:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(81, 43, 212, 0.3);
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
 }
 
 .theme-icon {
@@ -277,12 +298,13 @@ onMounted(() => {
   font-size: 0.9rem;
   transition: transform 0.3s ease;
   color: #512BD4;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dark-mode .theme-icon {
   transform: translateX(22px);
-  background: #1f1f1f;
-  color: #ac99ea;
+  background: #ff8c00;
+  color: #ffef76;
 }
 
 /* Bouton de connexion */
@@ -291,18 +313,32 @@ onMounted(() => {
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background: linear-gradient(135deg, #512BD4, #ac99ea);
+  background: rgba(255, 255, 255, 0.2);
   color: white;
   text-decoration: none;
   border-radius: 12px;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 10px rgba(81, 43, 212, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .login-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(81, 43, 212, 0.3);
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.dark-mode .login-btn {
+  background: rgba(223, 216, 247, 0.15);
+  border-color: rgba(223, 216, 247, 0.3);
+  color: #DFD8F7;
+}
+
+.dark-mode .login-btn:hover {
+  background: rgba(223, 216, 247, 0.2);
+  color: #DFD8F7;
 }
 
 .login-icon {
@@ -313,35 +349,58 @@ onMounted(() => {
 .mobile-menu-toggle {
   display: none;
   flex-direction: column;
+  justify-content: center;
   gap: 4px;
-  background: none;
-  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
   cursor: pointer;
   padding: 8px;
+  width: 44px;
+  height: 44px;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
 }
 
 .hamburger-line {
-  width: 25px;
+  width: 22px;
   height: 3px;
-  background: #512BD4;
+  background: #1a1a1a;
   transition: all 0.3s ease;
   border-radius: 2px;
+  margin: 0 auto;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .dark-mode .hamburger-line {
-  background: #ac99ea;
+  background: #1a1a1a;
 }
 
-.hamburger-line.active:nth-child(1) {
-  transform: rotate(45deg) translate(7px, 7px);
+.dark-mode .mobile-menu-toggle {
+  background: rgba(223, 216, 247, 0.15);
+  border-color: rgba(223, 216, 247, 0.3);
 }
 
-.hamburger-line.active:nth-child(2) {
+.dark-mode .mobile-menu-toggle:hover {
+  background: rgba(223, 216, 247, 0.25);
+}
+
+/* Animation de la croix */
+.mobile-menu-toggle.active .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-toggle.active .hamburger-line:nth-child(2) {
   opacity: 0;
+  transform: scale(0);
 }
 
-.hamburger-line.active:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -7px);
+.mobile-menu-toggle.active .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
 }
 
 /* Responsive Design */
@@ -365,7 +424,10 @@ onMounted(() => {
     top: 70px;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.98);
+    background: linear-gradient(135deg, 
+      rgba(74, 144, 226, 0.98) 0%, 
+      rgba(142, 108, 239, 0.98) 50%, 
+      rgba(236, 72, 153, 0.98) 100%);
     backdrop-filter: blur(20px);
     flex-direction: column;
     gap: 0;
@@ -374,12 +436,15 @@ onMounted(() => {
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
-    border-bottom: 1px solid rgba(81, 43, 212, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   }
 
   .dark-mode .nav-menu {
-    background: rgba(31, 31, 31, 0.98);
-    border-bottom-color: rgba(172, 153, 234, 0.2);
+    background: linear-gradient(135deg, 
+      rgba(31, 31, 31, 0.98) 0%, 
+      rgba(59, 39, 123, 0.98) 50%, 
+      rgba(119, 55, 161, 0.98) 100%);
+    border-bottom-color: rgba(172, 153, 234, 0.3);
   }
 
   .nav-menu.active {
