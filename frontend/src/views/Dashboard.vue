@@ -1,34 +1,5 @@
 <template>
   <div class="dashboard-page" :class="{ 'dark-mode': isDarkMode }">
-    <!-- Supprimer cette section complète -->
-    <!-- 
-    <header class="dashboard-header">
-      <div class="header-content">
-        <div class="header-left">
-          <div class="logo-section" @click="goToHome">
-            <img src="/src/assets/logo3.png" alt="PoulpISence Logo" class="header-logo" />
-            <div class="title-section">
-              <h1 class="dashboard-title">
-                <span class="brand-name">PoulpISence</span>
-                <span class="page-title">Dashboard</span>
-              </h1>
-              <p class="dashboard-subtitle">Surveillance temps réel de vos capteurs</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="header-actions">
-          <button @click="refreshData" class="action-btn refresh-btn" :class="{ 'loading': isRefreshing }" title="Actualiser">
-            <i class="fas fa-sync-alt"></i>
-          </button>
-          <button @click="logout" class="action-btn logout-btn" title="Se déconnecter">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Déconnexion</span>
-          </button>
-        </div>
-      </div>
-    </header>
-    -->
 
     <!-- Ajouter le composant header au début -->
     <AppHeader :isDarkMode="isDarkMode" @theme-changed="onThemeChanged" />
@@ -42,11 +13,6 @@
     <section class="device-selection-hero">
       <div class="hero-background">
         <div class="gradient-overlay"></div>
-        <div class="floating-shapes">
-          <div class="shape shape-1"></div>
-          <div class="shape shape-2"></div>
-          <div class="shape shape-3"></div>
-        </div>
       </div>
       
       <div class="container">

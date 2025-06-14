@@ -17,25 +17,82 @@
             <span>Accueil</span>
           </router-link>
           
-          <router-link to="/dashboard" class="nav-link" @click="closeMobileMenu">
+          <!-- Utiliser router-link si connecté, sinon lien avec gestion de redirection -->
+          <router-link 
+            v-if="isLoggedIn" 
+            to="/dashboard" 
+            class="nav-link" 
+            @click="closeMobileMenu"
+          >
             <i class="fas fa-chart-line nav-icon"></i>
             <span>Tableau de bord</span>
           </router-link>
+          <a 
+            v-else 
+            href="#" 
+            class="nav-link" 
+            @click.prevent="handleNavigation('/dashboard')"
+          >
+            <i class="fas fa-chart-line nav-icon"></i>
+            <span>Tableau de bord</span>
+          </a>
           
-          <router-link to="/devices" class="nav-link" @click="closeMobileMenu">
+          <router-link 
+            v-if="isLoggedIn" 
+            to="/devices" 
+            class="nav-link" 
+            @click="closeMobileMenu"
+          >
             <i class="fas fa-robot nav-icon"></i>
             <span>Appareils</span>
           </router-link>
+          <a 
+            v-else 
+            href="#" 
+            class="nav-link" 
+            @click.prevent="handleNavigation('/devices')"
+          >
+            <i class="fas fa-robot nav-icon"></i>
+            <span>Appareils</span>
+          </a>
           
-          <router-link to="/alerts" class="nav-link" @click="closeMobileMenu">
+          <router-link 
+            v-if="isLoggedIn" 
+            to="/alerts" 
+            class="nav-link" 
+            @click="closeMobileMenu"
+          >
             <i class="fas fa-bell nav-icon"></i>
             <span>Alertes</span>
           </router-link>
+          <a 
+            v-else 
+            href="#" 
+            class="nav-link" 
+            @click.prevent="handleNavigation('/alerts')"
+          >
+            <i class="fas fa-bell nav-icon"></i>
+            <span>Alertes</span>
+          </a>
           
-          <router-link to="/settings" class="nav-link" @click="closeMobileMenu">
+          <router-link 
+            v-if="isLoggedIn" 
+            to="/settings" 
+            class="nav-link" 
+            @click="closeMobileMenu"
+          >
             <i class="fas fa-cog nav-icon"></i>
             <span>Paramètres</span>
           </router-link>
+          <a 
+            v-else 
+            href="#" 
+            class="nav-link" 
+            @click.prevent="handleNavigation('/settings')"
+          >
+            <i class="fas fa-cog nav-icon"></i>
+            <span>Paramètres</span>
+          </a>
         </div>
 
         <!-- Actions de droite -->
@@ -49,7 +106,11 @@
             </button>
 
             <!-- Bouton de connexion/déconnexion -->
-            <router-link v-if="!isLoggedIn" to="/login" class="login-btn">
+            <router-link 
+              v-if="!isLoggedIn" 
+              :to="{ path: '/login', query: { returnTo: $route.fullPath } }" 
+              class="login-btn"
+            >
                 <i class="fas fa-user login-icon"></i>
                 <span>Connexion</span>
             </router-link>
@@ -72,11 +133,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, computed, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import logoUrl from '@/assets/logo3.png'
 
 const router = useRouter()
+const route = useRoute()
 
 // Props/Emits
 const emit = defineEmits(['theme-changed'])
@@ -84,13 +146,34 @@ const emit = defineEmits(['theme-changed'])
 // État réactif
 const isDarkMode = ref(false)
 const isMobileMenuOpen = ref(false)
+const userEmail = ref(localStorage.getItem('userEmail'))
 
 // Computed pour vérifier si l'utilisateur est connecté
 const isLoggedIn = computed(() => {
-  return localStorage.getItem('userEmail') !== null
+  return userEmail.value !== null
 })
 
-// Fonctions
+// Pages qui nécessitent une connexion
+const protectedRoutes = ['/dashboard', '/devices', '/alerts', '/settings']
+
+// Fonction pour gérer la navigation
+const handleNavigation = (path) => {
+  closeMobileMenu()
+  
+  // Si l'utilisateur n'est pas connecté et que la route est protégée
+  if (!isLoggedIn.value && protectedRoutes.includes(path)) {
+    router.push({ path: '/login', query: { returnTo: path } })
+  } else {
+    router.push(path)
+  }
+}
+
+// Watcher pour surveiller les changements dans le localStorage
+watch(() => localStorage.getItem('userEmail'), (newValue) => {
+  userEmail.value = newValue
+})
+
+// Fonctions existantes
 const toggleTheme = () => {
   isDarkMode.value = !isDarkMode.value
   localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light')
@@ -98,7 +181,7 @@ const toggleTheme = () => {
 }
 
 const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value
+  isMobileMenuOpen.value = !isMobileMenu.value
 }
 
 const closeMobileMenu = () => {
@@ -108,6 +191,7 @@ const closeMobileMenu = () => {
 const logout = () => {
   localStorage.removeItem('userEmail')
   localStorage.removeItem('rememberMe')
+  userEmail.value = null
   router.push('/')
 }
 
@@ -116,6 +200,8 @@ onMounted(() => {
   const savedTheme = localStorage.getItem('theme')
   isDarkMode.value = savedTheme === 'dark'
   emit('theme-changed', isDarkMode.value)
+  
+  userEmail.value = localStorage.getItem('userEmail')
 })
 </script>
 

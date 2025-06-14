@@ -197,7 +197,7 @@ const togglePassword = () => {
   showPassword.value = !showPassword.value
 }
 
-// Fonction de connexion (reste identique)
+// Fonction de connexion (modifiée)
 const login = async () => {
   validateEmail()
   validatePassword()
@@ -219,9 +219,13 @@ const login = async () => {
     localStorage.setItem('userEmail', email.value)
     emit('login-success')
     
-    setTimeout(() => {
-      router.push('/dashboard')
-    }, 1500)
+    // Rediriger vers la page précédente ou l'accueil
+    const returnTo = router.currentRoute.value.query.returnTo
+    if (returnTo && returnTo !== '/login') {
+      router.push(returnTo)
+    } else {
+      router.push('/')
+    }
     
   } catch (err) {
     messageType.value = 'error'
