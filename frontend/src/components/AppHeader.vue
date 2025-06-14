@@ -181,7 +181,7 @@ const toggleTheme = () => {
 }
 
 const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenu.value
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
 }
 
 const closeMobileMenu = () => {
