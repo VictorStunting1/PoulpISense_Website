@@ -5,8 +5,7 @@ import Login from './views/Login.vue'
 import Dashboard from './views/Dashboard.vue'
 
 const routes = [
-  { path: '/', component: Home },
-  { path: '/home', component: Home2 },
+  { path: '/', component: Home2 },
   { path: '/login', component: Login },
   { path: '/dashboard', component: Dashboard }
 ]
