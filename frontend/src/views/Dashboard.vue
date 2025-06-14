@@ -1,11 +1,7 @@
 <template>
   <div class="dashboard-page" :class="{ 'dark-mode': isDarkMode }">
-    <!-- Barre de progression du scroll -->
-    <div class="scroll-progress-container">
-      <div class="scroll-progress-bar" :style="{ width: scrollProgress + '%' }"></div>
-    </div>
-
-    <!-- Header moderne -->
+    <!-- Supprimer cette section complète -->
+    <!-- 
     <header class="dashboard-header">
       <div class="header-content">
         <div class="header-left">
@@ -32,6 +28,15 @@
         </div>
       </div>
     </header>
+    -->
+
+    <!-- Ajouter le composant header au début -->
+    <AppHeader :isDarkMode="isDarkMode" @theme-changed="onThemeChanged" />
+
+    <!-- Barre de progression du scroll -->
+    <div class="scroll-progress-container">
+      <div class="scroll-progress-bar" :style="{ width: scrollProgress + '%' }"></div>
+    </div>
 
     <!-- Hero section avec sélecteur d'appareils -->
     <section class="device-selection-hero">
@@ -386,6 +391,9 @@
         </div>
       </div>
     </section>
+
+    <!-- Ajouter le composant footer à la fin, avant la fermeture du div principal -->
+    <AppFooter :isDarkMode="isDarkMode" />
   </div>
 </template>
 
@@ -394,6 +402,9 @@ import { ref, onMounted, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import DeviceChart from '../components/DeviceChart.vue'
+// Ajouter ces imports
+import AppHeader from '../components/AppHeader.vue'
+import AppFooter from '../components/AppFooter.vue'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import Papa from 'papaparse'
@@ -410,6 +421,26 @@ const loading = ref(false)
 const timeRange = ref('week')
 const scrollProgress = ref(0)
 const isRefreshing = ref(false)
+// Ajouter cette ligne
+const isDarkMode = ref(false)
+
+// Ajouter cette fonction
+const onThemeChanged = (newTheme) => {
+  isDarkMode.value = newTheme
+}
+
+// Supprimer ces fonctions (déjà dans AppHeader)
+/*
+const goToHome = () => {
+  router.push('/')
+}
+
+function logout() {
+  localStorage.removeItem('userEmail')
+  localStorage.removeItem('rememberMe')
+  router.push('/')
+}
+*/
 
 // Fonctions utilitaires
 const updateScrollProgress = () => {
@@ -417,10 +448,6 @@ const updateScrollProgress = () => {
   const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight
   const progress = (scrollTop / docHeight) * 100
   scrollProgress.value = Math.min(100, Math.max(0, progress))
-}
-
-const goToHome = () => {
-  router.push('/')
 }
 
 const getDeviceStatus = (device) => {
@@ -613,13 +640,56 @@ function getChartData(measurements) {
   }
 }
 
-// Fonctions d'export (simplifiées pour l'exemple)
+// Fonctions d'export 
 function exportToPDF() {
   if (!filteredMeasurements.value.length) {
     alert('Aucune donnée à exporter')
     return
   }
-  // Logique d'export PDF existante...
+
+  try {
+    const doc = new jsPDF()
+    
+    // En-tête du document
+    doc.setFontSize(20)
+    doc.text('Rapport de Mesures - ' + selectedDevice.value.nom, 20, 20)
+    
+    doc.setFontSize(12)
+    doc.text('Période: ' + getTimeRangeLabel(), 20, 35)
+    doc.text('Généré le: ' + new Date().toLocaleDateString('fr-FR'), 20, 45)
+    
+    // Préparation des données pour le tableau
+    const tableData = filteredMeasurements.value.map(m => [
+      formatDateOnly(m.timestamp),
+      formatTimeOnly(m.timestamp),
+      m.temperature + '°C',
+      m.ph.toString(),
+      m.turbidity.toString()
+    ])
+    
+    // Génération du tableau
+    autoTable(doc, {
+      head: [['Date', 'Heure', 'Température', 'pH', 'Turbidité']],
+      body: tableData,
+      startY: 60,
+      styles: {
+        fontSize: 10,
+        cellPadding: 3
+      },
+      headStyles: {
+        fillColor: [102, 126, 234],
+        textColor: 255
+      }
+    })
+    
+    // Sauvegarde du fichier
+    const fileName = `mesures_${selectedDevice.value.nom}_${new Date().toISOString().split('T')[0]}.pdf`
+    doc.save(fileName)
+    
+  } catch (error) {
+    console.error('Erreur lors de l\'export PDF:', error)
+    alert('Erreur lors de l\'export PDF')
+  }
 }
 
 function exportToCSV() {
@@ -627,7 +697,44 @@ function exportToCSV() {
     alert('Aucune donnée à exporter')
     return
   }
-  // Logique d'export CSV existante...
+
+  try {
+    // Préparation des données pour CSV
+    const csvData = filteredMeasurements.value.map(m => ({
+      Date: formatDateOnly(m.timestamp),
+      Heure: formatTimeOnly(m.timestamp),
+      'Température (°C)': m.temperature,
+      'pH': m.ph,
+      'Turbidité': m.turbidity,
+      'Appareil': selectedDevice.value.nom,
+      'Localisation': selectedDevice.value.localisation?.description || 'Non définie'
+    }))
+    
+    // Conversion en CSV
+    const csv = Papa.unparse(csvData, {
+      delimiter: ';',
+      header: true
+    })
+    
+    // Création et téléchargement du fichier
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob)
+      link.setAttribute('href', url)
+      const fileName = `mesures_${selectedDevice.value.nom}_${new Date().toISOString().split('T')[0]}.csv`
+      link.setAttribute('download', fileName)
+      link.style.visibility = 'hidden'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+    
+  } catch (error) {
+    console.error('Erreur lors de l\'export CSV:', error)
+    alert('Erreur lors de l\'export CSV')
+  }
 }
 
 function getTimeRangeLabel() {
@@ -637,13 +744,6 @@ function getTimeRangeLabel() {
     case 'month': return 'Dernier mois'
     default: return 'Période inconnue'
   }
-}
-
-// Fonction de déconnexion
-function logout() {
-  localStorage.removeItem('userEmail')
-  localStorage.removeItem('rememberMe')
-  router.push('/')
 }
 
 // Lifecycle hooks

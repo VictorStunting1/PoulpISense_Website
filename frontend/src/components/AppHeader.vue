@@ -12,7 +12,7 @@
 
         <!-- Menu de navigation -->
         <div class="nav-menu" :class="{ 'active': isMobileMenuOpen }">
-          <router-link to="/home" class="nav-link" @click="closeMobileMenu">
+          <router-link to="/" class="nav-link" @click="closeMobileMenu">
             <i class="fas fa-home nav-icon"></i>
             <span>Accueil</span>
           </router-link>
@@ -48,11 +48,16 @@
                 </div>
             </button>
 
-            <!-- Bouton de connexion -->
-            <router-link to="/login" class="login-btn">
+            <!-- Bouton de connexion/déconnexion -->
+            <router-link v-if="!isLoggedIn" to="/login" class="login-btn">
                 <i class="fas fa-user login-icon"></i>
                 <span>Connexion</span>
             </router-link>
+            
+            <button v-else @click="logout" class="login-btn logout-btn">
+                <i class="fas fa-sign-out-alt login-icon"></i>
+                <span>Déconnexion</span>
+            </button>
 
             <!-- Menu mobile hamburger -->
             <button class="mobile-menu-toggle" :class="{ 'active': isMobileMenuOpen }" @click="toggleMobileMenu">
@@ -67,8 +72,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import logoUrl from '@/assets/logo3.png'
+
+const router = useRouter()
 
 // Props/Emits
 const emit = defineEmits(['theme-changed'])
@@ -76,6 +84,11 @@ const emit = defineEmits(['theme-changed'])
 // État réactif
 const isDarkMode = ref(false)
 const isMobileMenuOpen = ref(false)
+
+// Computed pour vérifier si l'utilisateur est connecté
+const isLoggedIn = computed(() => {
+  return localStorage.getItem('userEmail') !== null
+})
 
 // Fonctions
 const toggleTheme = () => {
@@ -90,6 +103,12 @@ const toggleMobileMenu = () => {
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
+}
+
+const logout = () => {
+  localStorage.removeItem('userEmail')
+  localStorage.removeItem('rememberMe')
+  router.push('/')
 }
 
 // Chargement du thème au montage
@@ -343,6 +362,33 @@ onMounted(() => {
 
 .login-icon {
   font-size: 1.1rem;
+}
+
+/* Bouton de déconnexion avec le même style que connexion mais en rose */
+.logout-btn {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(219, 39, 119, 0.2) 100%) !important;
+    border-color: rgba(236, 72, 153, 0.4) !important;
+    cursor: pointer;
+    color: white !important; 
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.3) 0%, rgba(219, 39, 119, 0.3) 100%) !important;
+    box-shadow: 0 4px 20px rgba(236, 72, 153, 0.3) !important;
+    transform: translateY(-2px);
+    color: white !important;
+}
+
+.dark-mode .logout-btn {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(219, 39, 119, 0.15) 100%) !important;
+    border-color: rgba(236, 72, 153, 0.3) !important;
+    color: white !important;
+}
+
+.dark-mode .logout-btn:hover {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.25) 0%, rgba(219, 39, 119, 0.25) 100%) !important;
+    box-shadow: 0 4px 20px rgba(236, 72, 153, 0.2) !important;
+    color: white !important;
 }
 
 /* Menu mobile */
