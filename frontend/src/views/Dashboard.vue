@@ -2255,18 +2255,14 @@ onMounted(() => {
 }
 
 .selection-icon {
-  font-size: 4rem;
+  font-size: 3rem;
   color: var(--text-secondary);
-  opacity: 0.6;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
 }
 
 .selection-pulse {
-  position: absolute;
-  inset: -20px;
-  border: 2px solid #667eea;
-  border-radius: 50%;
-  animation: pulse-ring 2s infinite;
-  opacity: 0.3;
+  display: none;
 }
 
 @keyframes pulse-ring {
@@ -2293,6 +2289,7 @@ onMounted(() => {
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
+  line-height: 1.6;
 }
 
 .selection-hint {
@@ -2301,8 +2298,8 @@ onMounted(() => {
   justify-content: center;
   gap: 0.75rem;
   color: #667eea;
-  font-weight: 600;
-  animation: bounce 2s infinite;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 @keyframes bounce {

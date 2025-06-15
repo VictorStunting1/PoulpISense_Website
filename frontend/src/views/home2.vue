@@ -33,9 +33,9 @@
             <span>Tableau de Bord</span>
             <div class="btn-glow"></div>
           </router-link>
-          <router-link to="/devices" class="btn btn-secondary">
-            <i class="fas fa-robot"></i>
-            <span>Gérer les Appareils</span>
+          <router-link to="/alerts" class="btn btn-secondary">
+            <i class="fas fa-bell"></i>
+            <span>Voir les alertes</span>
             <div class="btn-glow"></div>
           </router-link>
         </div>

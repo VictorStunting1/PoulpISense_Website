@@ -39,25 +39,6 @@
           
           <router-link 
             v-if="isLoggedIn" 
-            to="/devices" 
-            class="nav-link" 
-            @click="closeMobileMenu"
-          >
-            <i class="fas fa-robot nav-icon"></i>
-            <span>Appareils</span>
-          </router-link>
-          <a 
-            v-else 
-            href="#" 
-            class="nav-link" 
-            @click.prevent="handleNavigation('/devices')"
-          >
-            <i class="fas fa-robot nav-icon"></i>
-            <span>Appareils</span>
-          </a>
-          
-          <router-link 
-            v-if="isLoggedIn" 
             to="/alerts" 
             class="nav-link" 
             @click="closeMobileMenu"
@@ -73,25 +54,6 @@
           >
             <i class="fas fa-bell nav-icon"></i>
             <span>Alertes</span>
-          </a>
-          
-          <router-link 
-            v-if="isLoggedIn" 
-            to="/settings" 
-            class="nav-link" 
-            @click="closeMobileMenu"
-          >
-            <i class="fas fa-cog nav-icon"></i>
-            <span>Paramètres</span>
-          </router-link>
-          <a 
-            v-else 
-            href="#" 
-            class="nav-link" 
-            @click.prevent="handleNavigation('/settings')"
-          >
-            <i class="fas fa-cog nav-icon"></i>
-            <span>Paramètres</span>
           </a>
         </div>
 
