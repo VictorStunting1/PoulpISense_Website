@@ -914,6 +914,140 @@ onMounted(() => {
   background: var(--primary-gradient);
 }
 
+/* Mode sombre pour le hero background */
+.dark-mode .hero-background {
+  background: linear-gradient(135deg, #190649 0%, #2B0B98 50%, #0d0225 100%);
+}
+
+
+/* Mode sombre pour le gradient overlay */
+.dark-mode .gradient-overlay {
+  background: linear-gradient(135deg, 
+    rgba(25, 6, 73, 0.95) 0%, 
+    rgba(43, 11, 152, 0.9) 50%, 
+    rgba(13, 2, 37, 0.85) 100%);
+}
+
+/* Mode sombre pour les formes flottantes */
+.dark-mode .shape {
+  background: rgba(172, 153, 234, 0.08);
+}
+
+/* Mode sombre pour le titre du hero */
+.dark-mode .hero-title {
+  background: linear-gradient(135deg, #DFD8F7, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Mode sombre pour la description du hero */
+.dark-mode .hero-description {
+  color: #ac99ea;
+  opacity: 1;
+}
+
+
+/* Mode sombre pour les cartes d'appareils */
+.dark-mode .device-card {
+  background: rgba(26, 32, 44, 0.85);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(30px);
+}
+
+/* Mode sombre pour le hover des cartes */
+.dark-mode .device-card:hover {
+  box-shadow: 0 20px 60px rgba(172, 153, 234, 0.2);
+  border-color: rgba(172, 153, 234, 0.4);
+}
+
+/* Mode sombre pour les cartes sélectionnées */
+.dark-mode .device-card.selected {
+  background: rgba(172, 153, 234, 0.15);
+  border-color: #ac99ea;
+  box-shadow: 0 20px 60px rgba(172, 153, 234, 0.4);
+}
+
+
+/* Mode sombre pour l'indicateur offline */
+.dark-mode .device-status-indicator.offline {
+  background: #fc8181;
+  box-shadow: 0 0 20px rgba(252, 129, 129, 0.6);
+}
+
+/* Mode sombre pour l'icône d'appareil */
+.dark-mode .device-icon {
+  background: linear-gradient(135deg, #ac99ea, #DFD8F7);
+  box-shadow: 0 10px 30px rgba(172, 153, 234, 0.4);
+}
+
+/* Mode sombre pour le nom d'appareil */
+.dark-mode .device-name {
+  color: #DFD8F7;
+}
+
+/* Mode sombre pour la localisation */
+.dark-mode .device-location {
+  color: #ac99ea;
+}
+
+/* Mode sombre pour les éléments de métrique */
+.dark-mode .metric-item {
+  color: #a0aec0;
+}
+
+/* Mode sombre pour les icônes de métrique */
+.dark-mode .metric-item i {
+  color: #ac99ea;
+}
+
+/* Mode sombre pour l'effet de sélection */
+.dark-mode .device-selection-glow {
+  background: linear-gradient(135deg, #ac99ea, #DFD8F7);
+}
+
+
+/* Mode sombre pour l'effet de sélection actif */
+.dark-mode .device-card.selected .device-selection-glow {
+  opacity: 0.15;
+}
+
+/* Mode sombre pour l'icône vide */
+.dark-mode .empty-icon {
+  background: rgba(172, 153, 234, 0.2);
+  color: #DFD8F7;
+}
+
+/* Mode sombre pour le titre vide */
+.dark-mode .empty-devices h3 {
+  color: #DFD8F7;
+}
+
+/* Mode sombre pour le texte vide */
+.dark-mode .empty-devices p {
+  color: #ac99ea;
+  opacity: 1;
+}
+
+/* Mode sombre pour le bouton d'ajout */
+.dark-mode .add-device-btn {
+  background: rgba(172, 153, 234, 0.2);
+  border: 1px solid rgba(172, 153, 234, 0.4);
+  color: #DFD8F7;
+}
+
+/* Mode sombre pour le hover du bouton d'ajout */
+.dark-mode .add-device-btn:hover {
+  background: rgba(172, 153, 234, 0.3);
+  border-color: rgba(172, 153, 234, 0.6);
+  transform: translateY(-2px);
+}
+
+
+
+
+
 .gradient-overlay {
   position: absolute;
   inset: 0;
