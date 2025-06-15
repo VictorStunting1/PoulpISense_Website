@@ -1599,7 +1599,7 @@ onMounted(() => {
 .empty-devices {
   text-align: center;
   padding: 4rem 2rem;
-  color: white;
+  color: var(--text-secondary);
 }
 
 .empty-icon {
@@ -1959,6 +1959,7 @@ onMounted(() => {
   border-radius: 12px;
   padding: 4px;
   border: 1px solid var(--border-color);
+  gap: 6px; /* Ajouter de l'espacement entre les boutons */
 }
 
 .time-btn {
@@ -1970,6 +1971,7 @@ onMounted(() => {
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
+  min-width: 50px; /* Largeur minimale pour uniformiser */
 }
 
 .time-btn.active {
@@ -1978,47 +1980,39 @@ onMounted(() => {
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.export-controls {
-  display: flex;
-  gap: 0.75rem;
+/* Mode sombre pour les contrôles de temps */
+.dark-mode .time-controls {
+  background: rgba(45, 55, 72, 0.8);
+  border-color: rgba(74, 85, 104, 0.6);
 }
 
-.export-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  border: 1px solid var(--border-color);
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
+.dark-mode .time-btn {
+  color: #a0aec0;
 }
 
-.export-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-light);
+.dark-mode .time-btn:hover:not(.active) {
+  background: rgba(74, 85, 104, 0.4);
+  color: #f7fafc;
 }
 
-.export-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.pdf-btn:hover:not(:disabled) {
-  background: #dc3545;
+.dark-mode .time-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  border-color: #dc3545;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
-.csv-btn:hover:not(:disabled) {
-  background: #28a745;
-  color: white;
-  border-color: #28a745;
+/* Responsive pour les boutons de temps */
+@media (max-width: 480px) {
+  .time-controls {
+    gap: 4px;
+  }
+  
+  .time-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    min-width: 44px;
+  }
 }
-
 .chart-content {
   padding: 2rem;
 }
@@ -2322,6 +2316,7 @@ onMounted(() => {
     gap: 1.5rem;
   }
   
+   
   .device-card {
     padding: 1.5rem;
   }
