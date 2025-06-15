@@ -171,7 +171,7 @@
               <div class="metric-content">
                 <div class="metric-value">{{ latestMeasurement.turbidity }}</div>
                 <div class="metric-label">Turbidité</div>
-                <div class="metric-info">Optimal: < 4 NTU</div>
+                <div class="metric-info">Optimal: &lt; 4 NTU</div>
               </div>
               <div class="metric-chart">
                 <div class="mini-chart">
@@ -266,66 +266,246 @@
         <div class="table-section" v-motion-slide-visible-once-bottom :delay="600">
           <div class="table-card">
             <div class="table-header">
-              <h3 class="table-title">
-                <i class="fas fa-list-alt"></i>
-                Dernières Mesures
-              </h3>
-              <div class="table-info">
-                <span class="data-count">{{ sortedMeasurements.length }} mesures</span>
+              <div class="table-title-section">
+                <h3 class="table-title">
+                  <i class="fas fa-list-alt"></i>
+                  Dernières Mesures
+                </h3>
+                <div class="table-info">
+                  <span class="data-count">{{ filteredAndSortedMeasurements.length }} mesures</span>
+                  <span v-if="searchQuery" class="filter-indicator">
+                    <i class="fas fa-filter"></i>
+                    Filtré
+                  </span>
+                </div>
+              </div>
+
+              <!-- Contrôles de recherche et tri -->
+              <div class="table-controls">
+                <div class="search-container">
+                  <div class="search-input-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input 
+                      v-model="searchQuery" 
+                      type="text" 
+                      placeholder="Rechercher dans les mesures..."
+                      class="search-input"
+                    >
+                    <button 
+                      v-if="searchQuery" 
+                      @click="clearSearch"
+                      class="clear-search-btn"
+                    >
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="sort-controls">
+                  <div class="sort-dropdown">
+                    <button 
+                      @click="toggleSortDropdown"
+                      class="sort-btn"
+                      :class="{ active: showSortDropdown }"
+                    >
+                      <i class="fas fa-sort"></i>
+                      <span>Trier</span>
+                      <i class="fas fa-chevron-down sort-arrow" :class="{ rotated: showSortDropdown }"></i>
+                    </button>
+                    
+                    <div v-if="showSortDropdown" class="sort-menu">
+                      <div class="sort-option" 
+                           @click="setSortOption('timestamp', 'desc')"
+                           :class="{ active: sortBy === 'timestamp' && sortOrder === 'desc' }">
+                        <i class="fas fa-calendar"></i>
+                        <span>Plus récent</span>
+                        <i v-if="sortBy === 'timestamp' && sortOrder === 'desc'" class="fas fa-check"></i>
+                      </div>
+                      <div class="sort-option" 
+                           @click="setSortOption('timestamp', 'asc')"
+                           :class="{ active: sortBy === 'timestamp' && sortOrder === 'asc' }">
+                        <i class="fas fa-calendar"></i>
+                        <span>Plus ancien</span>
+                        <i v-if="sortBy === 'timestamp' && sortOrder === 'asc'" class="fas fa-check"></i>
+                      </div>
+                      <div class="sort-option" 
+                           @click="setSortOption('time', 'desc')"
+                           :class="{ active: sortBy === 'time' && sortOrder === 'desc' }">
+                        <i class="fas fa-clock"></i>
+                        <span>Heure ↓</span>
+                        <i v-if="sortBy === 'time' && sortOrder === 'desc'" class="fas fa-check"></i>
+                      </div>
+                      <div class="sort-option" 
+                           @click="setSortOption('time', 'asc')"
+                           :class="{ active: sortBy === 'time' && sortOrder === 'asc' }">
+                        <i class="fas fa-clock"></i>
+                        <span>Heure ↑</span>
+                        <i v-if="sortBy === 'time' && sortOrder === 'asc'" class="fas fa-check"></i>
+                      </div>
+                      <div class="sort-divider"></div>
+                      <div class="sort-option" 
+                           @click="setSortOption('temperature', 'desc')"
+                           :class="{ active: sortBy === 'temperature' && sortOrder === 'desc' }">
+                        <i class="fas fa-thermometer-half"></i>
+                        <span>Température ↓</span>
+                        <i v-if="sortBy === 'temperature' && sortOrder === 'desc'" class="fas fa-check"></i>
+                      </div>
+                      <div class="sort-option" 
+                           @click="setSortOption('temperature', 'asc')"
+                           :class="{ active: sortBy === 'temperature' && sortOrder === 'asc' }">
+                        <i class="fas fa-thermometer-half"></i>
+                        <span>Température ↑</span>
+                        <i v-if="sortBy === 'temperature' && sortOrder === 'asc'" class="fas fa-check"></i>
+                      </div>
+                      <div class="sort-option" 
+                           @click="setSortOption('ph', 'desc')"
+                           :class="{ active: sortBy === 'ph' && sortOrder === 'desc' }">
+                        <i class="fas fa-flask"></i>
+                        <span>pH ↓</span>
+                        <i v-if="sortBy === 'ph' && sortOrder === 'desc'" class="fas fa-check"></i>
+                      </div>
+                      <div class="sort-option" 
+                           @click="setSortOption('ph', 'asc')"
+                           :class="{ active: sortBy === 'ph' && sortOrder === 'asc' }">
+                        <i class="fas fa-flask"></i>
+                        <span>pH ↑</span>
+                        <i v-if="sortBy === 'ph' && sortOrder === 'asc'" class="fas fa-check"></i>
+                      </div>
+                      <div class="sort-option" 
+                           @click="setSortOption('turbidity', 'desc')"
+                           :class="{ active: sortBy === 'turbidity' && sortOrder === 'desc' }">
+                        <i class="fas fa-water"></i>
+                        <span>Turbidité ↓</span>
+                        <i v-if="sortBy === 'turbidity' && sortOrder === 'desc'" class="fas fa-check"></i>
+                      </div>
+                      <div class="sort-option" 
+                           @click="setSortOption('turbidity', 'asc')"
+                           :class="{ active: sortBy === 'turbidity' && sortOrder === 'asc' }">
+                        <i class="fas fa-water"></i>
+                        <span>Turbidité ↑</span>
+                        <i v-if="sortBy === 'turbidity' && sortOrder === 'asc'" class="fas fa-check"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pagination-controls">
+                  <span class="results-info">
+                    {{ (currentPage - 1) * itemsPerPage + 1 }}-{{ Math.min(currentPage * itemsPerPage, filteredAndSortedMeasurements.length) }} 
+                    sur {{ filteredAndSortedMeasurements.length }}
+                  </span>
+                </div>
               </div>
             </div>
             
             <div class="table-content">
-              <div v-if="sortedMeasurements.length === 0" class="table-empty">
+              <div v-if="filteredAndSortedMeasurements.length === 0" class="table-empty">
                 <i class="fas fa-table"></i>
-                <p>Aucune mesure enregistrée</p>
+                <p v-if="searchQuery">Aucune mesure trouvée pour "{{ searchQuery }}"</p>
+                <p v-else>Aucune mesure enregistrée</p>
+                <button v-if="searchQuery" @click="clearSearch" class="clear-filter-btn">
+                  <i class="fas fa-times"></i>
+                  Effacer le filtre
+                </button>
               </div>
               <div v-else class="table-wrapper">
                 <table class="modern-table">
                   <thead>
                     <tr>
-                      <th>
+                      <th @click="setSortOption('timestamp')" class="sortable-header" :class="{ active: sortBy === 'timestamp' }">
                         <i class="fas fa-calendar"></i>
                         Date
+                        <i v-if="sortBy === 'timestamp'" 
+                           class="fas sort-indicator" 
+                           :class="sortOrder === 'desc' ? 'fa-sort-down' : 'fa-sort-up'"></i>
                       </th>
-                      <th>
+                      <th @click="setSortOption('time')" class="sortable-header" :class="{ active: sortBy === 'time' }">
                         <i class="fas fa-clock"></i>
                         Heure
+                        <i v-if="sortBy === 'time'" 
+                           class="fas sort-indicator" 
+                           :class="sortOrder === 'desc' ? 'fa-sort-down' : 'fa-sort-up'"></i>
                       </th>
-                      <th>
+                      <th @click="setSortOption('temperature')" class="sortable-header" :class="{ active: sortBy === 'temperature' }">
                         <i class="fas fa-thermometer-half"></i>
                         Température
+                        <i v-if="sortBy === 'temperature'" 
+                           class="fas sort-indicator" 
+                           :class="sortOrder === 'desc' ? 'fa-sort-down' : 'fa-sort-up'"></i>
                       </th>
-                      <th>
+                      <th @click="setSortOption('ph')" class="sortable-header" :class="{ active: sortBy === 'ph' }">
                         <i class="fas fa-flask"></i>
                         pH
+                        <i v-if="sortBy === 'ph'" 
+                           class="fas sort-indicator" 
+                           :class="sortOrder === 'desc' ? 'fa-sort-down' : 'fa-sort-up'"></i>
                       </th>
-                      <th>
+                      <th @click="setSortOption('turbidity')" class="sortable-header" :class="{ active: sortBy === 'turbidity' }">
                         <i class="fas fa-water"></i>
                         Turbidité
+                        <i v-if="sortBy === 'turbidity'" 
+                           class="fas sort-indicator" 
+                           :class="sortOrder === 'desc' ? 'fa-sort-down' : 'fa-sort-up'"></i>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr 
-                      v-for="(measure, index) in sortedMeasurements.slice(0, 10)" 
+                      v-for="(measure, index) in paginatedMeasurements" 
                       :key="index"
                       class="table-row"
                     >
                       <td class="date-cell">{{ formatDateOnly(measure.timestamp) }}</td>
                       <td class="time-cell">{{ formatTimeOnly(measure.timestamp) }}</td>
                       <td class="temp-cell">
-                        <span class="value-badge temperature">{{ measure.temperature }}°C</span>
+                        <span class="value-badge temperature" :class="getTemperatureStatus(measure.temperature)">
+                          {{ measure.temperature }}°C
+                        </span>
                       </td>
                       <td class="ph-cell">
-                        <span class="value-badge ph">{{ measure.ph }}</span>
+                        <span class="value-badge ph" :class="getPhStatus(measure.ph)">
+                          {{ measure.ph }}
+                        </span>
                       </td>
                       <td class="turbidity-cell">
-                        <span class="value-badge turbidity">{{ measure.turbidity }}</span>
+                        <span class="value-badge turbidity" :class="getTurbidityStatus(measure.turbidity)">
+                          {{ measure.turbidity }}
+                        </span>
                       </td>
                     </tr>
                   </tbody>
                 </table>
+
+                <!-- Pagination -->
+                <div v-if="totalPages > 1" class="pagination">
+                  <button 
+                    @click="goToPage(currentPage - 1)"
+                    :disabled="currentPage === 1"
+                    class="pagination-btn"
+                  >
+                    <i class="fas fa-chevron-left"></i>
+                  </button>
+                  
+                  <div class="page-numbers">
+                    <button 
+                      v-for="page in visiblePages" 
+                      :key="page"
+                      @click="goToPage(page)"
+                      :class="{ active: page === currentPage }"
+                      class="page-btn"
+                    >
+                      {{ page }}
+                    </button>
+                  </div>
+                  
+                  <button 
+                    @click="goToPage(currentPage + 1)"
+                    :disabled="currentPage === totalPages"
+                    class="pagination-btn"
+                  >
+                    <i class="fas fa-chevron-right"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -385,6 +565,14 @@ const isRefreshing = ref(false)
 // Ajouter cette ligne
 const isDarkMode = ref(false)
 
+// Variables pour le tri, recherche et pagination
+const searchQuery = ref('')
+const sortBy = ref('timestamp')
+const sortOrder = ref('desc')
+const showSortDropdown = ref(false)
+const currentPage = ref(1)
+const itemsPerPage = ref(20)
+
 // Ajouter cette fonction
 const onThemeChanged = (newTheme) => {
   isDarkMode.value = newTheme
@@ -439,6 +627,12 @@ function selectDevice(device) {
   measurements.value = []
   selectedDeviceId.value = device.id
   selectedDevice.value = device
+  
+  // Reset des filtres
+  searchQuery.value = ''
+  currentPage.value = 1
+  sortBy.value = 'timestamp'
+  sortOrder.value = 'desc'
   
   nextTick(() => {
     fetchDeviceMeasurements(device.id)
@@ -539,6 +733,149 @@ const sortedMeasurements = computed(() => {
     new Date(b.timestamp) - new Date(a.timestamp)
   )
 })
+
+// Fonctions pour la recherche, tri et pagination
+const filteredAndSortedMeasurements = computed(() => {
+  if (!measurements.value.length) return []
+  
+  let filtered = [...measurements.value]
+  
+  // Filtrage par recherche
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase().trim()
+    filtered = filtered.filter(measure => {
+      const date = formatDateOnly(measure.timestamp).toLowerCase()
+      const time = formatTimeOnly(measure.timestamp).toLowerCase()
+      const temp = measure.temperature.toString()
+      const ph = measure.ph.toString()
+      const turbidity = measure.turbidity.toString()
+      
+      return date.includes(query) || 
+             time.includes(query) || 
+             temp.includes(query) || 
+             ph.includes(query) || 
+             turbidity.includes(query)
+    })
+  }
+  
+  // Tri
+  filtered.sort((a, b) => {
+    let aValue, bValue
+    
+    switch (sortBy.value) {
+      case 'timestamp':
+        aValue = new Date(a.timestamp)
+        bValue = new Date(b.timestamp)
+        break
+      case 'time':
+        // Tri par heure uniquement (en ignorant la date)
+        const aTime = new Date(a.timestamp)
+        const bTime = new Date(b.timestamp)
+        aValue = aTime.getHours() * 60 + aTime.getMinutes()
+        bValue = bTime.getHours() * 60 + bTime.getMinutes()
+        break
+      case 'temperature':
+        aValue = parseFloat(a.temperature)
+        bValue = parseFloat(b.temperature)
+        break
+      case 'ph':
+        aValue = parseFloat(a.ph)
+        bValue = parseFloat(b.ph)
+        break
+      case 'turbidity':
+        aValue = parseFloat(a.turbidity)
+        bValue = parseFloat(b.turbidity)
+        break
+      default:
+        return 0
+    }
+    
+    if (sortOrder.value === 'asc') {
+      return aValue > bValue ? 1 : aValue < bValue ? -1 : 0
+    } else {
+      return aValue < bValue ? 1 : aValue > bValue ? -1 : 0
+    }
+  })
+  
+  return filtered
+})
+
+// Pagination
+const totalPages = computed(() => {
+  return Math.ceil(filteredAndSortedMeasurements.value.length / itemsPerPage.value)
+})
+
+const paginatedMeasurements = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  const end = start + itemsPerPage.value
+  return filteredAndSortedMeasurements.value.slice(start, end)
+})
+
+const visiblePages = computed(() => {
+  const total = totalPages.value
+  const current = currentPage.value
+  const delta = 2
+  
+  let pages = []
+  let start = Math.max(1, current - delta)
+  let end = Math.min(total, current + delta)
+  
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+  
+  return pages
+})
+
+// Fonctions de tri et recherche
+const setSortOption = (field, order = null) => {
+  if (sortBy.value === field && order === null) {
+    // Toggle order si même champ
+    sortOrder.value = sortOrder.value === 'desc' ? 'asc' : 'desc'
+  } else {
+    sortBy.value = field
+    if (order) {
+      sortOrder.value = order
+    }
+  }
+  
+  currentPage.value = 1 // Reset pagination
+  showSortDropdown.value = false
+}
+
+const toggleSortDropdown = () => {
+  showSortDropdown.value = !showSortDropdown.value
+}
+
+const clearSearch = () => {
+  searchQuery.value = ''
+  currentPage.value = 1
+}
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
+}
+
+// Fonctions pour les statuts colorés des valeurs
+const getTemperatureStatus = (temp) => {
+  if (temp < 15) return 'cold'
+  if (temp > 25) return 'hot'
+  return 'normal'
+}
+
+const getPhStatus = (ph) => {
+  if (ph < 6.5) return 'acidic'
+  if (ph > 8.5) return 'basic'
+  return 'normal'
+}
+
+const getTurbidityStatus = (turbidity) => {
+  if (turbidity > 4) return 'high'
+  if (turbidity > 1) return 'medium'
+  return 'low'
+}
 
 // Obtenir la dernière mesure pour affichage en temps réel
 const latestMeasurement = computed(() => {
@@ -711,6 +1048,13 @@ function getTimeRangeLabel() {
 onMounted(() => {
   fetchUserDevices()
   window.addEventListener('scroll', updateScrollProgress, { passive: true })
+  
+  // Fermer le dropdown de tri en cliquant ailleurs
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.sort-dropdown')) {
+      showSortDropdown.value = false
+    }
+  })
 })
 </script>
 <style scoped>
@@ -2075,6 +2419,399 @@ onMounted(() => {
   .export-controls {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* Styles pour le système de tri, recherche et pagination */
+
+/* Header du tableau avec contrôles */
+.table-header {
+  padding: 2rem 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table-title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.filter-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 12px;
+  color: #667eea;
+  font-size: 0.85rem;
+}
+
+/* Contrôles du tableau */
+.table-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Barre de recherche */
+.search-container {
+  flex: 1;
+  min-width: 300px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-secondary);
+  z-index: 1;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.clear-search-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
+}
+
+.dark-mode .clear-search-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Contrôles de tri */
+.sort-controls {
+  position: relative;
+}
+
+.sort-dropdown {
+  position: relative;
+}
+
+.sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.sort-btn:hover,
+.sort-btn.active {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.sort-arrow {
+  transition: transform 0.3s ease;
+}
+
+.sort-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+.sort-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-medium);
+  min-width: 200px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.sort-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+}
+
+.sort-option:hover {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.sort-option.active {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+.sort-option i:last-child {
+  margin-left: auto;
+  color: #667eea;
+}
+
+.sort-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 0.5rem 0;
+}
+
+/* Headers de tableau triables */
+.sortable-header {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  user-select: none;
+}
+
+.sortable-header:hover {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.sortable-header.active {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+.sort-indicator {
+  margin-left: 0.5rem;
+  opacity: 0.7;
+}
+
+/* Badges de valeurs avec statuts */
+.value-badge.temperature.cold {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.value-badge.temperature.hot {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.value-badge.temperature.normal {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.value-badge.ph.acidic {
+  background: rgba(251, 146, 60, 0.1);
+  color: #fb923c;
+}
+
+.value-badge.ph.basic {
+  background: rgba(168, 85, 247, 0.1);
+  color: #a855f7;
+}
+
+.value-badge.ph.normal {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.value-badge.turbidity.high {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.value-badge.turbidity.medium {
+  background: rgba(251, 146, 60, 0.1);
+  color: #fb923c;
+}
+
+.value-badge.turbidity.low {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem 1rem 1rem;
+  border-top: 1px solid var(--border-color);
+  margin-top: 1rem;
+}
+
+.pagination-btn,
+.page-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.pagination-btn:hover,
+.page-btn:hover {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-btn:disabled:hover {
+  border-color: var(--border-color);
+  background: var(--bg-primary);
+}
+
+.page-btn.active {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.page-numbers {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.results-info {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-left: 1rem;
+}
+
+/* Bouton pour effacer les filtres */
+.clear-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid #667eea;
+  border-radius: 12px;
+  color: #667eea;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+}
+
+.clear-filter-btn:hover {
+  background: #667eea;
+  color: white;
+}
+
+/* Responsive pour les nouvelles fonctionnalités */
+@media (max-width: 768px) {
+  .table-header {
+    padding: 1.5rem 1rem 1rem;
+  }
+  
+  .table-title-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .table-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .search-container {
+    min-width: auto;
+  }
+  
+  .sort-controls {
+    align-self: flex-start;
+  }
+  
+  .sort-menu {
+    left: 0;
+    right: auto;
+  }
+  
+  .pagination {
+    padding: 1.5rem 0.5rem 1rem;
+  }
+  
+  .results-info {
+    margin-left: 0;
+    margin-top: 1rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-input {
+    font-size: 16px; /* Évite le zoom sur iOS */
+  }
+  
+  .pagination {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  
+  .pagination-btn,
+  .page-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .table-controls {
+    gap: 0.75rem;
   }
 }
 </style>
