@@ -4,12 +4,14 @@ import Home2 from './views/home2.vue'
 import Login from './views/Login.vue'
 import Dashboard from './views/Dashboard.vue'
 import ThemeTest from './views/ThemeTest.vue'
+import Register from './views/Register.vue'
 
 const routes = [
   { path: '/', component: Home2 },
   { path: '/login', component: Login },
   { path: '/dashboard', component: Dashboard },
-  { path: '/theme-test', component: ThemeTest }
+  { path: '/theme-test', component: ThemeTest },
+  { path: '/register', component: Register }
 ]
 
 const router = createRouter({
