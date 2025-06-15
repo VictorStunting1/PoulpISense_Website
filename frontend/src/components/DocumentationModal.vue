@@ -6,9 +6,14 @@
           <i class="fas fa-book"></i>
           <h2>Documentation Dashboard</h2>
         </div>
-        <button @click="closeModal" class="close-btn">
-          <i class="fas fa-times"></i>
-        </button>
+        <div class="header-actions">
+          <button @click="downloadDocumentation" class="download-btn" title="Télécharger la documentation">
+            <i class="fas fa-download"></i>
+          </button>
+          <button @click="closeModal" class="close-btn" title="Fermer">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
       </div>
       
       <div class="modal-content" ref="contentContainer">
@@ -16,6 +21,10 @@
       </div>
       
       <div class="modal-footer">
+        <button @click="downloadDocumentation" class="download-footer-btn">
+          <i class="fas fa-download"></i>
+          Télécharger
+        </button>
         <button @click="closeModal" class="footer-btn">
           <i class="fas fa-check"></i>
           Compris
@@ -26,7 +35,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import { marked } from 'marked'
 
 const props = defineProps({
@@ -57,6 +66,31 @@ const compiledMarkdown = computed(() => {
 const closeModal = () => {
   emit('close')
 }
+
+// Fonction pour télécharger la documentation
+const downloadDocumentation = () => {
+  const element = document.createElement('a')
+  const file = new Blob([markdownContent.value], { type: 'text/markdown' })
+  element.href = URL.createObjectURL(file)
+  element.download = 'Dashboard-PoulpISense-Documentation.md'
+  document.body.appendChild(element)
+  element.click()
+  document.body.removeChild(element)
+  URL.revokeObjectURL(element.href)
+}
+
+// Gérer le verrouillage du scroll de la page en arrière-plan
+watch(() => props.isVisible, (newValue) => {
+  if (newValue) {
+    // Bloquer le scroll de la page
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+  } else {
+    // Restaurer le scroll de la page
+    document.body.style.overflow = ''
+    document.documentElement.style.overflow = ''
+  }
+}, { immediate: true })
 
 // Charger le contenu markdown
 onMounted(async () => {
@@ -121,6 +155,14 @@ onMounted(() => {
   
   return () => {
     document.removeEventListener('keydown', handleEscape)
+  }
+})
+
+// Nettoyer le style overflow quand le composant est démonté
+onMounted(() => {
+  return () => {
+    document.body.style.overflow = ''
+    document.documentElement.style.overflow = ''
   }
 })
 </script>
@@ -218,6 +260,8 @@ onMounted(() => {
   flex: 1;
   overflow-y: auto;
   padding: 0;
+  /* Empêcher le scroll de la page en arrière-plan */
+  overscroll-behavior: contain;
 }
 
 .markdown-content {
@@ -225,6 +269,75 @@ onMounted(() => {
   line-height: 1.7;
   color: #2d3748;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Actions du header */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.download-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+}
+
+.download-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Bouton de téléchargement dans le footer */
+.download-footer-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 1rem;
+}
+
+.download-footer-btn:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+/* Améliorer le footer pour deux boutons */
+.modal-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Améliorer le texte en gras pour plus de lisibilité */
+.markdown-content :deep(strong) {
+  color: #1e3a8a; /* Bleu très foncé pour excellent contraste */
+  font-weight: 700;
+  background: rgba(59, 130, 246, 0.1); /* Arrière-plan bleu très léger */
+  padding: 0.125rem 0.25rem;
+  border-radius: 4px;
+  border-left: 3px solid #3b82f6; /* Bordure gauche pour plus de visibilité */
 }
 
 /* Styles pour le contenu Markdown */
@@ -352,9 +465,12 @@ onMounted(() => {
 }
 
 .markdown-content :deep(strong) {
-  color: #667eea; /* Couleur de votre thème */
+  color: #1e3a8a; /* Bleu très foncé pour excellent contraste */
   font-weight: 700;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Ombre légère pour plus de définition */
+  background: rgba(59, 130, 246, 0.1); /* Arrière-plan bleu très léger */
+  padding: 0.125rem 0.25rem;
+  border-radius: 4px;
+  border-left: 3px solid #3b82f6; /* Bordure gauche pour plus de visibilité */
 }
 
 .markdown-content :deep(em) {
@@ -378,6 +494,7 @@ onMounted(() => {
   background: #f8fafc;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .footer-btn {
@@ -430,21 +547,21 @@ onMounted(() => {
   
   .markdown-content :deep(p),
   .markdown-content :deep(li) {
-    color: #cbd5e0;
+    color: #e2e8f0 !important; /* Texte plus clair */
   }
   
-  .markdown-content :deep(code) {
-    background: #2d3748;
-    border-color: #4a5568;
+  .download-footer-btn {
+    background: rgba(16, 185, 129, 0.8);
   }
   
-  .markdown-content :deep(td) {
-    border-bottom-color: #4a5568;
-    color: #cbd5e0;
+  .download-footer-btn:hover {
+    background: #10b981;
   }
   
-  .markdown-content :deep(tr:hover) {
-    background: #2d3748;
+  .markdown-content :deep(strong) {
+    color: #93c5fd; /* Bleu clair pour mode sombre */
+    background: rgba(59, 130, 246, 0.2);
+    border-left-color: #60a5fa;
   }
 }
 
@@ -481,6 +598,21 @@ onMounted(() => {
   .modal-footer {
     padding: 1rem;
   }
+  
+  .header-actions {
+    gap: 0.5rem;
+  }
+  
+  .download-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .download-footer-btn {
+    padding: 0.65rem 1.25rem;
+    margin-right: 0.75rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -503,6 +635,22 @@ onMounted(() => {
   .close-btn {
     width: 36px;
     height: 36px;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .download-footer-btn {
+    margin-right: 0;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .footer-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 </style>
