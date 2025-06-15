@@ -125,7 +125,8 @@ watch(() => props.isVisible, (newValue) => {
 // Charger le contenu markdown
 onMounted(async () => {
   try {
-    const response = await fetch('/src/assets/dashboard-documentation.md')
+    // MODIFIER CETTE LIGNE - utiliser le chemin depuis public
+    const response = await fetch('/dashboard-documentation.md')
     if (response.ok) {
       markdownContent.value = await response.text()
     } else {
