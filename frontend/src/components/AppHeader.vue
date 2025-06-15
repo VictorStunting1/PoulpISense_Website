@@ -195,11 +195,36 @@ const logout = () => {
   router.push('/')
 }
 
+// Fonction pour détecter les préférences système
+const detectSystemTheme = () => {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+}
+
 // Chargement du thème au montage
 onMounted(() => {
   const savedTheme = localStorage.getItem('theme')
-  isDarkMode.value = savedTheme === 'dark'
+  
+  // Si aucun thème n'est sauvegardé, utiliser les préférences système
+  if (savedTheme === null) {
+    isDarkMode.value = detectSystemTheme()
+    localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light')
+  } else {
+    isDarkMode.value = savedTheme === 'dark'
+  }
+  
   emit('theme-changed', isDarkMode.value)
+  
+  // Écouter les changements des préférences système
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+  const handleSystemThemeChange = (e) => {
+    // Seulement si l'utilisateur n'a pas défini de préférence manuelle
+    if (localStorage.getItem('theme') === null) {
+      isDarkMode.value = e.matches
+      emit('theme-changed', isDarkMode.value)
+    }
+  }
+  
+  mediaQuery.addEventListener('change', handleSystemThemeChange)
   
   userEmail.value = localStorage.getItem('userEmail')
 })

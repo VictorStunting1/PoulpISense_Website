@@ -123,19 +123,6 @@ Cliquez sur le bouton **"Trier"** pour accéder aux options :
 
 ---
 
-## 🌙 Mode sombre
-
-### Activation
-- Cliquez sur l'icône **🌙** dans la barre de navigation
-- Le thème s'adapte automatiquement à toute l'interface
-- Préférence sauvegardée pour vos prochaines visites
-
-### Avantages
-- **Confort visuel** réduit la fatigue oculaire
-- **Lisibilité améliorée** dans environnements sombres
-
----
-
 ## 📱 Compatibilité mobile
 
 ### Fonctionnalités adaptatives
@@ -148,6 +135,20 @@ Cliquez sur le bouton **"Trier"** pour accéder aux options :
 - **Balayage** pour naviguer dans le tableau
 - **Menu hamburger** pour navigation compacte
 
+
+---
+
+## 🎨 Préférences d'affichage
+
+### Thème automatique
+Le Dashboard détecte automatiquement vos préférences de thème système :
+- **Mode clair :** Interface avec arrière-plan blanc et texte sombre
+- **Mode sombre :** Interface avec arrière-plan sombre et texte clair
+- **Détection automatique :** L'application suit les préférences de votre système d'exploitation
+
+### Personnalisation du thème
+- **Bouton de thème :** Utilisez l'icône 🌙/☀️ dans la barre de navigation pour changer manuellement
+- **Préférence mémorisée :** Votre choix manuel sera sauvegardé pour les prochaines visites
 
 ---
 
@@ -173,12 +174,23 @@ Cliquez sur le bouton **"Trier"** pour accéder aux options :
 2. **Assurez-vous d'avoir des données** dans la période
 3. **Essayez l'autre format** (PDF/CSV)
 
+### Problèmes de thème
+1. **Actualisez la page** si le thème ne se charge pas correctement
+2. **Videz le cache** du navigateur
+3. **Vérifiez les préférences** de votre système d'exploitation
 
 ---
 
 ## 🔄 Mises à jour
 
 Le Dashboard est régulièrement mis à jour avec de nouvelles fonctionnalités.
+
+**Nouveautés récentes :**
+- ✅ Détection automatique des préférences de thème système
+- ✅ Mode sombre/clair adaptatif
+- ✅ Documentation utilisateur intégrée
+- ✅ Fonction de tri et recherche avancée
+- ✅ Export PDF/CSV amélioré
 
 ---
 

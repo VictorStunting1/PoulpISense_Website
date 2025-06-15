@@ -579,6 +579,11 @@ const scrollProgress = ref(0)
 const isRefreshing = ref(false)
 const isDarkMode = ref(false)
 
+// Fonction pour détecter les préférences système
+const detectSystemTheme = () => {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+}
+
 // Variables pour le tri, recherche et pagination
 const searchQuery = ref('')
 const sortBy = ref('timestamp')
@@ -1074,6 +1079,25 @@ function getTimeRangeLabel() {
 
 // Lifecycle hooks
 onMounted(() => {
+  // Initialiser le thème selon les préférences système ou localStorage
+  const savedTheme = localStorage.getItem('theme')
+  if (savedTheme === null) {
+    isDarkMode.value = detectSystemTheme()
+  } else {
+    isDarkMode.value = savedTheme === 'dark'
+  }
+  
+  // Écouter les changements des préférences système
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+  const handleSystemThemeChange = (e) => {
+    // Seulement si l'utilisateur n'a pas défini de préférence manuelle
+    if (localStorage.getItem('theme') === null) {
+      isDarkMode.value = e.matches
+    }
+  }
+  
+  mediaQuery.addEventListener('change', handleSystemThemeChange)
+  
   fetchUserDevices()
   window.addEventListener('scroll', updateScrollProgress, { passive: true })
   
