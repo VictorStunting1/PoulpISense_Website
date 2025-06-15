@@ -20,6 +20,14 @@
           <h2 class="hero-title">Vos Appareils Connectés</h2>
           <p class="hero-description">Sélectionnez un appareil pour visualiser ses données en temps réel</p>
           
+          <!-- Bouton Documentation -->
+          <div class="hero-actions">
+            <button @click="openDocumentation" class="documentation-btn">
+              <i class="fas fa-book"></i>
+              <span>Voir la documentation</span>
+            </button>
+          </div>
+          
           <!-- Sélecteur d'appareils moderne -->
           <div v-if="userDevices.length > 0" class="device-grid">
             <div
@@ -535,6 +543,12 @@
 
     <!-- Ajouter le composant footer à la fin, avant la fermeture du div principal -->
     <AppFooter :isDarkMode="isDarkMode" />
+
+    <!-- Modal de documentation -->
+    <DocumentationModal 
+      :isVisible="showDocumentation" 
+      @close="closeDocumentation"
+    />
   </div>
 </template>
 
@@ -546,6 +560,7 @@ import DeviceChart from '../components/DeviceChart.vue'
 // Ajouter ces imports
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
+import DocumentationModal from '../components/DocumentationModal.vue'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import Papa from 'papaparse'
@@ -562,7 +577,6 @@ const loading = ref(false)
 const timeRange = ref('week')
 const scrollProgress = ref(0)
 const isRefreshing = ref(false)
-// Ajouter cette ligne
 const isDarkMode = ref(false)
 
 // Variables pour le tri, recherche et pagination
@@ -573,9 +587,23 @@ const showSortDropdown = ref(false)
 const currentPage = ref(1)
 const itemsPerPage = ref(20)
 
+// AJOUTER CETTE LIGNE
+const showDocumentation = ref(false)
+
 // Ajouter cette fonction
 const onThemeChanged = (newTheme) => {
   isDarkMode.value = newTheme
+}
+
+// AJOUTER CES FONCTIONS
+// Fonction pour ouvrir la documentation
+const openDocumentation = () => {
+  showDocumentation.value = true
+}
+
+// Fonction pour fermer la documentation
+const closeDocumentation = () => {
+  showDocumentation.value = false
 }
 
 // Supprimer ces fonctions (déjà dans AppHeader)
@@ -2281,7 +2309,7 @@ onMounted(() => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width:  768px) {
   .header-content {
     padding: 1rem;
     flex-direction: column;
@@ -2295,7 +2323,7 @@ onMounted(() => {
   }
   
   .title-section {
-    align-items: center;
+       align-items: center;
   }
   
   .dashboard-title {
@@ -2807,6 +2835,121 @@ onMounted(() => {
   
   .table-controls {
     gap: 0.75rem;
+  }
+}
+
+/* Actions du hero */
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.documentation-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.documentation-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border-radius: 16px;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.documentation-btn:hover::before {
+  opacity: 1;
+}
+
+.documentation-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.documentation-btn:active {
+  transform: translateY(-2px);
+}
+
+.documentation-btn i {
+  font-size: 1.125rem;
+  transition: transform 0.3s ease;
+}
+
+.documentation-btn:hover i {
+  transform: scale(1.1);
+}
+
+/* Mode sombre pour le bouton de documentation */
+.dark-mode .documentation-btn {
+  background: rgba(172, 153, 234, 0.2);
+  border-color: rgba(172, 153, 234, 0.3);
+  color: #DFD8F7;
+}
+
+.dark-mode .documentation-btn:hover {
+  background: rgba(172, 153, 234, 0.3);
+  border-color: rgba(172, 153, 234, 0.5);
+  box-shadow: 0 12px 40px rgba(172, 153, 234, 0.3);
+}
+
+/* Animation d'apparition du bouton */
+.documentation-btn {
+  animation: slideInDoc 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s backwards;
+}
+
+@keyframes slideInDoc {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive pour le bouton */
+@media (max-width: 768px) {
+  .documentation-btn {
+    padding: 0.875rem 1.75rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .documentation-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .documentation-btn span {
+    display: none;
+  }
+  
+  .documentation-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    justify-content: center;
   }
 }
 </style>
