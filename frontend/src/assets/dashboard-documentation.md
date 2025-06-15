@@ -1,4 +1,4 @@
-# 📊 Guide Utilisateur - Dashboard PoulpISense
+# Guide Utilisateur - Dashboard PoulpISense
 
 ## 🎯 Vue d'ensemble
 

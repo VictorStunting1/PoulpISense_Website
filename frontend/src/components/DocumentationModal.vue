@@ -352,8 +352,9 @@ onMounted(() => {
 }
 
 .markdown-content :deep(strong) {
-  color: #2d3748;
+  color: #667eea; /* Couleur de votre thème */
   font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Ombre légère pour plus de définition */
 }
 
 .markdown-content :deep(em) {
