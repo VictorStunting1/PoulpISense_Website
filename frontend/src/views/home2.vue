@@ -55,7 +55,7 @@
               <div class="feature-badge">En temps réel</div>
             </div>
             <h3>Surveillance Temps Réel</h3>
-            <p>Monitoring continu de la température, pH et turbidité avec alertes automatiques et notifications intelligentes</p>
+            <p>Monitoring continu de la température, pH et turbidité avec alertes automatiques</p>
             <div class="feature-footer">
               <span class="feature-stat">24/7</span>
               <span class="feature-label">Surveillance</span>
@@ -803,6 +803,12 @@ onUnmounted(() => {
   position: relative;
 }
 
+/* Mode sombre pour Features Section */
+.dark-mode .features-section {
+  background: linear-gradient(135deg, #190649 0%, #2B0B98 100%);
+  color: #DFD8F7;
+}
+
 .features-section::before {
   content: '';
   position: absolute;
@@ -813,8 +819,20 @@ onUnmounted(() => {
   background: linear-gradient(90deg, transparent, #512BD4, transparent);
 }
 
+.dark-mode .features-section::before {
+  background: linear-gradient(90deg, transparent, #ac99ea, transparent);
+}
+
 .features-section .section-title {
   color: #2B0B98;
+}
+
+.dark-mode .features-section .section-title {
+  color: #DFD8F7;
+  background: linear-gradient(135deg, #ffffff, #DFD8F7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .features-grid {
@@ -837,6 +855,14 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
+/* Mode sombre pour les cartes de fonctionnalités */
+.dark-mode .feature-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+}
+
 .feature-card::before {
   content: '';
   position: absolute;
@@ -849,6 +875,10 @@ onUnmounted(() => {
   transition: transform 0.3s ease;
 }
 
+.dark-mode .feature-card::before {
+  background: linear-gradient(90deg, #ac99ea, #DFD8F7);
+}
+
 .feature-card:hover::before {
   transform: translateX(0);
 }
@@ -856,6 +886,10 @@ onUnmounted(() => {
 .feature-card:hover {
   transform: translateY(-10px) scale(1.02);
   box-shadow: 0 30px 80px rgba(43, 11, 152, 0.2);
+}
+
+.dark-mode .feature-card:hover {
+  box-shadow: 0 30px 80px rgba(172, 153, 234, 0.3);
 }
 
 .feature-header {
@@ -869,6 +903,11 @@ onUnmounted(() => {
   font-size: 3.5rem;
   filter: drop-shadow(0 4px 8px rgba(81, 43, 212, 0.2));
   color: #512BD4;
+}
+
+.dark-mode .feature-icon {
+  color: #ac99ea;
+  filter: drop-shadow(0 4px 8px rgba(172, 153, 234, 0.3));
 }
 
 .feature-icon i {
@@ -886,6 +925,11 @@ onUnmounted(() => {
   letter-spacing: 0.5px;
 }
 
+.dark-mode .feature-badge {
+  background: linear-gradient(135deg, #ac99ea, #DFD8F7);
+  color: #2B0B98;
+}
+
 .feature-card h3 {
   font-size: clamp(1.3rem, 2.5vw, 1.5rem);
   margin-bottom: 20px;
@@ -894,11 +938,19 @@ onUnmounted(() => {
   line-height: 1.3;
 }
 
+.dark-mode .feature-card h3 {
+  color: #DFD8F7;
+}
+
 .feature-card p {
   color: #6E6E6E;
   line-height: 1.7;
   font-size: clamp(0.95rem, 1.8vw, 1rem);
   margin-bottom: 25px;
+}
+
+.dark-mode .feature-card p {
+  color: #ac99ea;
 }
 
 .feature-footer {
@@ -909,10 +961,18 @@ onUnmounted(() => {
   border-top: 1px solid rgba(81, 43, 212, 0.1);
 }
 
+.dark-mode .feature-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .feature-stat {
   font-size: 1.5rem;
   font-weight: 700;
   color: #512BD4;
+}
+
+.dark-mode .feature-stat {
+  color: #ac99ea;
 }
 
 .feature-stat i {
@@ -925,6 +985,10 @@ onUnmounted(() => {
   font-weight: 500;
 }
 
+.dark-mode .feature-label {
+  color: #DFD8F7;
+}
+
 /* Section de démonstration */
 .demo-section {
   width: 100%;
@@ -933,6 +997,11 @@ onUnmounted(() => {
   color: white;
   position: relative;
   overflow: hidden;
+}
+
+/* Mode sombre pour Demo Section */
+.dark-mode .demo-section {
+  background: linear-gradient(135deg, #0d0225 0%, #190649 100%);
 }
 
 .demo-section::before {
@@ -945,6 +1014,11 @@ onUnmounted(() => {
   background: radial-gradient(circle at 30% 40%, rgba(172, 153, 234, 0.1) 0%, transparent 50%),
               radial-gradient(circle at 70% 80%, rgba(223, 216, 247, 0.1) 0%, transparent 50%);
   pointer-events: none;
+}
+
+.dark-mode .demo-section::before {
+  background: radial-gradient(circle at 30% 40%, rgba(172, 153, 234, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(223, 216, 247, 0.05) 0%, transparent 50%);
 }
 
 .demo-content {
@@ -969,11 +1043,22 @@ onUnmounted(() => {
   background-clip: text;
 }
 
+.dark-mode .demo-text h2 {
+  background: linear-gradient(135deg, #DFD8F7, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .demo-text p {
   font-size: 1.2rem;
   line-height: 1.8;
   color: #DFD8F7;
   margin-bottom: 40px;
+}
+
+.dark-mode .demo-text p {
+  color: #ac99ea;
 }
 
 .demo-features {
@@ -997,15 +1082,29 @@ onUnmounted(() => {
   transition: all 0.3s ease;
 }
 
+.dark-mode .demo-feature {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #DFD8F7;
+}
+
 .demo-feature:hover {
   background: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
+}
+
+.dark-mode .demo-feature:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .demo-icon {
   font-size: 1.4rem;
   color: #DFD8F7;
   min-width: 24px;
+}
+
+.dark-mode .demo-icon {
+  color: #ac99ea;
 }
 
 .demo-icon i {
@@ -1037,6 +1136,11 @@ onUnmounted(() => {
   min-width: 200px;
 }
 
+.dark-mode .store-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .store-btn::before {
   content: '';
   position: absolute;
@@ -1058,9 +1162,18 @@ onUnmounted(() => {
   box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
 }
 
+.dark-mode .store-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 25px rgba(172, 153, 234, 0.2);
+}
+
 .store-icon {
   font-size: 2rem;
   color: #DFD8F7;
+}
+
+.dark-mode .store-icon {
+  color: #ac99ea;
 }
 
 .store-icon i {
@@ -1079,18 +1192,34 @@ onUnmounted(() => {
   margin-bottom: 2px;
 }
 
+.dark-mode .store-label {
+  color: #DFD8F7;
+}
+
 .store-name {
   font-size: 1.1rem;
   font-weight: 600;
   color: white;
 }
 
+.dark-mode .store-name {
+  color: #ac99ea;
+}
+
 .app-store .store-icon {
   color: #DFD8F7;
 }
 
+.dark-mode .app-store .store-icon {
+  color: #ac99ea;
+}
+
 .google-play .store-icon {
   color: #DFD8F7;
+}
+
+.dark-mode .google-play .store-icon {
+  color: #ac99ea;
 }
 
 .demo-btn {
@@ -1109,10 +1238,21 @@ onUnmounted(() => {
   box-shadow: 0 8px 25px rgba(172, 153, 234, 0.3);
 }
 
+.dark-mode .demo-btn {
+  background: linear-gradient(135deg, #DFD8F7, #ffffff);
+  color: #190649;
+  box-shadow: 0 8px 25px rgba(223, 216, 247, 0.3);
+}
+
 .demo-btn:hover {
   transform: translateY(-4px);
   box-shadow: 0 15px 40px rgba(172, 153, 234, 0.4);
   background: linear-gradient(135deg, #DFD8F7, #ffffff);
+}
+
+.dark-mode .demo-btn:hover {
+  background: linear-gradient(135deg, #ffffff, #DFD8F7);
+  box-shadow: 0 15px 40px rgba(223, 216, 247, 0.5);
 }
 
 .demo-arrow {
