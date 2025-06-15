@@ -31,7 +31,6 @@
               v-motion-slide-visible-once-bottom
               :delay="index * 100"
             >
-              <div class="device-status-indicator" :class="getDeviceStatus(device)"></div>
               <div class="device-icon">
                 <i class="fas fa-robot"></i>
               </div>
@@ -100,10 +99,6 @@
                   </span>
                 </div>
               </div>
-            </div>
-            <div class="device-status-badge online">
-              <i class="fas fa-circle"></i>
-              <span>En ligne</span>
             </div>
           </div>
         </div>
