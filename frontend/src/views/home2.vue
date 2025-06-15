@@ -119,62 +119,81 @@
       <div class="container">
         <div class="demo-content">
           <div class="demo-text" v-motion-slide-visible-once-left>
-            <h2>Interface Moderne & Intuitive</h2>
-            <p>Découvrez une expérience utilisateur repensée avec des visualisations en temps réel, des graphiques interactifs et une navigation fluide.</p>
+            <h2>Accédez à vos données partout, à tout moment</h2>
+            <p>Notre solution multiplateforme vous permet de surveiller vos capteurs depuis n'importe où. Site web responsive et applications mobiles natives pour une expérience optimale sur tous vos appareils.</p>
             <div class="demo-features">
               <div class="demo-feature">
                 <span class="demo-icon">
-                  <i class="fas fa-sparkles"></i>
+                  <i class="fas fa-desktop"></i>
                 </span>
-                <span>Design moderne</span>
-              </div>
-              <div class="demo-feature">
-                <span class="demo-icon">
-                  <i class="fas fa-crosshairs"></i>
-                </span>
-                <span>Navigation intuitive</span>
+                <span>Interface web responsive</span>
               </div>
               <div class="demo-feature">
                 <span class="demo-icon">
                   <i class="fas fa-mobile-alt"></i>
                 </span>
-                <span>Responsive design</span>
+                <span>Applications mobiles natives</span>
+              </div>
+              <div class="demo-feature">
+                <span class="demo-icon">
+                  <i class="fas fa-sync-alt"></i>
+                </span>
+                <span>Synchronisation temps réel</span>
+              </div>
+              <div class="demo-feature">
+                <span class="demo-icon">
+                  <i class="fas fa-cloud"></i>
+                </span>
+                <span>Accès cloud sécurisé</span>
               </div>
             </div>
+            
+            <!-- Boutons de téléchargement -->
+            <div class="download-buttons">
+              <a href="#" class="store-btn app-store">
+                <div class="store-icon">
+                  <i class="fab fa-apple"></i>
+                </div>
+                <div class="store-text">
+                  <span class="store-label">Prochainement sur</span>
+                  <span class="store-name">App Store</span>
+                </div>
+              </a>
+              <a href="#" class="store-btn google-play">
+                <div class="store-icon">
+                  <i class="fab fa-google-play"></i>
+                </div>
+                <div class="store-text">
+                  <span class="store-label">Prochainement sur</span>
+                  <span class="store-name">Google Play</span>
+                </div>
+              </a>
+            </div>
+            
             <router-link to="/dashboard" class="demo-btn">
-              <span>Voir la démo</span>
+              <span>Découvrir l'interface web</span>
               <span class="demo-arrow">
                 <i class="fas fa-arrow-right"></i>
               </span>
             </router-link>
           </div>
+          
           <div class="demo-visual" v-motion-slide-visible-once-right>
-            <div class="demo-dashboard">
-              <div class="demo-header">
-                <div class="demo-dot red"></div>
-                <div class="demo-dot yellow"></div>
-                <div class="demo-dot green"></div>
+            <div class="devices-showcase">
+              <!-- Mockup Desktop -->
+              <div class="desktop-mockup">
+                <div class="desktop-screen">
+                  <img src="@/assets/desktop_example.png" alt="Interface web PoulpISence" class="screen-image">
+                </div>
+                <div class="desktop-base"></div>
               </div>
-              <div class="demo-content-area">
-                <div class="demo-chart">
-                  <div class="chart-bars">
-                    <div class="bar" style="height: 60%"></div>
-                    <div class="bar" style="height: 80%"></div>
-                    <div class="bar" style="height: 45%"></div>
-                    <div class="bar" style="height: 90%"></div>
-                    <div class="bar" style="height: 70%"></div>
-                  </div>
+              
+              <!-- Mockup Mobile -->
+              <div class="mobile-mockup">
+                <div class="mobile-screen">
+                  <img src="@/assets/mobile_example.jpeg" alt="Application mobile PoulpISence" class="screen-image">
                 </div>
-                <div class="demo-stats">
-                  <div class="demo-stat">
-                    <div class="stat-value">24°C</div>
-                    <div class="stat-label">Température</div>
-                  </div>
-                  <div class="demo-stat">
-                    <div class="stat-value">7.2</div>
-                    <div class="stat-label">pH</div>
-                  </div>
-                </div>
+                <div class="mobile-button"></div>
               </div>
             </div>
           </div>
@@ -909,75 +928,191 @@ onUnmounted(() => {
 /* Section de démonstration */
 .demo-section {
   width: 100%;
-  padding: 100px 20px;
+  padding: 120px 20px;
   background: linear-gradient(135deg, #2B0B98 0%, #512BD4 100%);
   color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.demo-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 30% 40%, rgba(172, 153, 234, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(223, 216, 247, 0.1) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .demo-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  gap: 80px;
   align-items: center;
-  max-width: 1300px;
+  max-width: 1400px;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 .demo-text h2 {
-  font-size: clamp(2rem, 4vw, 2.8rem);
-  margin-bottom: 25px;
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  margin-bottom: 30px;
   font-weight: 700;
   line-height: 1.2;
+  background: linear-gradient(135deg, #ffffff, #DFD8F7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .demo-text p {
-  font-size: 1.1rem;
-  line-height: 1.7;
+  font-size: 1.2rem;
+  line-height: 1.8;
   color: #DFD8F7;
-  margin-bottom: 35px;
+  margin-bottom: 40px;
 }
 
 .demo-features {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
   margin-bottom: 40px;
 }
 
 .demo-feature {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 15px;
   font-size: 1rem;
   color: #ac99ea;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.demo-feature:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
 
 .demo-icon {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: #DFD8F7;
+  min-width: 24px;
 }
 
 .demo-icon i {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+}
+
+/* Boutons de téléchargement */
+.download-buttons {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.store-btn {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 25px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+  min-width: 200px;
+}
+
+.store-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.store-btn:hover::before {
+  left: 100%;
+}
+
+.store-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+}
+
+.store-icon {
+  font-size: 2rem;
+  color: #DFD8F7;
+}
+
+.store-icon i {
+  font-size: 2rem;
+}
+
+.store-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.store-label {
+  font-size: 0.85rem;
+  color: #ac99ea;
+  margin-bottom: 2px;
+}
+
+.store-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.app-store .store-icon {
+  color: #DFD8F7;
+}
+
+.google-play .store-icon {
+  color: #DFD8F7;
 }
 
 .demo-btn {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 32px;
+  padding: 18px 35px;
   background: linear-gradient(135deg, #ac99ea, #DFD8F7);
   color: #2B0B98;
   text-decoration: none;
   border-radius: 16px;
   font-weight: 700;
+  font-size: 1.1rem;
   transition: all 0.3s ease;
   width: fit-content;
+  box-shadow: 0 8px 25px rgba(172, 153, 234, 0.3);
 }
 
 .demo-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(172, 153, 234, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 15px 40px rgba(172, 153, 234, 0.4);
+  background: linear-gradient(135deg, #DFD8F7, #ffffff);
 }
 
 .demo-arrow {
@@ -992,605 +1127,153 @@ onUnmounted(() => {
   font-size: 1rem;
 }
 
-/* Mockup dashboard */
+/* Vitrine des appareils - Ultra simplifiée, images seulement */
 .demo-visual {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.demo-dashboard {
-  width: 100%;
-  max-width: 400px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 20px;
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.demo-header {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-}
-
-.demo-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-
-.demo-dot.red { background: #ff5f56; }
-.demo-dot.yellow { background: #ffbd2e; }
-.demo-dot.green { background: #27ca3f; }
-
-.demo-content-area {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.demo-chart {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  border-radius: 12px;
-  height: 120px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.chart-bars {
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
-  height: 80px;
-}
-
-.bar {
-  width: 20px;
-  background: linear-gradient(to top, #ac99ea, #DFD8F7);
-  border-radius: 4px 4px 0 0;
-  animation: bar-grow 2s ease-out;
-}
-
-@keyframes bar-grow {
-  from { height: 0; }
-  to { height: var(--height, 50%); }
-}
-
-.demo-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-}
-
-.demo-stat {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  border-radius: 12px;
-  text-align: center;
-}
-
-.stat-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 5px;
-}
-
-.stat-label {
-  font-size: 0.85rem;
-  color: #DFD8F7;
-}
-
-/* Stats Section avec effets visuels */
-.stats-section {
-  width: 100%;
-  padding: 100px 20px;
-  background: linear-gradient(135deg, #512BD4 0%, #2B0B98 100%);
   position: relative;
 }
 
-.stats-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 20% 50%, rgba(172, 153, 234, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 80% 20%, rgba(223, 216, 247, 0.1) 0%, transparent 50%);
-  pointer-events: none;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
-  max-width: 1300px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-}
-
-.stat-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 50px 30px;
-  border-radius: 24px;
-  text-align: center;
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.stat-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(172, 153, 234, 0.1));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.stat-card:hover .stat-background {
-  opacity: 1;
-}
-
-.stat-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 25px 80px rgba(255, 255, 255, 0.1);
-}
-
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #DFD8F7, #ac99ea);
-}
-
-.stat-icon {
-  font-size: 3rem;
-  margin-bottom: 20px;
-  filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.3));
-  color: #DFD8F7;
-}
-
-.stat-icon i {
-  font-size: 3rem;
-}
-
-.stat-value {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 800;
-  color: white;
-  margin-bottom: 15px;
-  line-height: 1;
-  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
-}
-
-.stat-label {
-  font-size: clamp(1rem, 2.2vw, 1.2rem);
-  color: #DFD8F7;
-  margin-bottom: 20px;
-  font-weight: 500;
-}
-
-.stat-trend {
+.devices-showcase {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.stat-trend.positive {
-  background: rgba(76, 175, 80, 0.2);
-  color: #4CAF50;
-}
-
-.stat-trend.warning {
-  background: rgba(255, 152, 0, 0.2);
-  color: #FF9800;
-}
-
-.trend-icon {
-  font-size: 1rem;
-}
-
-.trend-icon i {
-  font-size: 1rem;
-}
-
-.text-success {
-  color: #4CAF50 !important;
-}
-
-/* Actions Section */
-.actions-section {
-  width: 100%;
-  padding: 100px 20px;
-  background: linear-gradient(135deg, #DFD8F7 0%, #ac99ea 100%);
-  color: #2B0B98;
-}
-
-.actions-section .section-title {
-  color: #2B0B98;
-}
-
-.actions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 40px;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 700px;
+  width: 100%;
 }
 
-.action-card {
-  background: white;
-  padding: 50px 40px;
-  border-radius: 24px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 20px 60px rgba(43, 11, 152, 0.1);
-  border: 2px solid transparent;
-  position: relative;
-  overflow: hidden;
-}
-
-.action-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(81, 43, 212, 0.05), rgba(172, 153, 234, 0.05));
-  transform: translateY(100%);
+/* Desktop - juste l'image */
+.desktop-mockup {
+  flex: 1;
+  max-width: 450px;
   transition: transform 0.3s ease;
 }
 
-.action-card:hover::before {
-  transform: translateY(0);
+.desktop-mockup:hover {
+  transform: scale(1.02);
 }
 
-.action-card:hover {
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 30px 80px rgba(43, 11, 152, 0.2);
-  border-color: #512BD4;
+.desktop-screen {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
 }
 
-.action-icon {
-  font-size: 4rem;
-  margin-bottom: 25px;
-  filter: drop-shadow(0 4px 8px rgba(81, 43, 212, 0.2));
-  position: relative;
-  z-index: 2;
-  color: #512BD4;
+.desktop-base {
+  display: none; /* Supprimé */
 }
 
-.action-icon i {
-  font-size: 4rem;
+/* Mobile - juste l'image */
+.mobile-mockup {
+  flex: 0 0 200px;
+  transition: transform 0.3s ease;
 }
 
-.action-card h3 {
-  font-size: clamp(1.3rem, 2.5vw, 1.5rem);
-  margin-bottom: 20px;
-  color: #512BD4;
-  font-weight: 700;
-  position: relative;
-  z-index: 2;
+.mobile-mockup:hover {
+  transform: scale(1.02);
 }
 
-.action-card p {
-  color: #6E6E6E;
-  line-height: 1.7;
-  font-size: clamp(0.95rem, 1.8vw, 1rem);
-  position: relative;
-  z-index: 2;
+.mobile-screen {
+  width: 100%;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
 }
 
-/* Animations d'entrée */
-@keyframes slideInFromBottom {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
+.mobile-button {
+  display: none; /* Supprimé */
+}
+
+/* Images */
+.screen-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: inherit;
+  transition: opacity 0.3s ease;
+}
+
+/* Animation flottante légère */
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0px);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInFromLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
+  50% {
+    transform: translateY(-5px);
   }
 }
 
-@keyframes slideInFromRight {
-  from {
-    opacity: 0;
-    transform: translateX(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.desktop-mockup {
+  animation: gentleFloat 4s ease-in-out infinite;
 }
 
-/* Classes d'animation */
-.animate-in {
-  animation: slideInFromBottom 0.8s ease-out;
+.mobile-mockup {
+  animation: gentleFloat 3s ease-in-out infinite;
+  animation-delay: 0.5s;
 }
 
-/* Responsive Design complet */
-
-/* Tablettes */
+/* Responsive */
 @media (max-width: 1024px) {
-  .hero-section {
-    min-height: 90vh;
-    padding: 70px 15px 50px;
-  }
-  
-  .container {
-    padding: 0 15px;
-  }
-  
   .demo-content {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 60px;
     text-align: center;
   }
   
-  .features-grid,
-  .stats-grid,
-  .actions-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  .devices-showcase {
     gap: 30px;
   }
   
-  .shape {
-    display: none; /* Masquer les formes sur tablette */
+  .mobile-mockup {
+    flex: 0 0 180px;
   }
 }
 
-/* Mobiles */
 @media (max-width: 768px) {
-  .hero-section {
-    min-height: 100vh;
-    padding: 60px 15px 40px;
-  }
-  
-  .logo-container {
+  .devices-showcase {
     flex-direction: column;
-    gap: 20px;
+    gap: 40px;
+    max-width: 350px;
   }
   
-  .logo-icon {
-    font-size: 3.5rem;
+  .desktop-mockup {
+    order: 2;
+    max-width: 350px;
   }
   
-  .logo-icon i {
-    font-size: 3.5rem;
-  }
-  
-  .cta-buttons {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-  
-  .btn {
-    width: 100%;
-    max-width: 320px;
-    min-width: auto;
-  }
-  
-  .features-grid,
-  .stats-grid,
-  .actions-grid {
-    grid-template-columns: 1fr;
-    gap: 25px;
-  }
-  
-  .feature-card,
-  .stat-card,
-  .action-card {
-    margin: 0 10px;
-  }
-  
-  .stats-section,
-  .features-section,
-  .actions-section,
-  .demo-section {
-    padding: 80px 15px;
-  }
-  
-  .scroll-indicator {
-    bottom: 20px;
-  }
-  
-  .demo-content {
-    gap: 30px;
-  }
-  
-  .demo-dashboard {
-    max-width: 300px;
+  .mobile-mockup {
+    order: 1;
+    flex: 0 0 160px;
   }
 }
 
-/* Petits mobiles */
 @media (max-width: 480px) {
-  .hero-section {
-    padding: 50px 10px 30px;
-    min-height: 100vh;
+  .devices-showcase {
+    max-width: 280px;
   }
   
-  .logo-icon {
-    font-size: 2.5rem;
+  .desktop-mockup {
+    max-width: 280px;
   }
   
-  .logo-icon i {
-    font-size: 2.5rem;
-  }
-  
-  .hero-content {
-    padding: 0 10px;
-  }
-  
-  .container {
-    padding: 0 10px;
-  }
-  
-  .feature-card,
-  .stat-card,
-  .action-card {
-    padding: 30px 20px;
-    margin: 0 5px;
-  }
-  
-  .stats-section,
-  .features-section,
-  .actions-section,
-  .demo-section {
-    padding: 60px 10px;
-  }
-  
-  .cta-buttons {
-    gap: 15px;
-  }
-  
-  .btn {
-    padding: 14px 28px;
-    font-size: 1rem;
-  }
-  
-  .demo-dashboard {
-    max-width: 250px;
-    padding: 15px;
-  }
-  
-  .chart-bars {
-    gap: 4px;
-  }
-  
-  .bar {
-    width: 15px;
+  .mobile-mockup {
+    flex: 0 0 140px;
   }
 }
 
-/* Extra large screens */
-@media (min-width: 1400px) {
-  .hero-section {
-    padding: 120px 20px 100px;
-  }
-  
-  .container {
-    max-width: 1600px;
-  }
-  
-  .features-grid,
-  .stats-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  
-  .actions-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+/* Mode sombre - juste les ombres */
+.dark-mode .desktop-screen {
+  box-shadow: 0 15px 50px rgba(255, 255, 255, 0.1);
 }
 
-/* Mode paysage mobiles */
-@media (max-height: 500px) and (orientation: landscape) {
-  .hero-section {
-    min-height: auto;
-    padding: 30px 20px;
-  }
-  
-  .logo-container {
-    margin-bottom: 20px;
-  }
-  
-  .hero-subtitle,
-  .hero-description {
-    margin: 10px 0;
-  }
-  
-  .cta-buttons {
-    margin-top: 20px;
-  }
-  
-  .scroll-indicator {
-    display: none;
-  }
+.dark-mode .mobile-screen {
+  box-shadow: 0 15px 50px rgba(255, 255, 255, 0.1);
 }
 
-/* Animation de chargement de la page */
-.hero-content.hero-loaded {
-  animation: fadeInUp 1s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Améliorations pour l'accessibilité */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* Focus states pour l'accessibilité */
-.btn:focus,
-.action-card:focus {
-  outline: 3px solid #ac99ea;
-  outline-offset: 2px;
-}
-
-/* Amélioration des contrastes pour le mode sombre */
-.dark-mode .feature-card,
-.dark-mode .action-card {
-  background: rgba(255, 255, 255, 0.95);
-}
-
-.dark-mode .demo-section {
-  background: linear-gradient(135deg, #190649 0%, #2B0B98 100%);
-}
-
-.dark-mode .stats-section {
-  background: linear-gradient(135deg, #2B0B98 0%, #190649 100%);
-}
-
+/* Scroll progress */
 .scroll-progress-container {
   position: fixed;
   top: 0;
@@ -1649,5 +1332,4 @@ onUnmounted(() => {
     height: 3px;
   }
 }
-
 </style>
