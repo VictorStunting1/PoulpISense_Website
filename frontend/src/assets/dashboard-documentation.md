@@ -13,7 +13,6 @@ Le Dashboard PoulpISense est votre centre de contrôle principal pour surveiller
 - L'appareil sélectionné sera mis en surbrillance avec une bordure bleue
 - Les données de l'appareil s'afficheront automatiquement
 
-> **💡 Astuce :** Un indicateur coloré (vert/rouge) montre le statut en ligne de chaque appareil.
 
 ---
 
@@ -24,7 +23,6 @@ Une fois un appareil sélectionné, vous verrez :
 - **Nom et description** de l'appareil
 - **Localisation** d'installation
 - **Date d'installation**
-- **Statut de connexion** (En ligne/Hors ligne)
 
 ### 📊 Métriques en temps réel
 Trois cartes principales affichent les dernières mesures :
@@ -134,7 +132,6 @@ Cliquez sur le bouton **"Trier"** pour accéder aux options :
 
 ### Avantages
 - **Confort visuel** réduit la fatigue oculaire
-- **Économie d'énergie** sur écrans OLED
 - **Lisibilité améliorée** dans environnements sombres
 
 ---
@@ -151,17 +148,6 @@ Cliquez sur le bouton **"Trier"** pour accéder aux options :
 - **Balayage** pour naviguer dans le tableau
 - **Menu hamburger** pour navigation compacte
 
----
-
-## ⚡ Raccourcis clavier
-
-| Raccourci | Action |
-|-----------|--------|
-| `Espace` | Actualiser les données |
-| `1`, `2`, `3` | Sélectionner période (24h, 7j, 30j) |
-| `Ctrl/Cmd + F` | Focus sur la recherche |
-| `Échap` | Fermer les menus ouverts |
-| `←` `→` | Navigation pagination |
 
 ---
 
@@ -187,31 +173,13 @@ Cliquez sur le bouton **"Trier"** pour accéder aux options :
 2. **Assurez-vous d'avoir des données** dans la période
 3. **Essayez l'autre format** (PDF/CSV)
 
----
-
-## 📞 Support
-
-### Assistance technique
-- **Email** : support@poulpisense.com
-- **Téléphone** : +33 (0)1 XX XX XX XX
-- **Horaires** : Lun-Ven 9h-18h
-
-### Ressources
-- **Base de connaissances** : [help.poulpisense.com](https://help.poulpisense.com)
-- **Vidéos tutoriels** : [youtube.com/poulpisense](https://youtube.com/poulpisense)
-- **Forum communauté** : [community.poulpisense.com](https://community.poulpisense.com)
 
 ---
 
 ## 🔄 Mises à jour
 
-Le Dashboard est régulièrement mis à jour avec de nouvelles fonctionnalités :
-- **Notifications automatiques** des mises à jour importantes
-- **Nouvelles fonctionnalités** ajoutées mensuellement
-- **Corrections de bugs** déployées en continu
+Le Dashboard est régulièrement mis à jour avec de nouvelles fonctionnalités.
 
 ---
-
-**💡 Conseil :** Cette documentation est également accessible via le bouton "?" dans l'interface pour une consultation rapide pendant l'utilisation.
 
 *Dernière mise à jour : 15 juin 2025*
