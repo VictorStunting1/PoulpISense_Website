@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Graphique Alertes - PoulpISense</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            color: #333;
+        }
+        .test-info {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f0f9ff;
+            border-radius: 12px;
+            border-left: 4px solid #3b82f6;
+        }
+        .test-steps {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        .step {
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .step:last-child {
+            border-bottom: none;
+        }
+        .nav-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 2rem;
+        }
+        .feature-list li::before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔔 Test du Graphique d'Historique des Alertes</h1>
+        
+        <div class="test-info">
+            <h3>Objectif du test</h3>
+            <p>Vérifier que le graphique d'évolution des alertes utilise maintenant les vraies données et s'adapte selon la période sélectionnée.</p>
+        </div>
+
+        <h3>🚀 Fonctionnalités implémentées :</h3>
+        <ul class="feature-list">
+            <li>Graphique basé sur les vraies données d'alertes</li>
+            <li>Adaptation automatique selon la période (semaine, mois, 3 mois, année)</li>
+            <li>Statistiques dynamiques selon la période sélectionnée</li>
+            <li>Graphique responsive avec hauteur fixe</li>
+            <li>Icônes d'alertes selon le type d'alerte</li>
+            <li>Mise à jour automatique lors du changement de données</li>
+        </ul>
+
+        <a href="http://localhost:5174/#/alerts" class="nav-link">
+            🔗 Aller à la page des Alertes
+        </a>
+
+        <div class="test-steps">
+            <h3>Étapes de test :</h3>
+            <div class="step">
+                <strong>1.</strong> Se connecter avec l'email : <code>admin@test.fr</code>
+            </div>
+            <div class="step">
+                <strong>2.</strong> Naviguer vers l'onglet "Historique" des alertes
+            </div>
+            <div class="step">
+                <strong>3.</strong> Changer la période (semaine, mois, 3 mois, année)
+            </div>
+            <div class="step">
+                <strong>4.</strong> Observer que :
+                <ul>
+                    <li>Le graphique affiche les vraies données d'alertes</li>
+                    <li>Les statistiques changent selon la période</li>
+                    <li>Le titre du graphique indique la période sélectionnée</li>
+                    <li>Les points de données correspondent aux alertes réelles</li>
+                </ul>
+            </div>
+            <div class="step">
+                <strong>5.</strong> Vérifier les onglets "Alertes récentes" et "Seuils d'alerte"
+            </div>
+        </div>
+
+        <div class="test-info" style="margin-top: 2rem; background: #ecfdf5; border-left-color: #10b981;">
+            <h3>✅ Résultat attendu</h3>
+            <p>Le graphique doit afficher les 6 alertes existantes dans la base de données, réparties selon leurs dates réelles. Les statistiques doivent être cohérentes avec la période sélectionnée.</p>
+        </div>
+    </div>
+
+    <script>
+        // Auto-login si pas déjà connecté
+        if (!localStorage.getItem('userEmail')) {
+            console.log('Auto-login pour les tests...');
+            localStorage.setItem('userEmail', 'admin@test.fr');
+            localStorage.setItem('isLoggedIn', 'true');
+        }
+        
+        console.log('Test setup: utilisateur connecté en tant que', localStorage.getItem('userEmail'));
+    </script>
+</body>
+</html>

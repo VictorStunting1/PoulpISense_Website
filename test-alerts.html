@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Alertes PoulpISense</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        .button:hover {
+            background: #5a6fd8;
+        }
+        
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        
+        .alert-item {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ef4444;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .alert-header {
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+        
+        .alert-message {
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+        
+        .alert-meta {
+            font-size: 0.8em;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔔 Test de la Page Alertes PoulpISense</h1>
+        <p>Test direct de la récupération et affichage des alertes</p>
+        
+        <button class="button" onclick="testAlertsAPI()">Tester API Alertes</button>
+        <button class="button" onclick="simulateLogin()">Simuler Connexion Admin</button>
+        <button class="button" onclick="openAlertsPage()">Ouvrir Page Alertes</button>
+        <button class="button" onclick="clearResults()">Effacer</button>
+        
+        <div id="results" class="results"></div>
+        <div id="alerts-display"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3001';
+        
+        function log(message) {
+            const results = document.getElementById('results');
+            results.textContent += new Date().toLocaleTimeString() + ': ' + message + '\n';
+        }
+        
+        function clearResults() {
+            document.getElementById('results').textContent = '';
+            document.getElementById('alerts-display').innerHTML = '';
+        }
+        
+        async function testAlertsAPI() {
+            try {
+                log('🔍 Test de récupération des alertes...');
+                
+                // 1. Test endpoint alertes
+                const alertsRes = await fetch(`${API_BASE}/api/alerts`);
+                const alerts = await alertsRes.json();
+                log(`✅ ${alerts.length} alertes récupérées`);
+                
+                // 2. Test endpoint mesures 
+                const measurementsRes = await fetch(`${API_BASE}/api/measurements`);
+                const measurements = await measurementsRes.json();
+                log(`✅ ${measurements.length} mesures récupérées`);
+                
+                // 3. Test endpoint appareils utilisateur
+                const email = 'admin@test.fr';
+                const devicesRes = await fetch(`${API_BASE}/api/devices/user/${encodeURIComponent(email)}`);
+                const devices = await devicesRes.json();
+                log(`✅ ${devices.length} appareils récupérés pour ${email}`);
+                
+                // 4. Filtrage des alertes
+                const userDeviceIds = devices.map(d => d.id);
+                const filteredAlerts = alerts.filter(alert => {
+                    const measurement = measurements.find(m => m.id === alert.measurementId);
+                    return measurement && userDeviceIds.includes(measurement.deviceId);
+                });
+                
+                log(`🎯 ${filteredAlerts.length} alertes filtrées pour l'utilisateur`);
+                
+                // Affichage des alertes
+                displayAlerts(filteredAlerts, devices, measurements);
+                
+            } catch (error) {
+                log(`❌ Erreur: ${error.message}`);
+            }
+        }
+        
+        function displayAlerts(alerts, devices, measurements) {
+            const display = document.getElementById('alerts-display');
+            
+            if (alerts.length === 0) {
+                display.innerHTML = '<p>Aucune alerte à afficher</p>';
+                return;
+            }
+            
+            let html = `<h2>📋 ${alerts.length} Alertes trouvées</h2>`;
+            
+            alerts.forEach(alert => {
+                const measurement = measurements.find(m => m.id === alert.measurementId);
+                const device = devices.find(d => d.id === measurement?.deviceId);
+                
+                html += `
+                    <div class="alert-item">
+                        <div class="alert-header">${alert.type}</div>
+                        <div class="alert-message">${alert.message}</div>
+                        <div class="alert-meta">
+                            📍 Appareil: ${device?.nom || 'Inconnu'} | 
+                            📅 ${new Date(alert.date).toLocaleString('fr-FR')} |
+                            ${alert.isRead ? '✅ Lue' : '🔴 Non lue'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            display.innerHTML = html;
+        }
+        
+        function simulateLogin() {
+            localStorage.setItem('userEmail', 'admin@test.fr');
+            localStorage.setItem('authToken', 'faketoken');
+            log('✅ Connexion simulée pour admin@test.fr');
+        }
+        
+        function openAlertsPage() {
+            window.open('http://localhost:5174/#/alerts', '_blank');
+        }
+        
+        // Auto-test au chargement
+        window.onload = function() {
+            log('🚀 Page de test chargée');
+            simulateLogin();
+        };
+    </script>
+</body>
+</html>

@@ -16,7 +16,7 @@ const MODE_PRODUCTION = true;
 
 const BASE_API_URL = MODE_PRODUCTION 
   ? "http://ssssirhcwan.ddns.net:40000"
-  : "http://localhost:40000";
+  : "http://localhost:3001";
 
 //const BASE_API_URL = "http://10.58.255.68:5168";
 

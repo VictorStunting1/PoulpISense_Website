@@ -5,13 +5,15 @@ import Login from './views/Login.vue'
 import Dashboard from './views/Dashboard.vue'
 import ThemeTest from './views/ThemeTest.vue'
 import Register from './views/Register.vue'
+import Alerts from './views/Alerts.vue'
 
 const routes = [
   { path: '/', component: Home2 },
   { path: '/login', component: Login },
   { path: '/dashboard', component: Dashboard },
   { path: '/theme-test', component: ThemeTest },
-  { path: '/register', component: Register }
+  { path: '/register', component: Register },
+  { path: '/alerts', component: Alerts }
 ]
 
 const router = createRouter({
