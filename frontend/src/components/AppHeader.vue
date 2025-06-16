@@ -61,10 +61,10 @@
         <div class="nav-actions">
             <!-- Bouton de thème -->
             <button class="theme-toggle" @click="toggleTheme" :title="isDarkMode ? 'Mode clair' : 'Mode sombre'">
-                <div class="theme-icon">
-                <i v-if="isDarkMode" class="fas fa-sun"></i>
-                <i v-else class="fas fa-moon"></i>
-                </div>
+              <div class="theme-icon">
+              <i v-if="isDarkMode" class="fas fa-moon"></i>
+              <i v-else class="fas fa-sun"></i>
+              </div>
             </button>
 
             <!-- Bouton de connexion/déconnexion -->
@@ -382,21 +382,21 @@ onMounted(() => {
   left: 2px;
   width: 24px;
   height: 24px;
-  background: white;
+  background: #ff8c00;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.9rem;
   transition: transform 0.3s ease;
-  color: #512BD4;
+  color: #ffef76;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dark-mode .theme-icon {
   transform: translateX(22px);
-  background: #ff8c00;
-  color: #ffef76;
+  background: #ac95ff;
+  color: #512BD4;
 }
 
 /* Bouton de connexion */
