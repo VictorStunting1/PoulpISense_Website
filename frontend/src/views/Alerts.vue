@@ -893,26 +893,40 @@ async function saveThreshold() {
       return
     }
     
-    const data = {
-      ...thresholdForm.value,
-      userId: currentUser.value.id
+    // Nettoyer les données - enlever les métadonnées .NET et les références circulaires
+    const cleanData = {
+      deviceId: thresholdForm.value.deviceId,
+      userId: currentUser.value.id,
+      parameterType: thresholdForm.value.parameterType,
+      minValue: thresholdForm.value.minValue,
+      maxValue: thresholdForm.value.maxValue,
+      isActive: thresholdForm.value.isActive
     }
     
+    console.log('Données nettoyées à envoyer:', cleanData)
+    
     if (editingThreshold.value) {
-      const response = await axios.put(`${API_CONFIG.BASE_URL}/api/alert-thresholds/${editingThreshold.value.id}`, data)
+      const response = await axios.put(`${API_CONFIG.BASE_URL}/api/alert-thresholds/${editingThreshold.value.id}`, cleanData)
       // Mettre à jour le seuil dans la liste
       const index = thresholds.value.findIndex(t => t.id === editingThreshold.value.id)
       if (index !== -1) {
-        thresholds.value[index] = { ...thresholds.value[index], ...data }
+        thresholds.value[index] = { ...thresholds.value[index], ...cleanData }
       }
+      console.log('Seuil mis à jour avec succès')
     } else {
-      const response = await axios.post(`${API_CONFIG.BASE_URL}/api/alert-thresholds`, data)
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/api/alert-thresholds`, cleanData)
       thresholds.value.push(response.data)
+      console.log('Seuil créé avec succès')
     }
     
     closeModal()
+    // Rafraîchir les seuils pour avoir les données à jour
+    await fetchThresholds()
   } catch (error) {
     console.error('Erreur lors de la sauvegarde du seuil:', error)
+    if (error.response) {
+      console.error('Détails de l\'erreur:', error.response.status, error.response.data)
+    }
     alert('Erreur lors de la sauvegarde du seuil. Vérifiez la console pour plus de détails.')
   }
 }
