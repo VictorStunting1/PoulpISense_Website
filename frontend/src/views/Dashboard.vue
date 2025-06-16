@@ -2919,58 +2919,142 @@ onMounted(() => {
   transform: scale(1.1);
 }
 
-/* Mode sombre pour le bouton de documentation */
+/* Mode sombre pour le bouton de documentation - avec spécificité élevée */
+.dashboard-page.dark-mode .documentation-btn {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.2), rgba(223, 216, 247, 0.15)) !important;
+  backdrop-filter: blur(30px) !important;
+  border: 2px solid rgba(172, 153, 234, 0.4) !important;
+  color: #DFD8F7 !important;
+}
+
+.dashboard-page.dark-mode .documentation-btn::before {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.15), rgba(223, 216, 247, 0.1)) !important;
+}
+
+.dashboard-page.dark-mode .documentation-btn:hover {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.3), rgba(223, 216, 247, 0.2)) !important;
+  border-color: rgba(172, 153, 234, 0.6) !important;
+  color: #f7fafc !important;
+  box-shadow: 0 12px 40px rgba(172, 153, 234, 0.4) !important;
+  transform: translateY(-4px);
+}
+
+.dashboard-page.dark-mode .documentation-btn:hover::before {
+  opacity: 1;
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.2), rgba(223, 216, 247, 0.15)) !important;
+}
+
+.dashboard-page.dark-mode .documentation-btn:active {
+  transform: translateY(-2px);
+}
+
+.dashboard-page.dark-mode .documentation-btn i {
+  color: #ac99ea !important;
+  transition: all 0.3s ease;
+}
+
+.dashboard-page.dark-mode .documentation-btn:hover i {
+  color: #DFD8F7 !important;
+  transform: scale(1.1);
+}
+
+/* Animation d'apparition adaptée au mode sombre */
 .dark-mode .documentation-btn {
-  background: rgba(172, 153, 234, 0.2);
-  border-color: rgba(172, 153, 234, 0.3);
-  color: #DFD8F7;
+  animation: slideInDocDark 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s backwards;
 }
 
-.dark-mode .documentation-btn:hover {
-  background: rgba(172, 153, 234, 0.3);
-  border-color: rgba(172, 153, 234, 0.5);
-  box-shadow: 0 12px 40px rgba(172, 153, 234, 0.3);
-}
-
-/* Animation d'apparition du bouton */
-.documentation-btn {
-  animation: slideInDoc 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s backwards;
-}
-
-@keyframes slideInDoc {
+@keyframes slideInDocDark {
   from {
     opacity: 0;
     transform: translateY(20px);
+    box-shadow: 0 0 0 rgba(172, 153, 234, 0);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+    box-shadow: 0 4px 20px rgba(172, 153, 234, 0.2);
   }
 }
 
-/* Responsive pour le bouton */
+/* Effet de brillance subtil en mode sombre */
+.dashboard-page.dark-mode .documentation-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 30%, rgba(223, 216, 247, 0.1) 50%, transparent 70%);
+  border-radius: 16px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.dashboard-page.dark-mode .documentation-btn:hover::after {
+  opacity: 1;
+}
+
+/* Amélioration pour les états focus et active */
+.dashboard-page.dark-mode .documentation-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(172, 153, 234, 0.3), 0 12px 40px rgba(172, 153, 234, 0.3) !important;
+}
+
+.dashboard-page.dark-mode .documentation-btn:focus:not(:hover) {
+  border-color: rgba(172, 153, 234, 0.5) !important;
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.25), rgba(223, 216, 247, 0.18)) !important;
+}
+
+/* Responsive pour le mode sombre */
 @media (max-width: 768px) {
-  .documentation-btn {
-    padding: 0.875rem 1.75rem;
-    font-size: 0.95rem;
+  .dashboard-page.dark-mode .documentation-btn {
+    background: linear-gradient(135deg, rgba(172, 153, 234, 0.25), rgba(223, 216, 247, 0.18)) !important;
+    border-color: rgba(172, 153, 234, 0.5) !important;
+  }
+  
+  .dashboard-page.dark-mode .documentation-btn:hover {
+    background: linear-gradient(135deg, rgba(172, 153, 234, 0.35), rgba(223, 216, 247, 0.25)) !important;
+    border-color: rgba(172, 153, 234, 0.7) !important;
   }
 }
 
 @media (max-width: 480px) {
-  .documentation-btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9rem;
+  /* Version circulaire en mode sombre */
+  .dashboard-page.dark-mode .documentation-btn {
+    background: linear-gradient(135deg, rgba(172, 153, 234, 0.3), rgba(223, 216, 247, 0.2)) !important;
+    border: 3px solid rgba(172, 153, 234, 0.5) !important;
+    box-shadow: 0 4px 20px rgba(172, 153, 234, 0.3) !important;
   }
   
-  .documentation-btn span {
-    display: none;
+  .dashboard-page.dark-mode .documentation-btn:hover {
+    background: linear-gradient(135deg, rgba(172, 153, 234, 0.4), rgba(223, 216, 247, 0.3)) !important;
+    border-color: rgba(172, 153, 234, 0.7) !important;
+    box-shadow: 0 8px 30px rgba(172, 153, 234, 0.5) !important;
+    transform: translateY(-4px) scale(1.05);
   }
   
-  .documentation-btn {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    justify-content: center;
+  .dashboard-page.dark-mode .documentation-btn i {
+    color: #DFD8F7 !important;
+    font-size: 1.25rem;
   }
+  
+  .dashboard-page.dark-mode .documentation-btn:hover i {
+    color: #ffffff !important;
+    transform: scale(1.15);
+  }
+}
+
+/* Transition globale améliorée pour le mode sombre */
+.dashboard-page.dark-mode .documentation-btn * {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* État pressed (click) en mode sombre */
+.dashboard-page.dark-mode .documentation-btn:active {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.4), rgba(223, 216, 247, 0.3)) !important;
+  border-color: rgba(172, 153, 234, 0.8) !important;
+  box-shadow: 0 4px 15px rgba(172, 153, 234, 0.6) !important;
+  transform: translateY(-1px) scale(0.98);
 }
 </style>
