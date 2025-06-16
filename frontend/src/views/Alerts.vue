@@ -1371,45 +1371,84 @@ const updateScrollProgress = () => {
 /* === EN-TÊTE DE PAGE === */
 .page-header {
   background: var(--bg-primary);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 2rem;
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
   margin-bottom: 2rem;
-  box-shadow: var(--shadow-light);
+  box-shadow: var(--shadow-medium);
   border: 1px solid var(--border-color);
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(102, 126, 234, 0.05) 0%, 
+    rgba(118, 75, 162, 0.03) 50%, 
+    rgba(240, 147, 251, 0.02) 100%);
+  z-index: -1;
 }
 
 .header-content {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 100%;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
 }
 
 .header-left h1.page-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin: 0 0 0.5rem 0;
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 0;
   background: var(--primary-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .page-title i {
-  color: #f59e0b;
-  font-size: 2rem;
+  background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 2.5rem;
+  filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3));
 }
 
 .page-subtitle {
   color: var(--text-secondary);
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   margin: 0;
+  font-weight: 500;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
 }
 
 .refresh-btn {
