@@ -2,9 +2,12 @@
   <div class="alerts-page" :class="{ 'dark-mode': isDarkMode }">
     <!-- Header -->
     <AppHeader 
-      @toggle-theme="onThemeChanged"
+      @theme-changed="onThemeChanged"
       @open-documentation="openDocumentation"
     />
+    <div class="scroll-progress-container">
+        <div class="scroll-progress-bar" :style="{ width: scrollProgress + '%' }"></div>
+    </div>
 
     <main class="alerts-main">
       <div class="alerts-container">
@@ -455,6 +458,7 @@ const currentPage = ref(1)
 const itemsPerPage = ref(10)
 const showDocumentation = ref(false)
 const isDarkMode = ref(false)
+const scrollProgress = ref(0)
 
 // Variables pour les seuils
 const showCreateThreshold = ref(false)
@@ -592,11 +596,16 @@ const deviceWithMostAlerts = computed(() => {
   return entries.reduce((a, b) => a[1] > b[1] ? a : b)[0]
 })
 
+// Fonction pour détecter les préférences système
+const detectSystemTheme = () => {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+}
+
 // Fonctions utilitaires
 const onThemeChanged = (newTheme) => {
-  isDarkMode.value = newTheme === 'dark'
+  isDarkMode.value = newTheme
   // Sauvegarder la préférence utilisateur
-  localStorage.setItem('theme', newTheme === 'dark' ? 'dark' : 'light')
+  localStorage.setItem('theme', newTheme ? 'dark' : 'light')
 }
 
 const openDocumentation = () => {
@@ -955,18 +964,24 @@ function createHistoryChart() {
   const ctx = historyChart.value.getContext('2d')
   const { labels, data } = getHistoryData()
   
+  // Couleurs adaptées au thème
+  const primaryColor = isDarkMode.value ? '#ac99ea' : '#667eea'
+  const backgroundColor = isDarkMode.value ? 'rgba(172, 153, 234, 0.1)' : 'rgba(99, 102, 241, 0.1)'
+  const gridColor = isDarkMode.value ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+  const textColor = isDarkMode.value ? '#f7fafc' : '#2d3748'
+  
   // Données basées sur les vraies alertes
   const chartData = {
     labels,
     datasets: [{
       label: 'Nombre d\'alertes',
       data,
-      borderColor: 'rgb(99, 102, 241)',
-      backgroundColor: 'rgba(99, 102, 241, 0.1)',
+      borderColor: primaryColor,
+      backgroundColor: backgroundColor,
       tension: 0.3,
       fill: true,
-      pointBackgroundColor: 'rgb(99, 102, 241)',
-      pointBorderColor: '#fff',
+      pointBackgroundColor: primaryColor,
+      pointBorderColor: isDarkMode.value ? '#1a202c' : '#fff',
       pointBorderWidth: 2,
       pointRadius: 4,
       pointHoverRadius: 6
@@ -986,18 +1001,22 @@ function createHistoryChart() {
       plugins: {
         legend: {
           position: 'top',
+          labels: {
+            color: textColor
+          }
         },
         title: {
           display: true,
-          text: `Évolution des alertes - ${getPeriodLabel()}`
+          text: `Évolution des alertes - ${getPeriodLabel()}`,
+          color: textColor
         },
         tooltip: {
           mode: 'index',
           intersect: false,
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          titleColor: '#fff',
-          bodyColor: '#fff',
-          borderColor: 'rgb(99, 102, 241)',
+          backgroundColor: isDarkMode.value ? 'rgba(26, 32, 44, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+          titleColor: textColor,
+          bodyColor: textColor,
+          borderColor: primaryColor,
           borderWidth: 1
         }
       },
@@ -1006,17 +1025,21 @@ function createHistoryChart() {
           beginAtZero: true,
           ticks: {
             stepSize: 1,
+            color: textColor,
             callback: function(value) {
               return Number.isInteger(value) ? value : ''
             }
           },
           grid: {
-            color: 'rgba(0, 0, 0, 0.1)'
+            color: gridColor
           }
         },
         x: {
+          ticks: {
+            color: textColor
+          },
           grid: {
-            color: 'rgba(0, 0, 0, 0.1)'
+            color: gridColor
           }
         }
       },
@@ -1066,6 +1089,25 @@ watch(alerts, () => {
 
 // Lifecycle - REPRENDRE LA LOGIQUE DE DASHBOARD
 onMounted(async () => {
+  // Initialiser le thème selon les préférences système ou localStorage
+  const savedTheme = localStorage.getItem('theme')
+  if (savedTheme === null) {
+    isDarkMode.value = detectSystemTheme()
+  } else {
+    isDarkMode.value = savedTheme === 'dark'
+  }
+  
+  // Écouter les changements des préférences système
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+  const handleSystemThemeChange = (e) => {
+    // Seulement si l'utilisateur n'a pas défini de préférence manuelle
+    if (localStorage.getItem('theme') === null) {
+      isDarkMode.value = e.matches
+    }
+  }
+  
+  mediaQuery.addEventListener('change', handleSystemThemeChange)
+  
   const email = userEmail.value
   if (!email) {
     console.log('Utilisateur non connecté, redirection vers login')
@@ -1075,20 +1117,87 @@ onMounted(async () => {
   
   console.log('Utilisateur connecté:', email)
   await refreshData()
+
+  window.addEventListener('scroll', updateScrollProgress, { passive: true })
 })
+
+// Ajouter cette fonction :
+const updateScrollProgress = () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight
+  const progress = (scrollTop / docHeight) * 100
+  scrollProgress.value = Math.min(100, Math.max(0, progress))
+}
 </script>
 
 <style scoped>
-/* === LAYOUT GÉNÉRAL === */
+/* === VARIABLES CSS ET THÈME === */
 .alerts-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #333;
+  position: relative;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  overflow-x: hidden;
+  
+  /* Mode clair par défaut */
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --bg-primary: rgba(255, 255, 255, 0.9);
+  --bg-secondary: rgba(247, 250, 252, 0.9);
+  --border-color: rgba(226, 232, 240, 0.8);
+  --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.1);
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --danger-gradient: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+  --warning-gradient: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
+  --success-gradient: linear-gradient(135deg, #5f27cd 0%, #00d2d3 100%);
+  
+  /* Fond dégradé identique à Dashboard.vue */
+  background: var(--primary-gradient);
 }
 
+.alerts-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(102, 126, 234, 0.9) 0%, 
+    rgba(118, 75, 162, 0.8) 50%, 
+    rgba(240, 147, 251, 0.7) 100%);
+  backdrop-filter: blur(10px);
+  z-index: -1;
+}
+
+/* Mode sombre */
+.alerts-page.dark-mode {
+  --text-primary: #f7fafc;
+  --text-secondary: #e2e8f0;
+  --bg-primary: rgba(30, 41, 59, 0.9);
+  --bg-secondary: rgba(51, 65, 85, 0.9);
+  --border-color: rgba(71, 85, 105, 0.6);
+  --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.2);
+  --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.3);
+  
+  /* Fond sombre */
+  background: linear-gradient(135deg, #190649 0%, #2B0B98 50%, #0d0225 100%);
+}
+
+.alerts-page.dark-mode::before {
+  background: linear-gradient(135deg, 
+    rgba(25, 6, 73, 0.95) 0%, 
+    rgba(43, 11, 152, 0.9) 50%, 
+    rgba(13, 2, 37, 0.85) 100%);
+}
+
+/* === LAYOUT GÉNÉRAL === */
 .alerts-main {
-  padding: 2rem 0;
+  padding: 6rem 0 2rem 0; 
   min-height: calc(100vh - 140px);
+  position: relative;
+  z-index: 1;
 }
 
 .alerts-container {
@@ -1099,13 +1208,14 @@ onMounted(async () => {
 
 /* === EN-TÊTE DE PAGE === */
 .page-header {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-primary);
   backdrop-filter: blur(10px);
   border-radius: 20px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-light);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
 }
 
 .header-content {
@@ -1120,7 +1230,7 @@ onMounted(async () => {
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0 0 0.5rem 0;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--primary-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1135,13 +1245,13 @@ onMounted(async () => {
 }
 
 .page-subtitle {
-  color: #6b7280;
+  color: var(--text-secondary);
   font-size: 1.1rem;
   margin: 0;
 }
 
 .refresh-btn {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--primary-gradient);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -1164,6 +1274,25 @@ onMounted(async () => {
   cursor: not-allowed;
 }
 
+/* Mode sombre pour le bouton refresh - avec spécificité élevée */
+.alerts-page.dark-mode .refresh-btn {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.8), rgba(223, 216, 247, 0.6)) !important;
+  color: #f7fafc !important;
+  border: 1px solid rgba(172, 153, 234, 0.4) !important;
+}
+
+.alerts-page.dark-mode .refresh-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.9), rgba(223, 216, 247, 0.7)) !important;
+  box-shadow: 0 8px 25px rgba(172, 153, 234, 0.5) !important;
+  transform: translateY(-2px);
+}
+
+.alerts-page.dark-mode .refresh-btn:disabled {
+  background: rgba(172, 153, 234, 0.3) !important;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* === STATISTIQUES === */
 .stats-grid {
   display: grid;
@@ -1173,21 +1302,21 @@ onMounted(async () => {
 }
 
 .stat-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-primary);
   backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 1.5rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-light);
+  border: 1px solid var(--border-color);
   transition: all 0.3s ease;
 }
 
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-medium);
 }
 
 .stat-icon {
@@ -1201,46 +1330,30 @@ onMounted(async () => {
   background: rgba(99, 102, 241, 0.1);
 }
 
-.stat-icon i.text-red-500 {
-  color: #ef4444;
-}
-
-.stat-icon i.text-blue-500 {
-  color: #3b82f6;
-}
-
-.stat-icon i.text-green-500 {
-  color: #10b981;
-}
-
-.stat-content {
-  flex: 1;
-}
-
 .stat-value {
   display: block;
   font-size: 2rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--text-primary);
   line-height: 1;
 }
 
 .stat-label {
   display: block;
-  color: #6b7280;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   margin-top: 0.25rem;
 }
 
 /* === ONGLETS === */
 .tabs-container {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-primary);
   backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 0.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-light);
+  border: 1px solid var(--border-color);
 }
 
 .tabs {
@@ -1261,7 +1374,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .tab:hover {
@@ -1270,19 +1383,36 @@ onMounted(async () => {
 }
 
 .tab.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--primary-gradient);
   color: white;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
+/* Mode sombre pour les onglets - avec spécificité élevée */
+.alerts-page.dark-mode .tab {
+  color: #9ca3af !important;
+  background: rgba(45, 55, 72, 0.5) !important;
+}
+
+.alerts-page.dark-mode .tab:hover {
+  background: rgba(172, 153, 234, 0.15) !important;
+  color: #DFD8F7 !important;
+}
+
+.alerts-page.dark-mode .tab.active {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.8), rgba(223, 216, 247, 0.6)) !important;
+  color: #f7fafc !important;
+  box-shadow: 0 4px 15px rgba(172, 153, 234, 0.4) !important;
+}
+
 /* === CONTENU DES ONGLETS === */
 .tab-content {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-primary);
   backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-light);
+  border: 1px solid var(--border-color);
 }
 
 /* === SECTION ALERTES === */
@@ -1322,6 +1452,23 @@ onMounted(async () => {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+/* Mode sombre pour les filtres - avec spécificité élevée */
+.alerts-page.dark-mode .device-filter,
+.alerts-page.dark-mode .status-filter,
+.alerts-page.dark-mode .period-filter {
+  background: rgba(45, 55, 72, 0.9) !important;
+  color: #e2e8f0 !important;
+  border: 2px solid rgba(172, 153, 234, 0.3) !important;
+}
+
+.alerts-page.dark-mode .device-filter:focus,
+.alerts-page.dark-mode .status-filter:focus,
+.alerts-page.dark-mode .period-filter:focus {
+  border-color: #ac99ea !important;
+  background: rgba(45, 55, 72, 0.95) !important;
+  box-shadow: 0 0 0 3px rgba(172, 153, 234, 0.2) !important;
+}
+
 .action-btn {
   padding: 0.75rem 1.5rem;
   border: none;
@@ -1349,6 +1496,34 @@ onMounted(async () => {
 .action-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Mode sombre pour les boutons d'action - avec spécificité élevée */
+.alerts-page.dark-mode .action-btn.primary {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.8), rgba(223, 216, 247, 0.6)) !important;
+  color: #f7fafc !important;
+  border: 2px solid rgba(172, 153, 234, 0.4) !important;
+  box-shadow: 0 4px 15px rgba(172, 153, 234, 0.3) !important;
+}
+
+.alerts-page.dark-mode .action-btn.primary:hover {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.9), rgba(223, 216, 247, 0.7)) !important;
+  box-shadow: 0 4px 15px rgba(172, 153, 234, 0.4) !important;
+  transform: translateY(-2px);
+}
+
+.alerts-page.dark-mode .action-btn.secondary {
+  background: rgba(45, 55, 72, 0.8) !important;
+  color: #e2e8f0 !important;
+  border: 2px solid rgba(172, 153, 234, 0.3) !important;
+}
+
+.alerts-page.dark-mode .action-btn.secondary:hover {
+  background: rgba(172, 153, 234, 0.2) !important;
+  border-color: rgba(172, 153, 234, 0.5) !important;
+  color: #f7fafc !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(172, 153, 234, 0.3) !important;
 }
 
 /* === LISTE DES ALERTES === */
@@ -2039,40 +2214,372 @@ onMounted(async () => {
   animation: fadeIn 0.3s ease-out;
 }
 
-/* === THÈME SOMBRE (OPTIONNEL) === */
-@media (prefers-color-scheme: dark) {
-  .alerts-page {
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-  }
-  
-  .page-header,
-  .tab-content,
-  .stat-card {
-    background: rgba(30, 41, 59, 0.95);
-    color: #f1f5f9;
-    border-color: rgba(71, 85, 105, 0.3);
-  }
-  
-  .page-subtitle,
-  .stat-label {
-    color: #94a3b8;
-  }
-  
-  .alert-item,
-  .threshold-card,
-  .device-thresholds {
-    background: rgba(51, 65, 85, 0.8);
-    border-color: rgba(71, 85, 105, 0.5);
-    color: #f1f5f9;
-  }
-  
-  .alert-message {
-    color: #e2e8f0;
-  }
-  
-  .modal-content {
-    background: #1e293b;
-    color: #f1f5f9;
-  }
+/* === AMÉLIORATION DU CONTRASTE === */
+/* Mode clair - amélioration des couleurs */
+.alerts-page:not(.dark-mode) .alert-item {
+  background: #ffffff;
+  color: #1a202c;
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.alerts-page:not(.dark-mode) .alert-item.unread {
+  border-left: 4px solid #ef4444;
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.08) 0%, #ffffff 10%);
+}
+
+.alerts-page:not(.dark-mode) .alert-message {
+  color: #2d3748;
+  font-weight: 500;
+}
+
+.alerts-page:not(.dark-mode) .alert-device {
+  background: #f7fafc;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+
+.alerts-page:not(.dark-mode) .tab-content {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(160, 174, 192, 0.2);
+}
+
+.alerts-page:not(.dark-mode) .device-filter,
+.alerts-page:not(.dark-mode) .status-filter,
+.alerts-page:not(.dark-mode) .period-filter {
+   background: #ffffff;
+  color: #2d3748;
+  border: 2px solid #e2e8f0;
+}
+
+.alerts-page:not(.dark-mode) .device-filter:focus,
+.alerts-page:not(.dark-mode) .status-filter:focus,
+.alerts-page:not(.dark-mode) .period-filter:focus {
+  border-color: #667eea;
+  background: #ffffff;
+}
+
+/* Mode sombre - amélioration des couleurs */
+.alerts-page.dark-mode .alert-item {
+  background: rgba(45, 55, 72, 0.9);
+  color: #f7fafc;
+  border: 2px solid rgba(172, 153, 234, 0.3);
+}
+
+.alerts-page.dark-mode .alert-item.unread {
+  border-left: 4px solid #fc8181;
+  background: linear-gradient(90deg, rgba(252, 129, 129, 0.15) 0%, rgba(45, 55, 72, 0.9) 15%);
+}
+
+.alerts-page.dark-mode .alert-message {
+  color: #e2e8f0;
+  font-weight: 400;
+}
+
+.alerts-page.dark-mode .alert-device {
+  background: rgba(172, 153, 234, 0.2);
+  color: #DFD8F7;
+  border: 1px solid rgba(172, 153, 234, 0.4);
+}
+
+.alerts-page.dark-mode .device-filter,
+.alerts-page.dark-mode .status-filter,
+.alerts-page.dark-mode .period-filter {
+  background: rgba(45, 55, 72, 0.9);
+  color: #e2e8f0;
+  border: 2px solid rgba(172, 153, 234, 0.3);
+}
+
+.alerts-page.dark-mode .device-filter:focus,
+.alerts-page.dark-mode .status-filter:focus,
+.alerts-page.dark-mode .period-filter:focus {
+  border-color: #ac99ea;
+  background: rgba(45, 55, 72, 0.95);
+}
+
+.alerts-page.dark-mode .threshold-card,
+.alerts-page.dark-mode .device-thresholds {
+  background: rgba(45, 55, 72, 0.9);
+  border: 2px solid rgba(172, 153, 234, 0.3);
+  color: #f7fafc;
+}
+
+.alerts-page.dark-mode .threshold-type {
+  color: #e2e8f0;
+}
+
+.alerts-page.dark-mode .device-header h3 {
+  color: #f7fafc;
+}
+
+.alerts-page.dark-mode .device-location {
+  background: rgba(172, 153, 234, 0.2);
+  color: #DFD8F7;
+}
+
+.alerts-page.dark-mode .section-header h2 {
+  color: #f7fafc;
+}
+
+.alerts-page.dark-mode .history-chart,
+.alerts-page.dark-mode .stat-item {
+  background: rgba(45, 55, 72, 0.9);
+  border: 2px solid rgba(172, 153, 234, 0.3);
+  color: #f7fafc;
+}
+
+.alerts-page.dark-mode .stat-item .stat-value {
+  color: #f7fafc;
+}
+
+.alerts-page.dark-mode .stat-item .stat-label {
+  color: #e2e8f0;
+}
+
+.alerts-page.dark-mode .modal-content {
+  background: rgba(26, 32, 44, 0.95);
+  color: #f7fafc;
+}
+
+.alerts-page.dark-mode .modal-header h3 {
+  color: #f7fafc;
+}
+
+.alerts-page.dark-mode .form-group label {
+  color: #e2e8f0;
+}
+
+.alerts-page.dark-mode .form-group input,
+.alerts-page.dark-mode .form-group select {
+  background: rgba(45, 55, 72, 0.9);
+  border: 2px solid rgba(172, 153, 234, 0.3);
+  color: #f7fafc;
+}
+
+.alerts-page.dark-mode .form-group input:focus,
+.alerts-page.dark-mode .form-group select:focus {
+  border-color: #ac99ea;
+  background: rgba(45, 55, 72, 0.95);
+}
+
+.alerts-page.dark-mode .checkmark {
+  color: #e2e8f0;
+}
+
+.alerts-page.dark-mode .cancel-btn {
+  background: rgba(172, 153, 234, 0.2) !important;
+  border: 2px solid rgba(172, 153, 234, 0.3) !important;
+  color: #e2e8f0 !important;
+}
+
+.alerts-page.dark-mode .cancel-btn:hover {
+  background: rgba(172, 153, 234, 0.3) !important;
+  border-color: rgba(172, 153, 234, 0.5) !important;
+  color: #f7fafc !important;
+}
+
+/* === STYLES MANQUANTS EN MODE SOMBRE === */
+
+/* Boutons de pagination */
+.alerts-page.dark-mode .pagination-btn {
+  background: rgba(45, 55, 72, 0.9) !important;
+  border: 2px solid rgba(172, 153, 234, 0.3) !important;
+  color: #e2e8f0 !important;
+}
+
+.alerts-page.dark-mode .pagination-btn:hover:not(:disabled) {
+  border-color: rgba(172, 153, 234, 0.6) !important;
+  background: rgba(172, 153, 234, 0.2) !important;
+  color: #f7fafc !important;
+}
+
+.alerts-page.dark-mode .pagination-btn:disabled {
+  background: rgba(45, 55, 72, 0.5) !important;
+  border-color: rgba(172, 153, 234, 0.2) !important;
+  color: #6b7280 !important;
+}
+
+.alerts-page.dark-mode .pagination-info {
+  color: #e2e8f0 !important;
+}
+
+/* Boutons toggle pour les seuils */
+.alerts-page.dark-mode .toggle-btn {
+  background: rgba(45, 55, 72, 0.9) !important;
+  border: 2px solid rgba(172, 153, 234, 0.3) !important;
+  color: #e2e8f0 !important;
+}
+
+.alerts-page.dark-mode .toggle-btn.active {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.8), rgba(34, 197, 94, 0.6)) !important;
+  border-color: rgba(16, 185, 129, 0.5) !important;
+  color: #f7fafc !important;
+}
+
+.alerts-page.dark-mode .toggle-btn:not(.active):hover {
+  background: rgba(172, 153, 234, 0.2) !important;
+  border-color: rgba(172, 153, 234, 0.5) !important;
+}
+
+/* Boutons d'édition */
+.alerts-page.dark-mode .edit-btn {
+  background: rgba(45, 55, 72, 0.9) !important;
+  border: 2px solid rgba(172, 153, 234, 0.3) !important;
+  color: #e2e8f0 !important;
+}
+
+.alerts-page.dark-mode .edit-btn:hover {
+  background: rgba(172, 153, 234, 0.3) !important;
+  border-color: rgba(172, 153, 234, 0.6) !important;
+  color: #f7fafc !important;
+}
+
+/* Boutons d'ajout de seuil */
+.alerts-page.dark-mode .add-threshold-btn {
+  background: rgba(45, 55, 72, 0.9) !important;
+  border: 2px solid rgba(172, 153, 234, 0.3) !important;
+  color: #e2e8f0 !important;
+}
+
+.alerts-page.dark-mode .add-threshold-btn:hover {
+  background: rgba(172, 153, 234, 0.3) !important;
+  border-color: rgba(172, 153, 234, 0.6) !important;
+  color: #f7fafc !important;
+}
+
+/* Boutons de fermeture modal */
+.alerts-page.dark-mode .close-btn {
+  color: #e2e8f0 !important;
+  background: rgba(45, 55, 72, 0.5) !important;
+}
+
+.alerts-page.dark-mode .close-btn:hover {
+  background: rgba(172, 153, 234, 0.3) !important;
+  color: #f7fafc !important;
+}
+
+/* Boutons save pour modales */
+.alerts-page.dark-mode .save-btn {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.8), rgba(223, 216, 247, 0.6)) !important;
+  color: #f7fafc !important;
+  border: none !important;
+}
+
+.alerts-page.dark-mode .save-btn:hover {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.9), rgba(223, 216, 247, 0.7)) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(172, 153, 234, 0.4) !important;
+}
+
+/* Checkboxes personnalisées */
+.alerts-page.dark-mode .checkbox-label {
+  color: #e2e8f0 !important;
+}
+
+.alerts-page.dark-mode .checkbox-label input[type="checkbox"] {
+  background: rgba(45, 55, 72, 0.9) !important;
+  border: 2px solid rgba(172, 153, 234, 0.3) !important;
+}
+
+.alerts-page.dark-mode .checkbox-label input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.8), rgba(223, 216, 247, 0.6)) !important;
+  border-color: rgba(172, 153, 234, 0.6) !important;
+}
+
+/* Icônes de flèches dans la pagination */
+.alerts-page.dark-mode .pagination-btn i {
+  color: #e2e8f0 !important;
+}
+
+.alerts-page.dark-mode .pagination-btn:hover:not(:disabled) i {
+  color: #f7fafc !important;
+}
+
+/* États vides */
+.alerts-page.dark-mode .empty-state {
+  color: #e2e8f0 !important;
+}
+
+.alerts-page.dark-mode .empty-state i {
+  color: #ac99ea !important;
+}
+
+.alerts-page.dark-mode .empty-state h3 {
+  color: #f7fafc !important;
+}
+
+/* Loading containers */
+.alerts-page.dark-mode .loading-container {
+  color: #e2e8f0 !important;
+}
+
+.alerts-page.dark-mode .loading-spinner {
+  border-color: rgba(172, 153, 234, 0.2) !important;
+  border-top-color: #ac99ea !important;
+}
+
+/* État "no threshold" */
+.alerts-page.dark-mode .no-threshold {
+  color: #9ca3af !important;
+}
+
+/* Valeurs de seuils */
+.alerts-page.dark-mode .min-value,
+.alerts-page.dark-mode .max-value {
+  background: rgba(172, 153, 234, 0.2) !important;
+  color: #DFD8F7 !important;
+}
+
+/* Types d'alertes */
+.alerts-page.dark-mode .alert-type i.fas.fa-exclamation-triangle {
+  color: #fbbf24 !important;
+}
+
+.alerts-page.dark-mode .alert-type i.fas.fa-thermometer-half {
+  color: #f87171 !important;
+}
+
+.alerts-page.dark-mode .alert-type i.fas.fa-flask {
+  color: #60a5fa !important;
+}
+
+.alerts-page.dark-mode .alert-type i.fas.fa-water {
+  color: #34d399 !important;
+}
+
+/* Boutons d'export et d'actions dans les en-têtes */
+.alerts-page.dark-mode .header-actions .refresh-btn:disabled {
+  background: rgba(45, 55, 72, 0.5) !important;
+  color: #6b7280 !important;
+  border-color: rgba(172, 153, 234, 0.2) !important;
+}
+
+/* Amélioration des boutons primary et secondary pour cohérence */
+.alerts-page.dark-mode .action-btn.primary {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.8), rgba(223, 216, 247, 0.6)) !important;
+  color: #f7fafc !important;
+  border: 2px solid rgba(172, 153, 234, 0.4) !important;
+  box-shadow: 0 4px 15px rgba(172, 153, 234, 0.3) !important;
+}
+
+.alerts-page.dark-mode .action-btn.secondary {
+  background: rgba(45, 55, 72, 0.8) !important;
+  color: #e2e8f0 !important;
+  border: 2px solid rgba(172, 153, 234, 0.3) !important;
+}
+
+/* Animation des icônes de chargement */
+.alerts-page.dark-mode .refresh-btn.loading i {
+  color: #f7fafc !important;
+}
+
+/* Amélioration du contraste pour les labels */
+.alerts-page.dark-mode .stat-label {
+  color: #9ca3af !important;
+}
+
+.alerts-page.dark-mode .stat-value {
+  color: #f7fafc !important;
 }
 </style>
