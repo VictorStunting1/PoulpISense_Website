@@ -2033,10 +2033,112 @@ onMounted(() => {
 }
 
 /* Mode sombre pour les contrôles de temps */
-.dark-mode .time-controls {
-  background: rgba(45, 55, 72, 0.8);
-  border-color: rgba(74, 85, 104, 0.6);
+.dashboard-page.dark-mode .time-controls {
+  background: linear-gradient(135deg, rgba(26, 32, 44, 0.9), rgba(45, 55, 72, 0.8)) !important;
+  border: 1px solid rgba(172, 153, 234, 0.3) !important;
+  backdrop-filter: blur(20px) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
 }
+
+.dashboard-page.dark-mode .time-btn {
+  color: #ac99ea !important;
+  background: transparent !important;
+  border-radius: 8px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.dashboard-page.dark-mode .time-btn:hover:not(.active) {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.15), rgba(223, 216, 247, 0.1)) !important;
+  color: #DFD8F7 !important;
+  transform: translateY(-1px);
+}
+
+.dashboard-page.dark-mode .time-btn.active {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.3), rgba(223, 216, 247, 0.2)) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(172, 153, 234, 0.4) !important;
+  box-shadow: 0 4px 12px rgba(172, 153, 234, 0.4) !important;
+  transform: translateY(-2px);
+}
+
+.dashboard-page.dark-mode .time-btn.active:hover {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.4), rgba(223, 216, 247, 0.3)) !important;
+  box-shadow: 0 6px 20px rgba(172, 153, 234, 0.5) !important;
+}
+
+/* Mode sombre pour les boutons d'export (PDF/CSV) */
+.dashboard-page.dark-mode .export-controls {
+  gap: 0.75rem;
+}
+
+.dashboard-page.dark-mode .export-btn {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.15), rgba(223, 216, 247, 0.1)) !important;
+  border: 2px solid rgba(172, 153, 234, 0.3) !important;
+  color: #DFD8F7 !important;
+  backdrop-filter: blur(20px) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.dashboard-page.dark-mode .export-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.25), rgba(223, 216, 247, 0.15)) !important;
+  border-color: rgba(172, 153, 234, 0.5) !important;
+  color: #ffffff !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(172, 153, 234, 0.3) !important;
+}
+
+.dashboard-page.dark-mode .export-btn:active:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(172, 153, 234, 0.4) !important;
+}
+
+.dashboard-page.dark-mode .export-btn:disabled {
+  background: rgba(74, 85, 104, 0.3) !important;
+  border-color: rgba(74, 85, 104, 0.4) !important;
+  color: rgba(160, 174, 192, 0.5) !important;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Mode sombre pour le bouton de tri */
+.dashboard-page.dark-mode .sort-btn {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.15), rgba(223, 216, 247, 0.1)) !important;
+  border: 2px solid rgba(172, 153, 234, 0.3) !important;
+  color: #DFD8F7 !important;
+  backdrop-filter: blur(20px) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.dashboard-page.dark-mode .sort-btn:hover,
+.dashboard-page.dark-mode .sort-btn.active {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.25), rgba(223, 216, 247, 0.15)) !important;
+  border-color: rgba(172, 153, 234, 0.5) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(172, 153, 234, 0.3) !important;
+}
+
+.dashboard-page.dark-mode .sort-btn i {
+  color: #ac99ea !important;
+  transition: all 0.3s ease !important;
+}
+
+.dashboard-page.dark-mode .sort-btn:hover i,
+.dashboard-page.dark-mode .sort-btn.active i {
+  color: #ffffff !important;
+}
+
+.dashboard-page.dark-mode .sort-arrow {
+  color: #ac99ea !important;
+}
+
+.dashboard-page.dark-mode .sort-btn:hover .sort-arrow,
+.dashboard-page.dark-mode .sort-btn.active .sort-arrow {
+  color: #ffffff !important;
+}
+
+
 
 .dark-mode .time-btn {
   color: #a0aec0;
