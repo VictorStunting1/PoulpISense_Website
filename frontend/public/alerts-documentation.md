@@ -92,4 +92,5 @@ Pour toute assistance technique : support@poulpisense.com
 
 ---
 
-**Version** : 2.0 | **Dernière mise à jour** : Décembre 2024
+
+*Dernière mise à jour : 15 juin 2025*
