@@ -264,7 +264,11 @@
                 <p>Cet appareil n'a pas encore généré de mesures</p>
               </div>
               <div v-else class="chart-wrapper">
-                <DeviceChart :key="selectedDeviceId" :data="getChartData(filteredMeasurements)" />
+                <DeviceChart 
+                  :key="selectedDeviceId" 
+                  :data="getChartData(filteredMeasurements)"
+                  :isDarkMode="isDarkMode"
+                />
               </div>
             </div>
           </div>
