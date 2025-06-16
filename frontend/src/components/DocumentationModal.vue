@@ -4,7 +4,7 @@
       <div class="modal-header" v-show="!isFullscreen">
         <div class="modal-title">
           <i class="fas fa-book"></i>
-          <h2>Documentation Dashboard</h2>
+          <h2>Documentation</h2>
         </div>
         <div class="header-actions">
           <button @click="toggleFullscreen" class="fullscreen-btn" :title="isFullscreen ? 'Quitter le mode lecture' : 'Mode lecture immersif'">
@@ -59,6 +59,10 @@ const props = defineProps({
   isVisible: {
     type: Boolean,
     default: false
+  },
+  documentationFile: {
+    type: String,
+    default: 'dashboard-documentation.md'
   }
 })
 
@@ -119,47 +123,17 @@ watch(() => props.isVisible, (newValue) => {
 // Charger le contenu markdown
 onMounted(async () => {
   try {
-    // MODIFIER CETTE LIGNE - utiliser le chemin depuis public
-    const response = await fetch('/dashboard-documentation.md')
+    const response = await fetch(`/${props.documentationFile}`)
     if (response.ok) {
       markdownContent.value = await response.text()
     } else {
       // Fallback si le fichier n'est pas trouvé
       markdownContent.value = `
-# 📊 Guide Utilisateur - Dashboard PoulpISense
+# 📚 Documentation non disponible
 
-## 🎯 Vue d'ensemble
+Le fichier de documentation demandé n'a pas pu être chargé.
 
-Le Dashboard PoulpISense est votre centre de contrôle principal pour surveiller et analyser les données de vos appareils de mesure de qualité de l'eau en temps réel.
-
-## 🚀 Fonctionnalités principales
-
-### 📱 Sélection d'appareils
-- Cliquez sur une carte d'appareil pour le sélectionner
-- Visualisez le statut de connexion (vert = en ligne, rouge = hors ligne)
-- Consultez les informations détaillées de chaque appareil
-
-### 📊 Métriques en temps réel
-- **Température** : Surveillance continue avec seuils optimaux
-- **pH** : Contrôle de l'acidité/basicité de l'eau
-- **Turbidité** : Mesure de la clarté de l'eau
-
-### 📈 Graphiques interactifs
-- Choisissez la période d'affichage (24h, 7j, 30j)
-- Graphiques interactifs avec zoom et filtrage
-- Export des données en PDF ou CSV
-
-### 🔍 Recherche et tri
-- Recherche dans toutes les mesures
-- Tri par date, heure, ou valeurs
-- Pagination intelligente des résultats
-
-### 🌙 Mode sombre
-- Interface adaptée pour un confort visuel optimal
-- Commutation automatique selon vos préférences
-
-## 📞 Support
-Pour toute assistance : support@poulpisense.com
+Veuillez contacter le support pour plus d'informations.
       `
     }
   } catch (error) {

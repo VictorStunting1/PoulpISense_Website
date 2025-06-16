@@ -22,6 +22,11 @@
               <p class="page-subtitle">Gérez vos alertes et configurez vos seuils de surveillance</p>
             </div>
             <div class="header-actions">
+              <!-- Ajouter le bouton de documentation -->
+              <button @click="openDocumentation" class="documentation-btn">
+                <i class="fas fa-book"></i>
+                <span>Voir la documentation</span>
+              </button>
               <button @click="refreshData" class="refresh-btn" :disabled="loading">
                 <i class="fas fa-sync-alt" :class="{ 'fa-spin': loading }"></i>
                 Actualiser
@@ -515,8 +520,9 @@
 
     <!-- Documentation Modal -->
     <DocumentationModal 
-      v-if="showDocumentation" 
-      @close="closeDocumentation" 
+      :isVisible="showDocumentation" 
+      :documentationFile="'alerts-documentation.md'"
+      @close="closeDocumentation"
     />
 
     <!-- Footer -->
@@ -3124,5 +3130,146 @@ const updateScrollProgress = () => {
 
 .alerts-page.dark-mode .field-lock-info.parameter-locked span {
   color: #c084fc !important;
+}
+
+
+
+/* Bouton de documentation dans le header */
+.documentation-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.1));
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  color: var(--text-primary);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.documentation-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05));
+  border-radius: 12px;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.documentation-btn:hover::before {
+  opacity: 1;
+}
+
+.documentation-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  border-color: rgba(102, 126, 234, 0.5);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.15));
+}
+
+.documentation-btn:active {
+  transform: translateY(-1px);
+}
+
+.documentation-btn i {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+  color: #667eea;
+}
+
+.documentation-btn:hover i {
+  transform: scale(1.1);
+  color: #667eea;
+}
+
+/* Mode sombre pour le bouton de documentation */
+.alerts-page.dark-mode .documentation-btn {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.2), rgba(223, 216, 247, 0.15)) !important;
+  backdrop-filter: blur(30px) !important;
+  border: 2px solid rgba(172, 153, 234, 0.4) !important;
+  color: #DFD8F7 !important;
+}
+
+.alerts-page.dark-mode .documentation-btn::before {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.15), rgba(223, 216, 247, 0.1)) !important;
+}
+
+.alerts-page.dark-mode .documentation-btn:hover {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.3), rgba(223, 216, 247, 0.2)) !important;
+  border-color: rgba(172, 153, 234, 0.6) !important;
+  color: #f7fafc !important;
+  box-shadow: 0 8px 25px rgba(172, 153, 234, 0.4) !important;
+  transform: translateY(-2px);
+}
+
+.alerts-page.dark-mode .documentation-btn:hover::before {
+  opacity: 1;
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.2), rgba(223, 216, 247, 0.15)) !important;
+}
+
+.alerts-page.dark-mode .documentation-btn i {
+  color: #ac99ea !important;
+  transition: all 0.3s ease;
+}
+
+.alerts-page.dark-mode .documentation-btn:hover i {
+  color: #DFD8F7 !important;
+  transform: scale(1.1);
+}
+
+/* Responsive pour le bouton de documentation */
+@media (max-width: 768px) {
+  .header-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  
+  .documentation-btn {
+    order: -1; /* Mettre le bouton de documentation en premier sur mobile */
+  }
+  
+  .documentation-btn span {
+    display: none; /* Masquer le texte sur mobile */
+  }
+  
+  .documentation-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 12px;
+  }
+  
+  .documentation-btn i {
+    margin: 0;
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-actions {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .documentation-btn {
+    flex: 1;
+    max-width: 60px;
+  }
+  
+  .refresh-btn {
+    flex: 1;
+    max-width: 120px;
+  }
 }
 </style>
