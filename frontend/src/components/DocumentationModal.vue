@@ -10,12 +10,6 @@
           <button @click="toggleFullscreen" class="fullscreen-btn" :title="isFullscreen ? 'Quitter le mode lecture' : 'Mode lecture immersif'">
             <i :class="isFullscreen ? 'fas fa-compress' : 'fas fa-expand'"></i>
           </button>
-          <button @click="downloadDocumentation" class="download-btn" title="Télécharger la documentation">
-            <i class="fas fa-download"></i>
-          </button>
-          <button @click="closeModal" class="close-btn" title="Fermer">
-            <i class="fas fa-times"></i>
-          </button>
         </div>
       </div>
       
