@@ -117,10 +117,11 @@
         <!-- Pied de page -->
         <div class="login-footer">
           <p>Vous n'avez pas de compte ?</p>
-          <router-link to="/register" class="register-link">
-            <span>Créer un compte</span>
-            <i class="fas fa-arrow-right"></i>
-          </router-link>
+          <div class="mobile-app-info">
+            <i class="fas fa-mobile-alt"></i>
+            <span>Créer un compte via l'app mobile uniquement</span>
+          </div>
+          <p class="mobile-note">Téléchargez l'application mobile PoulpISence pour vous inscrire</p>
         </div>
       </div>
     </div>
@@ -730,6 +731,30 @@ const goToHome = () => {
 
 .login-footer p {
   margin: 0 0 12px 0;
+}
+
+.mobile-app-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #9b59b6;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: rgba(155, 89, 182, 0.1);
+  border: 1px solid rgba(155, 89, 182, 0.2);
+  margin-bottom: 8px;
+}
+
+.mobile-app-info i {
+  font-size: 16px;
+}
+
+.mobile-note {
+  color: #6c757d !important;
+  font-size: 12px !important;
+  font-style: italic;
+  margin: 8px 0 0 0 !important;
 }
 
 .register-link {
