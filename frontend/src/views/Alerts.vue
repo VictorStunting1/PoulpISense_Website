@@ -238,6 +238,12 @@
                         >
                           <i class="fas fa-edit"></i>
                         </button>
+                        <button 
+                          @click="deleteThreshold(getThreshold(device.id, 'temperature'))"
+                          class="delete-btn"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
                       </div>
                     </div>
                     <div v-else class="no-threshold">
@@ -278,6 +284,12 @@
                         >
                           <i class="fas fa-edit"></i>
                         </button>
+                        <button 
+                          @click="deleteThreshold(getThreshold(device.id, 'ph'))"
+                          class="delete-btn"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
                       </div>
                     </div>
                     <div v-else class="no-threshold">
@@ -317,6 +329,12 @@
                           class="edit-btn"
                         >
                           <i class="fas fa-edit"></i>
+                        </button>
+                        <button 
+                          @click="deleteThreshold(getThreshold(device.id, 'turbidity'))"
+                          class="delete-btn"
+                        >
+                          <i class="fas fa-trash"></i>
                         </button>
                       </div>
                     </div>
@@ -786,25 +804,45 @@ async function saveThreshold() {
     }
     
     if (editingThreshold.value) {
-      await axios.put(`/api/alert-thresholds/${editingThreshold.value.id}`, data)
+      const response = await axios.put(`${API_CONFIG.BASE_URL}/api/alert-thresholds/${editingThreshold.value.id}`, data)
+      // Mettre à jour le seuil dans la liste
       const index = thresholds.value.findIndex(t => t.id === editingThreshold.value.id)
       if (index !== -1) {
-        thresholds.value[index] = { ...editingThreshold.value, ...data }
+        thresholds.value[index] = { ...thresholds.value[index], ...data }
       }
     } else {
-      const response = await axios.post('/api/alert-thresholds', data)
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/api/alert-thresholds`, data)
       thresholds.value.push(response.data)
     }
     
     closeModal()
   } catch (error) {
     console.error('Erreur lors de la sauvegarde du seuil:', error)
+    alert('Erreur lors de la sauvegarde du seuil. Vérifiez la console pour plus de détails.')
+  }
+}
+
+async function deleteThreshold(threshold) {
+  if (!confirm('Êtes-vous sûr de vouloir supprimer ce seuil d\'alerte ?')) {
+    return
+  }
+  
+  try {
+    await axios.delete(`${API_CONFIG.BASE_URL}/api/alert-thresholds/${threshold.id}`)
+    // Retirer le seuil de la liste
+    const index = thresholds.value.findIndex(t => t.id === threshold.id)
+    if (index !== -1) {
+      thresholds.value.splice(index, 1)
+    }
+  } catch (error) {
+    console.error('Erreur lors de la suppression du seuil:', error)
+    alert('Erreur lors de la suppression du seuil. Vérifiez la console pour plus de détails.')
   }
 }
 
 async function toggleThreshold(threshold) {
   try {
-    await axios.patch(`/api/alert-thresholds/${threshold.id}/toggle`)
+    await axios.patch(`${API_CONFIG.BASE_URL}/api/alert-thresholds/${threshold.id}/toggle`)
     threshold.isActive = !threshold.isActive
   } catch (error) {
     console.error('Erreur lors de la modification du seuil:', error)
@@ -1506,12 +1544,6 @@ const updateScrollProgress = () => {
   box-shadow: 0 4px 15px rgba(172, 153, 234, 0.3) !important;
 }
 
-.alerts-page.dark-mode .action-btn.primary:hover {
-  background: linear-gradient(135deg, rgba(172, 153, 234, 0.9), rgba(223, 216, 247, 0.7)) !important;
-  box-shadow: 0 4px 15px rgba(172, 153, 234, 0.4) !important;
-  transform: translateY(-2px);
-}
-
 .alerts-page.dark-mode .action-btn.secondary {
   background: rgba(45, 55, 72, 0.8) !important;
   color: #e2e8f0 !important;
@@ -1878,6 +1910,22 @@ const updateScrollProgress = () => {
   color: white;
 }
 
+.delete-btn {
+  background: #f3f4f6;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #6b7280;
+}
+
+.delete-btn:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: white;
+}
+
 .no-threshold {
   color: #9ca3af;
   font-style: italic;
@@ -2199,7 +2247,7 @@ const updateScrollProgress = () => {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
+}
 }
 
 .alert-item {
@@ -2412,26 +2460,26 @@ const updateScrollProgress = () => {
 }
 
 .alerts-page.dark-mode .toggle-btn.active {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.8), rgba(34, 197, 94, 0.6)) !important;
-  border-color: rgba(16, 185, 129, 0.5) !important;
+  background: rgba(52, 211, 153, 0.6) !important;
+  border-color: rgba(52, 211, 153, 0.8) !important;
   color: #f7fafc !important;
 }
 
 .alerts-page.dark-mode .toggle-btn:not(.active):hover {
-  background: rgba(172, 153, 234, 0.2) !important;
+  background: rgba(172, 153, 234, 0.3) !important;
   border-color: rgba(172, 153, 234, 0.5) !important;
 }
 
 /* Boutons d'édition */
 .alerts-page.dark-mode .edit-btn {
-  background: rgba(45, 55, 72, 0.9) !important;
-  border: 2px solid rgba(172, 153, 234, 0.3) !important;
+  background: rgba(45, 55, 72, 0.8) !important;
+  border-color: rgba(172, 153, 234, 0.3) !important;
   color: #e2e8f0 !important;
 }
 
 .alerts-page.dark-mode .edit-btn:hover {
-  background: rgba(172, 153, 234, 0.3) !important;
-  border-color: rgba(172, 153, 234, 0.6) !important;
+  background: rgba(172, 153, 234, 0.6) !important;
+  border-color: rgba(172, 153, 234, 0.8) !important;
   color: #f7fafc !important;
 }
 
@@ -2555,31 +2603,45 @@ const updateScrollProgress = () => {
   border-color: rgba(172, 153, 234, 0.2) !important;
 }
 
-/* Amélioration des boutons primary et secondary pour cohérence */
-.alerts-page.dark-mode .action-btn.primary {
-  background: linear-gradient(135deg, rgba(172, 153, 234, 0.8), rgba(223, 216, 247, 0.6)) !important;
-  color: #f7fafc !important;
-  border: 2px solid rgba(172, 153, 234, 0.4) !important;
-  box-shadow: 0 4px 15px rgba(172, 153, 234, 0.3) !important;
-}
-
-.alerts-page.dark-mode .action-btn.secondary {
+/* Styles de mode sombre pour les boutons d'action des seuils */
+.alerts-page.dark-mode .edit-btn {
   background: rgba(45, 55, 72, 0.8) !important;
+  border-color: rgba(172, 153, 234, 0.3) !important;
   color: #e2e8f0 !important;
-  border: 2px solid rgba(172, 153, 234, 0.3) !important;
 }
 
-/* Animation des icônes de chargement */
-.alerts-page.dark-mode .refresh-btn.loading i {
+.alerts-page.dark-mode .edit-btn:hover {
+  background: rgba(172, 153, 234, 0.6) !important;
+  border-color: rgba(172, 153, 234, 0.8) !important;
   color: #f7fafc !important;
 }
 
-/* Amélioration du contraste pour les labels */
-.alerts-page.dark-mode .stat-label {
-  color: #9ca3af !important;
+.alerts-page.dark-mode .delete-btn {
+  background: rgba(45, 55, 72, 0.8) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  color: #f87171 !important;
 }
 
-.alerts-page.dark-mode .stat-value {
+.alerts-page.dark-mode .delete-btn:hover {
+  background: rgba(239, 68, 68, 0.6) !important;
+  border-color: rgba(239, 68, 68, 0.8) !important;
   color: #f7fafc !important;
+}
+
+.alerts-page.dark-mode .toggle-btn {
+  background: rgba(45, 55, 72, 0.8) !important;
+  border-color: rgba(172, 153, 234, 0.3) !important;
+  color: #e2e8f0 !important;
+}
+
+.alerts-page.dark-mode .toggle-btn.active {
+  background: rgba(52, 211, 153, 0.6) !important;
+  border-color: rgba(52, 211, 153, 0.8) !important;
+  color: #f7fafc !important;
+}
+
+.alerts-page.dark-mode .toggle-btn:not(.active):hover {
+  background: rgba(172, 153, 234, 0.3) !important;
+  border-color: rgba(172, 153, 234, 0.5) !important;
 }
 </style>
