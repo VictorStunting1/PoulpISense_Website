@@ -185,7 +185,7 @@
             <!-- Bouton pour créer un nouveau seuil -->
             <div class="section-header">
               <h2>Configuration des seuils</h2>
-              <button @click="showCreateThreshold = true" class="action-btn primary">
+              <button @click="createThreshold()" class="action-btn primary">
                 <i class="fas fa-plus"></i>
                 Nouveau seuil
               </button>
@@ -397,22 +397,47 @@
           </button>
         </div>
         <form @submit.prevent="saveThreshold" class="threshold-form">
+          <!-- Message informatif si pré-rempli -->
+          <div v-if="thresholdForm.deviceId && thresholdForm.parameterType" class="prefilled-info">
+            <i class="fas fa-info-circle"></i>
+            Appareil et paramètre pré-sélectionnés depuis la configuration
+          </div>
+          
           <div class="form-group">
             <label>Appareil</label>
-            <select v-model="thresholdForm.deviceId" required>
+            <select 
+              v-model="thresholdForm.deviceId" 
+              :class="{ 'prefilled': isFieldLocked('device'), 'locked': isFieldLocked('device') }"
+              :disabled="isFieldLocked('device')"
+              required
+            >
               <option value="">Sélectionner un appareil</option>
               <option v-for="device in userDevices" :key="device.id" :value="device.id">
                 {{ device.nom }}
               </option>
             </select>
+            <div v-if="isFieldLocked('device')" class="field-lock-info device-locked">
+              <i class="fas fa-lock"></i>
+              <span>Appareil verrouillé pour cette configuration</span>
+            </div>
           </div>
           <div class="form-group">
             <label>Paramètre</label>
-            <select v-model="thresholdForm.parameterType" required>
+            <select 
+              v-model="thresholdForm.parameterType" 
+              :class="{ 'prefilled': isFieldLocked('parameter'), 'locked': isFieldLocked('parameter') }"
+              :disabled="isFieldLocked('parameter')"
+              required
+            >
+              <option value="">Sélectionner un paramètre</option>
               <option value="temperature">Température</option>
               <option value="ph">pH</option>
               <option value="turbidity">Turbidité</option>
             </select>
+            <div v-if="isFieldLocked('parameter')" class="field-lock-info parameter-locked">
+              <i class="fas fa-lock"></i>
+              <span>Paramètre verrouillé pour cette configuration</span>
+            </div>
           </div>
           <div class="form-row">
             <div class="form-group">
@@ -438,6 +463,53 @@
             </button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- Modal de confirmation de suppression -->
+    <div v-if="showDeleteConfirmation" class="modal-overlay" @click="closeDeleteConfirmation">
+      <div class="modal-content delete-modal" @click.stop>
+        <div class="modal-header delete-header">
+          <div class="delete-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <h3>Confirmer la suppression</h3>
+          <button @click="closeDeleteConfirmation" class="close-btn">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="delete-content">
+          <p class="delete-message">
+            Êtes-vous sûr de vouloir supprimer ce seuil d'alerte ?
+          </p>
+          <div v-if="thresholdToDelete" class="threshold-details">
+            <div class="detail-item">
+              <span class="detail-label">Paramètre :</span>
+              <span class="detail-value">{{ thresholdToDelete.parameterType === 'temperature' ? 'Température' : thresholdToDelete.parameterType === 'ph' ? 'pH' : 'Turbidité' }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Valeurs :</span>
+              <span class="detail-value">
+                {{ thresholdToDelete.minValue }} - {{ thresholdToDelete.maxValue }}
+                {{ thresholdToDelete.parameterType === 'temperature' ? '°C' : thresholdToDelete.parameterType === 'turbidity' ? 'NTU' : '' }}
+              </span>
+            </div>
+          </div>
+          <p class="warning-text">
+            <i class="fas fa-info-circle"></i>
+            Cette action est irréversible et supprimera définitivement ce seuil d'alerte.
+          </p>
+        </div>
+        <div class="modal-actions delete-actions">
+          <button @click="closeDeleteConfirmation" class="cancel-btn">
+            <i class="fas fa-times"></i>
+            Annuler
+          </button>
+          <button @click="confirmDeleteThreshold" class="delete-confirm-btn">
+            <i class="fas fa-trash"></i>
+            Supprimer
+          </button>
+        </div>
       </div>
     </div>
 
@@ -488,6 +560,10 @@ const thresholdForm = ref({
   maxValue: null,
   isActive: true
 })
+
+// Variables pour la modal de suppression
+const showDeleteConfirmation = ref(false)
+const thresholdToDelete = ref(null)
 
 // Variables pour l'historique
 const historyPeriod = ref('week')
@@ -773,7 +849,7 @@ function getThreshold(deviceId, parameterType) {
   )
 }
 
-function createThreshold(deviceId, parameterType) {
+function createThreshold(deviceId = '', parameterType = '') {
   thresholdForm.value = {
     deviceId: deviceId,
     parameterType: parameterType,
@@ -789,6 +865,25 @@ function editThreshold(threshold) {
   thresholdForm.value = { ...threshold }
   editingThreshold.value = threshold
   showCreateThreshold.value = true
+}
+
+// Fonction pour déterminer si un champ doit être verrouillé
+function isFieldLocked(fieldType) {
+  if (fieldType === 'device') {
+    // Le champ appareil est verrouillé si :
+    // 1. On est en mode édition OU
+    // 2. On a pré-rempli l'appareil via le bouton "+"
+    return editingThreshold.value !== null || thresholdForm.value.deviceId !== ''
+  }
+  
+  if (fieldType === 'parameter') {
+    // Le champ paramètre est verrouillé si :
+    // 1. On est en mode édition OU
+    // 2. On a pré-rempli le paramètre via le bouton "+"
+    return editingThreshold.value !== null || thresholdForm.value.parameterType !== ''
+  }
+  
+  return false
 }
 
 async function saveThreshold() {
@@ -823,21 +918,30 @@ async function saveThreshold() {
 }
 
 async function deleteThreshold(threshold) {
-  if (!confirm('Êtes-vous sûr de vouloir supprimer ce seuil d\'alerte ?')) {
-    return
-  }
+  thresholdToDelete.value = threshold
+  showDeleteConfirmation.value = true
+}
+
+async function confirmDeleteThreshold() {
+  if (!thresholdToDelete.value) return
   
   try {
-    await axios.delete(`${API_CONFIG.BASE_URL}/api/alert-thresholds/${threshold.id}`)
+    await axios.delete(`${API_CONFIG.BASE_URL}/api/alert-thresholds/${thresholdToDelete.value.id}`)
     // Retirer le seuil de la liste
-    const index = thresholds.value.findIndex(t => t.id === threshold.id)
+    const index = thresholds.value.findIndex(t => t.id === thresholdToDelete.value.id)
     if (index !== -1) {
       thresholds.value.splice(index, 1)
     }
+    closeDeleteConfirmation()
   } catch (error) {
     console.error('Erreur lors de la suppression du seuil:', error)
     alert('Erreur lors de la suppression du seuil. Vérifiez la console pour plus de détails.')
   }
+}
+
+function closeDeleteConfirmation() {
+  showDeleteConfirmation.value = false
+  thresholdToDelete.value = null
 }
 
 async function toggleThreshold(threshold) {
@@ -2043,6 +2147,24 @@ const updateScrollProgress = () => {
   padding: 2rem;
 }
 
+/* Message informatif pour les champs pré-remplis */
+.prefilled-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 8px;
+  color: #1d4ed8;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.prefilled-info i {
+  color:
+}
+
 .form-group {
   margin-bottom: 1.5rem;
 }
@@ -2069,6 +2191,19 @@ const updateScrollProgress = () => {
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Styles pour les champs pré-remplis */
+.form-group select.prefilled {
+  background: rgba(59, 130, 246, 0.05);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #1d4ed8;
+  font-weight: 500;
+}
+
+.form-group select.prefilled:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .form-row {
@@ -2411,6 +2546,28 @@ const updateScrollProgress = () => {
   background: rgba(45, 55, 72, 0.95);
 }
 
+/* Styles en mode sombre pour les champs pré-remplis */
+.alerts-page.dark-mode .prefilled-info {
+  background: rgba(172, 153, 234, 0.15) !important;
+  border-color: rgba(172, 153, 234, 0.3) !important;
+  color: #DFD8F7 !important;
+}
+
+.alerts-page.dark-mode .prefilled-info i {
+  color: #ac99ea !important;
+}
+
+.alerts-page.dark-mode .form-group select.prefilled {
+  background: rgba(172, 153, 234, 0.1) !important;
+  border-color: rgba(172, 153, 234, 0.4) !important;
+  color: #DFD8F7 !important;
+}
+
+.alerts-page.dark-mode .form-group select.prefilled:focus {
+  border-color: #ac99ea !important;
+  box-shadow: 0 0 0 3px rgba(172, 153, 234, 0.3) !important;
+}
+
 .alerts-page.dark-mode .checkmark {
   color: #e2e8f0;
 }
@@ -2643,5 +2800,315 @@ const updateScrollProgress = () => {
 .alerts-page.dark-mode .toggle-btn:not(.active):hover {
   background: rgba(172, 153, 234, 0.3) !important;
   border-color: rgba(172, 153, 234, 0.5) !important;
+}
+
+/* === MODAL DE SUPPRESSION === */
+.delete-modal {
+  max-width: 500px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.delete-header {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #fca5a5;
+}
+
+.delete-icon {
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #dc2626;
+}
+
+.delete-header h3 {
+  flex: 1;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.delete-content {
+  padding: 2rem;
+}
+
+.delete-message {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+
+.threshold-details {
+  background: rgba(99, 102, 241, 0.05);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.detail-item:last-child {
+  margin-bottom: 0;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.detail-value {
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.warning-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #d97706;
+  font-size: 0.9rem;
+  margin: 1.5rem 0 0 0;
+  padding: 1rem;
+  background: rgba(251, 146, 60, 0.1);
+  border: 1px solid rgba(251, 146, 60, 0.2);
+  border-radius: 8px;
+}
+
+.delete-actions {
+  padding: 1.5rem 2rem;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.delete-confirm-btn {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.delete-confirm-btn:hover {
+  background: linear-gradient(135deg, #b91c1c, #991b1b);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+}
+
+/* Mode sombre pour la modal de suppression */
+.alerts-page.dark-mode .delete-header {
+  background: linear-gradient(135deg, rgba(254, 226, 226, 0.1), rgba(254, 202, 202, 0.15));
+  color: #fca5a5;
+  border-bottom-color: rgba(248, 113, 113, 0.3);
+}
+
+.alerts-page.dark-mode .delete-icon {
+  background: rgba(248, 113, 113, 0.2);
+  color: #f87171;
+}
+
+.alerts-page.dark-mode .threshold-details {
+  background: rgba(172, 153, 234, 0.1);
+  border-color: rgba(172, 153, 234, 0.2);
+}
+
+.alerts-page.dark-mode .warning-text {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+.alerts-page.dark-mode .delete-actions {
+  background: rgba(51, 65, 85, 0.9);
+  border-top-color: rgba(74, 85, 104, 0.6);
+}
+
+.alerts-page.dark-mode .delete-modal .delete-confirm-btn {
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.8), rgba(185, 28, 28, 0.9)) !important;
+  border: 1px solid rgba(248, 113, 113, 0.4) !important;
+  color: #f7fafc !important;
+}
+
+.alerts-page.dark-mode .delete-modal .delete-confirm-btn:hover {
+  background: linear-gradient(135deg, rgba(185, 28, 28, 0.9), rgba(153, 27, 27, 0.95)) !important;
+  box-shadow: 0 8px 25px rgba(248, 113, 113, 0.4) !important;
+  transform: translateY(-2px);
+  color: #ffffff !important;
+}
+
+/* === NOUVEAUX STYLES PROPOSÉS === */
+/* Styles pour les informations de verrouillage des champs */
+.field-lock-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #92400e;
+  transition: all 0.3s ease;
+}
+
+.field-lock-info i {
+  color: #f59e0b;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.field-lock-info span {
+  color: #92400e;
+  font-weight: 500;
+}
+
+/* Animation subtile */
+.field-lock-info {
+  animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Effet hover pour une meilleure interactivité */
+.field-lock-info:hover {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.08) 100%);
+  border-color: rgba(251, 191, 36, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.2);
+}
+
+.field-lock-info:hover i {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Mode sombre pour les informations de verrouillage */
+.alerts-page.dark-mode .field-lock-info {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%) !important;
+  border: 1px solid rgba(251, 191, 36, 0.4) !important;
+  color: #fbbf24 !important;
+}
+
+.alerts-page.dark-mode .field-lock-info i {
+  color: #fcd34d !important;
+}
+
+.alerts-page.dark-mode .field-lock-info span {
+  color: #fbbf24 !important;
+}
+
+.alerts-page.dark-mode .field-lock-info:hover {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.15) 100%) !important;
+  border-color: rgba(251, 191, 36, 0.5) !important;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3) !important;
+}
+
+/* Amélioration responsive */
+@media (max-width: 768px) {
+  .field-lock-info {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    gap: 0.4rem;
+  }
+  
+  .field-lock-info i {
+    font-size: 0.8rem;
+  }
+}
+
+/* Variante pour différents états de verrouillage */
+.field-lock-info.device-locked {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #1d4ed8;
+}
+
+.field-lock-info.device-locked i {
+  color: #3b82f6;
+}
+
+.field-lock-info.device-locked span {
+  color: #1d4ed8;
+}
+
+.field-lock-info.parameter-locked {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(147, 51, 234, 0.05) 100%);
+  border-color: rgba(168, 85, 247, 0.3);
+  color: #7c3aed;
+}
+
+.field-lock-info.parameter-locked i {
+  color: #a855f7;
+}
+
+.field-lock-info.parameter-locked span {
+  color: #7c3aed;
+}
+
+/* Mode sombre pour les variantes */
+.alerts-page.dark-mode .field-lock-info.device-locked {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.1) 100%) !important;
+  border-color: rgba(59, 130, 246, 0.4) !important;
+  color: #60a5fa !important;
+}
+
+.alerts-page.dark-mode .field-lock-info.device-locked i {
+  color: #93c5fd !important;
+}
+
+.alerts-page.dark-mode .field-lock-info.device-locked span {
+  color: #60a5fa !important;
+}
+
+.alerts-page.dark-mode .field-lock-info.parameter-locked {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(147, 51, 234, 0.1) 100%) !important;
+  border-color: rgba(168, 85, 247, 0.4) !important;
+  color: #c084fc !important;
+}
+
+.alerts-page.dark-mode .field-lock-info.parameter-locked i {
+  color: #d8b4fe !important;
+}
+
+.alerts-page.dark-mode .field-lock-info.parameter-locked span {
+  color: #c084fc !important;
 }
 </style>
