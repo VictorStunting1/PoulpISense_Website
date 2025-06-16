@@ -3159,4 +3159,218 @@ onMounted(() => {
   box-shadow: 0 4px 15px rgba(172, 153, 234, 0.6) !important;
   transform: translateY(-1px) scale(0.98);
 }
+
+
+/* Mode sombre pour la pagination */
+.dashboard-page.dark-mode .pagination {
+  border-top: 1px solid rgba(172, 153, 234, 0.2) !important;
+}
+
+.dashboard-page.dark-mode .pagination-btn,
+.dashboard-page.dark-mode .page-btn {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.1), rgba(223, 216, 247, 0.05)) !important;
+  border: 1px solid rgba(172, 153, 234, 0.3) !important;
+  color: #DFD8F7 !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.dashboard-page.dark-mode .pagination-btn:hover:not(:disabled),
+.dashboard-page.dark-mode .page-btn:hover:not(.active) {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.2), rgba(223, 216, 247, 0.1)) !important;
+  border-color: rgba(172, 153, 234, 0.5) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(172, 153, 234, 0.3) !important;
+}
+
+.dashboard-page.dark-mode .pagination-btn:disabled {
+  background: rgba(74, 85, 104, 0.2) !important;
+  border-color: rgba(74, 85, 104, 0.3) !important;
+  color: rgba(160, 174, 192, 0.4) !important;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.dashboard-page.dark-mode .pagination-btn:disabled:hover {
+  background: rgba(74, 85, 104, 0.2) !important;
+  border-color: rgba(74, 85, 104, 0.3) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.dashboard-page.dark-mode .page-btn.active {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.4), rgba(223, 216, 247, 0.3)) !important;
+  border-color: rgba(172, 153, 234, 0.6) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(172, 153, 234, 0.4) !important;
+  transform: translateY(-1px);
+}
+
+.dashboard-page.dark-mode .page-btn.active:hover {
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.5), rgba(223, 216, 247, 0.4)) !important;
+  border-color: rgba(172, 153, 234, 0.7) !important;
+  box-shadow: 0 8px 25px rgba(172, 153, 234, 0.5) !important;
+  transform: translateY(-3px);
+}
+
+/* Amélioration de l'indicateur de résultats en mode sombre */
+.dashboard-page.dark-mode .results-info {
+  color: #ac99ea !important;
+  font-weight: 500;
+}
+
+/* Effet de brillance pour les boutons de pagination */
+.dashboard-page.dark-mode .pagination-btn::after,
+.dashboard-page.dark-mode .page-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 30%, rgba(223, 216, 247, 0.1) 50%, transparent 70%);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.dashboard-page.dark-mode .pagination-btn:hover:not(:disabled)::after,
+.dashboard-page.dark-mode .page-btn:hover::after {
+  opacity: 1;
+}
+
+/* Animation d'apparition pour les boutons de pagination */
+.dashboard-page.dark-mode .pagination-btn,
+.dashboard-page.dark-mode .page-btn {
+  position: relative;
+  overflow: hidden;
+  animation: slideInPagination 0.3s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+@keyframes slideInPagination {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* États focus pour l'accessibilité */
+.dashboard-page.dark-mode .pagination-btn:focus,
+.dashboard-page.dark-mode .page-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(172, 153, 234, 0.3) !important;
+}
+
+.dashboard-page.dark-mode .pagination-btn:focus:not(:hover):not(:disabled),
+.dashboard-page.dark-mode .page-btn:focus:not(:hover):not(.active) {
+  border-color: rgba(172, 153, 234, 0.5) !important;
+  background: linear-gradient(135deg, rgba(172, 153, 234, 0.15), rgba(223, 216, 247, 0.08)) !important;
+}
+
+/* Responsive pour la pagination en mode sombre */
+@media (max-width: 768px) {
+  .dashboard-page.dark-mode .pagination {
+    padding: 1.5rem 0.5rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .dashboard-page.dark-mode .pagination-btn,
+  .dashboard-page.dark-mode .page-btn {
+    background: linear-gradient(135deg, rgba(172, 153, 234, 0.15), rgba(223, 216, 247, 0.08)) !important;
+    border-color: rgba(172, 153, 234, 0.4) !important;
+  }
+  
+  .dashboard-page.dark-mode .results-info {
+    margin-left: 0;
+    margin-top: 1rem;
+    text-align: center;
+    color: #ac99ea !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-page.dark-mode .pagination-btn,
+  .dashboard-page.dark-mode .page-btn {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, rgba(172, 153, 234, 0.2), rgba(223, 216, 247, 0.1)) !important;
+    border-color: rgba(172, 153, 234, 0.4) !important;
+  }
+  
+  .dashboard-page.dark-mode .pagination-btn:hover:not(:disabled),
+  .dashboard-page.dark-mode .page-btn:hover:not(.active) {
+    background: linear-gradient(135deg, rgba(172, 153, 234, 0.3), rgba(223, 216, 247, 0.15)) !important;
+    border-color: rgba(172, 153, 234, 0.6) !important;
+    transform: translateY(-1px);
+  }
+  
+  .dashboard-page.dark-mode .page-btn.active {
+    background: linear-gradient(135deg, rgba(172, 153, 234, 0.5), rgba(223, 216, 247, 0.3)) !important;
+    border-color: rgba(172, 153, 234, 0.7) !important;
+  }
+  
+  .dashboard-page.dark-mode .pagination {
+    gap: 0.25rem;
+  }
+  
+  .dashboard-page.dark-mode .page-numbers {
+    gap: 0.2rem;
+  }
+}
+
+/* Effet de pulsation pour le bouton actif */
+.dashboard-page.dark-mode .page-btn.active {
+  animation: activePaginationPulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes activePaginationPulse {
+  0% {
+    box-shadow: 0 6px 20px rgba(172, 153, 234, 0.4);
+  }
+  100% {
+    box-shadow: 0 8px 25px rgba(172, 153, 234, 0.6);
+  }
+}
+
+/* Amélioration de la navigation avec les flèches */
+.dashboard-page.dark-mode .pagination-btn i {
+  color: #ac99ea !important;
+  transition: all 0.3s ease;
+}
+
+.dashboard-page.dark-mode .pagination-btn:hover:not(:disabled) i {
+  color: #ffffff !important;
+  transform: scale(1.1);
+}
+
+.dashboard-page.dark-mode .pagination-btn:disabled i {
+  color: rgba(160, 174, 192, 0.4) !important;
+  transform: none !important;
+}
+
+/* Amélioration du contraste pour une meilleure lisibilité */
+.dashboard-page.dark-mode .page-btn.active,
+.dashboard-page.dark-mode .pagination-btn:hover:not(:disabled) {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+}
+
+/* Style pour les points de suspension (si utilisés) */
+.dashboard-page.dark-mode .pagination-ellipsis {
+  color: #ac99ea !important;
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
 </style>
