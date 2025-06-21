@@ -1,7 +1,7 @@
 // Configuration des URLs d'API
 // Changez MODE_PRODUCTION à false pour utiliser le serveur local
 
-const MODE_PRODUCTION = false; // Set to true for production
+const MODE_PRODUCTION = true; // Set to true for production
 
 export const API_CONFIG = {
   // URL du serveur principal (port 42000)
