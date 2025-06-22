@@ -112,12 +112,6 @@
                   <option value="read">Lues</option>
                 </select>
               </div>
-              <div class="filters-right">
-                <button @click="markAllAsRead" class="action-btn secondary">
-                  <i class="fas fa-check-double"></i>
-                  Tout marquer comme lu
-                </button>
-              </div>
             </div>
 
             <!-- Liste des alertes -->
