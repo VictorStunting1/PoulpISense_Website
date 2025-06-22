@@ -16,20 +16,7 @@
           </div>
         </div>
 
-        <!-- Contact et support -->
-        <div class="footer-section">
-          <h3 class="footer-title">Support</h3>
-          <div class="footer-links">
-            <div class="footer-link">
-              <i class="fas fa-book link-icon"></i>
-              <span>Documentation</span>
-            </div>
-            <div class="footer-link">
-              <i class="fas fa-gavel link-icon"></i>
-              <span>Mentions légales</span>
-            </div>
-          </div>
-        </div>
+
       </div>
 
       <!-- Technologies utilisées -->
